@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { IndustrialIcon } from './industrial-icon';
+import { X } from 'lucide-react';
 
 const industrialBadgeVariants = cva(
   'inline-flex items-center gap-1 rounded-industrial border px-2.5 py-0.5 text-xs font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -53,7 +54,15 @@ const industrialBadgeVariants = cva(
 export interface IndustrialBadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof industrialBadgeVariants> {
-  icon?: string;
+  icon?:
+    | 'gear'
+    | 'factory'
+    | 'wrench'
+    | 'cog'
+    | 'hammer'
+    | 'hardhat'
+    | 'bolt'
+    | 'circuit';
   iconPosition?: 'left' | 'right';
   removable?: boolean;
   onRemove?: () => void;
@@ -76,7 +85,7 @@ const IndustrialBadge = React.forwardRef<HTMLDivElement, IndustrialBadgeProps>(
     ref
   ) => {
     const iconSize =
-      size === 'sm' ? 'xs' : size === 'lg' ? 'sm' : size === 'xl' ? 'md' : 'xs';
+      size === 'sm' ? 'sm' : size === 'lg' ? 'md' : size === 'xl' ? 'lg' : 'sm';
 
     return (
       <div
@@ -90,20 +99,17 @@ const IndustrialBadge = React.forwardRef<HTMLDivElement, IndustrialBadgeProps>(
         {icon && iconPosition === 'left' && (
           <IndustrialIcon icon={icon} size={iconSize} className="shrink-0" />
         )}
-
         <span className="truncate">{children}</span>
-
         {icon && iconPosition === 'right' && (
           <IndustrialIcon icon={icon} size={iconSize} className="shrink-0" />
-        )}
-
+        )}{' '}
         {removable && (
           <button
             onClick={onRemove}
             className="ml-1 rounded-full p-0.5 hover:bg-black/10 focus:outline-none focus:ring-1 focus:ring-industrial-ring transition-colors"
             type="button"
           >
-            <IndustrialIcon icon="x" size={iconSize} className="shrink-0" />
+            <X size={16} className="shrink-0" />
           </button>
         )}
       </div>

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { IndustrialIcon } from './industrial-icon';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, AlertCircle } from 'lucide-react';
 
 const industrialInputVariants = cva(
   'flex h-10 w-full border border-industrial-border bg-industrial-background px-3 py-2 text-sm text-industrial-foreground placeholder:text-industrial-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-industrial-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
@@ -34,13 +34,29 @@ const industrialInputVariants = cva(
 );
 
 export interface IndustrialInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof industrialInputVariants> {
   label?: string;
   description?: string;
   error?: string;
-  leftIcon?: string;
-  rightIcon?: string;
+  leftIcon?:
+    | 'gear'
+    | 'factory'
+    | 'wrench'
+    | 'cog'
+    | 'hammer'
+    | 'hardhat'
+    | 'bolt'
+    | 'circuit';
+  rightIcon?:
+    | 'gear'
+    | 'factory'
+    | 'wrench'
+    | 'cog'
+    | 'hammer'
+    | 'hardhat'
+    | 'bolt'
+    | 'circuit';
   leftComponent?: React.ReactNode;
   rightComponent?: React.ReactNode;
   isRequired?: boolean;
@@ -83,7 +99,6 @@ const IndustrialInput = React.forwardRef<
             )}
           </label>
         )}
-
         <div className="relative">
           {hasLeftContent && (
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center">
@@ -124,16 +139,14 @@ const IndustrialInput = React.forwardRef<
             </div>
           )}
         </div>
-
         {description && !error && (
           <p className="text-xs text-industrial-muted-foreground">
             {description}
           </p>
-        )}
-
+        )}{' '}
         {error && (
           <p className="text-xs text-red-500 flex items-center gap-1">
-            <IndustrialIcon icon="alert-circle" size="xs" />
+            <AlertCircle size={16} />
             {error}
           </p>
         )}

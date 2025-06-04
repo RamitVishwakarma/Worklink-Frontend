@@ -6,6 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { IndustrialIcon } from './industrial-icon';
 import { motion, AnimatePresence } from 'framer-motion';
+import { X, Loader2 } from 'lucide-react';
 
 const IndustrialDialog = DialogPrimitive.Root;
 
@@ -78,10 +79,10 @@ const IndustrialDialogContent = React.forwardRef<
         className={cn(industrialDialogVariants({ variant, size }), className)}
         {...props}
       >
-        {children}
+        {children}{' '}
         {showCloseButton && (
           <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-industrial-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-            <IndustrialIcon icon="x" size="sm" />
+            <X size={16} />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}
@@ -122,7 +123,15 @@ IndustrialDialogFooter.displayName = 'IndustrialDialogFooter';
 const IndustrialDialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> & {
-    icon?: string;
+    icon?:
+      | 'gear'
+      | 'factory'
+      | 'wrench'
+      | 'cog'
+      | 'hammer'
+      | 'hardhat'
+      | 'bolt'
+      | 'circuit';
   }
 >(({ className, icon, children, ...props }, ref) => (
   <DialogPrimitive.Title
@@ -169,7 +178,15 @@ export interface IndustrialConfirmDialogProps {
   onConfirm: () => void;
   onCancel?: () => void;
   variant?: 'default' | 'danger' | 'warning';
-  icon?: string;
+  icon?:
+    | 'gear'
+    | 'factory'
+    | 'wrench'
+    | 'cog'
+    | 'hammer'
+    | 'hardhat'
+    | 'bolt'
+    | 'circuit';
   loading?: boolean;
 }
 
@@ -192,21 +209,21 @@ const IndustrialConfirmDialog: React.FC<IndustrialConfirmDialogProps> = ({
         return {
           confirmButtonClass: 'bg-red-600 hover:bg-red-700 text-white',
           iconClass: 'text-red-500',
-          defaultIcon: 'alert-triangle',
+          defaultIcon: 'hammer' as const,
         };
       case 'warning':
         return {
           confirmButtonClass:
             'bg-industrial-safety-300 hover:bg-industrial-safety-400 text-industrial-gunmetal-900',
           iconClass: 'text-industrial-safety-300',
-          defaultIcon: 'alert-circle',
+          defaultIcon: 'bolt' as const,
         };
       default:
         return {
           confirmButtonClass:
             'bg-industrial-gunmetal-800 hover:bg-industrial-gunmetal-700 text-white',
           iconClass: 'text-industrial-accent',
-          defaultIcon: 'help-circle',
+          defaultIcon: 'gear' as const,
         };
     }
   };
@@ -248,13 +265,8 @@ const IndustrialConfirmDialog: React.FC<IndustrialConfirmDialogProps> = ({
             )}
             disabled={loading}
           >
-            {loading && (
-              <IndustrialIcon
-                icon="loader-2"
-                size="xs"
-                className="mr-2 animate-spin"
-              />
-            )}
+            {' '}
+            {loading && <Loader2 size={16} className="mr-2 animate-spin" />}
             {confirmText}
           </button>
         </IndustrialDialogFooter>

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { IndustrialIcon } from './industrial-icon';
+import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 
 const industrialTableVariants = cva('w-full border-collapse', {
   variants: {
@@ -131,19 +132,17 @@ const IndustrialTableHead = React.forwardRef<
     {...props}
   >
     <div className="flex items-center gap-2">
-      {children}
+      {children}{' '}
       {sortable && (
-        <IndustrialIcon
-          icon={
-            sortDirection === 'asc'
-              ? 'chevron-up'
-              : sortDirection === 'desc'
-                ? 'chevron-down'
-                : 'chevrons-up-down'
-          }
-          size="xs"
-          className="text-industrial-safety-300"
-        />
+        <>
+          {sortDirection === 'asc' ? (
+            <ChevronUp className="w-4 h-4 text-industrial-safety-300" />
+          ) : sortDirection === 'desc' ? (
+            <ChevronDown className="w-4 h-4 text-industrial-safety-300" />
+          ) : (
+            <ChevronsUpDown className="w-4 h-4 text-industrial-safety-300" />
+          )}
+        </>
       )}
     </div>
   </th>
@@ -182,7 +181,15 @@ const IndustrialTableEmpty = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement> & {
     colSpan: number;
-    icon?: string;
+    icon?:
+      | 'gear'
+      | 'factory'
+      | 'wrench'
+      | 'cog'
+      | 'hammer'
+      | 'hardhat'
+      | 'bolt'
+      | 'circuit';
     message?: string;
   }
 >(
@@ -190,7 +197,7 @@ const IndustrialTableEmpty = React.forwardRef<
     {
       className,
       colSpan,
-      icon = 'database',
+      icon = 'gear',
       message = 'No data available',
       ...props
     },

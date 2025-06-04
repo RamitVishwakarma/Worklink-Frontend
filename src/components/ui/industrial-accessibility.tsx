@@ -289,7 +289,6 @@ export const AccessibleFormField: React.FC<AccessibleFormFieldProps> = ({
       >
         {label}
       </label>
-
       {hint && (
         <p
           id={hintId}
@@ -297,10 +296,9 @@ export const AccessibleFormField: React.FC<AccessibleFormFieldProps> = ({
         >
           {hint}
         </p>
-      )}
-
+      )}{' '}
       <div>
-        {React.cloneElement(children as React.ReactElement, {
+        {React.cloneElement(children as React.ReactElement<any>, {
           id,
           'aria-describedby':
             cn(hint && hintId, error && errorId).trim() || undefined,
@@ -308,7 +306,6 @@ export const AccessibleFormField: React.FC<AccessibleFormFieldProps> = ({
           'aria-required': required,
         })}
       </div>
-
       {error && (
         <p
           id={errorId}

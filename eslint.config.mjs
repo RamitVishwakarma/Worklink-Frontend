@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import tseslint from '@typescript-eslint/eslint-plugin';
 import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
 import nextPlugin from '@next/eslint-plugin-next/recommended';
 import prettierConfig from 'eslint-config-prettier';

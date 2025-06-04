@@ -298,7 +298,7 @@ interface ResponsiveVisibilityProps
   extends React.HTMLAttributes<HTMLDivElement> {
   show?: ('xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl')[];
   hide?: ('xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl')[];
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 }
 
 export const ResponsiveVisibility = React.forwardRef<

@@ -79,7 +79,10 @@ const industrialRadioIndicatorVariants = cva(
 );
 
 interface IndustrialRadioGroupProps
-  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
+  extends Omit<
+      React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
+      'orientation'
+    >,
     VariantProps<typeof industrialRadioGroupVariants> {
   label?: string;
   description?: string;

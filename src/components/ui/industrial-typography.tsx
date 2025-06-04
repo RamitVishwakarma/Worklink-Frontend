@@ -77,7 +77,7 @@ const IndustrialHeading = React.forwardRef<
     },
     ref
   ) => {
-    const Component = `h${level}` as keyof JSX.IntrinsicElements;
+    const Component = `h${level}` as React.ElementType;
 
     const headingClass = cn(
       industrialHeadingVariants({ level, variant, align, spacing }),
