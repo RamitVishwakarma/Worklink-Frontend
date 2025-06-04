@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const steps = [
   {
@@ -11,6 +13,8 @@ const steps = [
       'Create your account and build your profile as a worker, startup, or manufacturer.',
     image:
       'https://images.pexels.com/photos/3760529/pexels-photo-3760529.jpeg?auto=compress&cs=tinysrgb&w=600',
+    actionText: 'Sign Up Now',
+    actionLink: '/signup',
   },
   {
     number: '02',
@@ -19,6 +23,8 @@ const steps = [
       'Post jobs, list machines, or search for opportunities that match your needs.',
     image:
       'https://images.pexels.com/photos/3912992/pexels-photo-3912992.jpeg?auto=compress&cs=tinysrgb&w=600',
+    actionText: 'Browse Gigs',
+    actionLink: '/gigs',
   },
   {
     number: '03',
@@ -27,6 +33,8 @@ const steps = [
       'Complete projects, utilize equipment, and build your industrial network.',
     image:
       'https://images.pexels.com/photos/3855962/pexels-photo-3855962.jpeg?auto=compress&cs=tinysrgb&w=600',
+    actionText: 'View Machines',
+    actionLink: '/machines',
   },
 ];
 
@@ -94,7 +102,18 @@ export function HowItWorks() {
                   <h3 className="font-oswald text-2xl font-bold text-white mb-3 mt-4">
                     {step.title}
                   </h3>
-                  <p className="text-industrial-navy-100">{step.description}</p>
+                  <p className="text-industrial-navy-100 mb-4">
+                    {step.description}
+                  </p>
+
+                  <Link href={step.actionLink}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-industrial-safety-300 text-industrial-safety-300 hover:bg-industrial-safety-300 hover:text-industrial-gunmetal-800 transition-colors"
+                    >
+                      {step.actionText}
+                    </Button>
+                  </Link>
                 </div>
               </div>
 

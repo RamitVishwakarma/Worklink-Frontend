@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -59,15 +60,19 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button className="bg-industrial-safety-300 hover:bg-industrial-safety-400 text-industrial-gunmetal-800 font-bold text-lg px-8 py-6 rounded-md shadow-lg shadow-industrial-safety-300/20">
-                Find Work
-              </Button>
-              <Button
-                variant="outline"
-                className="border-2 border-gray-300 hover:bg-white/20 hover:text-black/70 font-bold text-lg px-8 py-6 rounded-md"
-              >
-                Post Requirements
-              </Button>
+              <Link href="/gigs">
+                <Button className="bg-industrial-safety-300 hover:bg-industrial-safety-400 text-industrial-gunmetal-800 font-bold text-lg px-8 py-6 rounded-md shadow-lg shadow-industrial-safety-300/20">
+                  Find Work
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button
+                  variant="outline"
+                  className="border-2 border-gray-300 hover:bg-white/20 hover:text-black/70 font-bold text-lg px-8 py-6 rounded-md"
+                >
+                  Post Requirements
+                </Button>
+              </Link>
             </motion.div>
           </div>
         </div>

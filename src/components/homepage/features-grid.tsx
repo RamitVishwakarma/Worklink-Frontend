@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,28 +21,32 @@ const features = [
     title: 'On-Demand Scheduling',
     description:
       'Book workers or machines with real-time availability. No waiting, no hassle.',
-    cta: 'Learn More',
+    cta: 'Browse Gigs',
+    link: '/gigs',
   },
   {
     icon: MapPin,
     title: 'Proximity Matching',
     description:
       'Find opportunities within your area. Reduce travel time and costs.',
-    cta: 'Explore',
+    cta: 'View Machines',
+    link: '/machines',
   },
   {
     icon: Shield,
     title: 'Verified Credentials',
     description:
       'Every worker and machine is verified for safety and quality standards.',
-    cta: 'Our Standards',
+    cta: 'Worker Portal',
+    link: '/worker/dashboard',
   },
   {
     icon: CreditCard,
     title: 'Secure Payments',
     description:
       'Transparent pricing with secure payment processing and escrow options.',
-    cta: 'Payment Options',
+    cta: 'Start Earning',
+    link: '/signup',
   },
 ];
 
@@ -99,12 +104,14 @@ export function FeaturesGrid() {
 
                   <p className="text-gray-600 mb-6">{feature.description}</p>
 
-                  <Button
-                    variant="link"
-                    className="px-0 text-industrial-safety-500 hover:text-industrial-safety-600 font-medium"
-                  >
-                    {feature.cta} →
-                  </Button>
+                  <Link href={feature.link}>
+                    <Button
+                      variant="link"
+                      className="px-0 text-industrial-safety-500 hover:text-industrial-safety-600 font-medium"
+                    >
+                      {feature.cta} →
+                    </Button>
+                  </Link>
                 </div>
               </motion.div>
             );
@@ -118,9 +125,11 @@ export function FeaturesGrid() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-12 text-center"
         >
-          <Button className="bg-industrial-gunmetal-800 hover:bg-industrial-gunmetal-900 text-white font-medium px-8 py-6 rounded-md">
-            Explore All Features
-          </Button>
+          <Link href="/signup">
+            <Button className="bg-industrial-gunmetal-800 hover:bg-industrial-gunmetal-900 text-white font-medium px-8 py-6 rounded-md">
+              Get Started Today
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
