@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -18,11 +17,16 @@ import {
   IndustrialHeader,
 } from '@/components/ui/industrial-layout';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
-import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import {
+  useGigsStore,
+  useGigStats,
+  useApplicationsStore,
+  useGigApplicationStats,
+  useProfilesStore,
+} from '@/lib/store';
 import withAuth from '@/components/auth/withAuth';
-import { UserType, Gig, GigApplication } from '@/lib/types';
+import { UserType, GigApplication } from '@/lib/types';
 import {
   Briefcase,
   Users,
@@ -32,13 +36,11 @@ import {
   MapPin,
   DollarSign,
   Calendar,
-  TrendingUp,
   Clock,
   CheckCircle,
   XCircle,
   Factory,
-  Cog,
-  Wrench,
+  Settings,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -59,57 +61,22 @@ const itemVariants = {
 };
 
 function StartupDashboardPage() {
-  const [dashboardData, setDashboardData] = useState({
-    gigs: [] as Gig[],
-    applications: [] as GigApplication[],
-    stats: {
-      totalGigs: 0,
-      activeGigs: 0,
-      totalApplications: 0,
-      pendingApplications: 0,
-    },
-  });
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
   const { user } = useAuthStore();
   const router = useRouter();
 
-  const fetchDashboardData = async () => {
-    try {
-      const [gigsResponse, applicationsResponse] = await Promise.all([
-        api.get('/gigs/my-gigs'),
-        api.get('/applications/received'),
-      ]);
+  // Store data
+  const { gigs, isLoading: gigsLoading } = useGigsStore();
+  const { gigApplications, gigApplicationsLoading } = useApplicationsStore();
+  const { currentProfile } = useProfilesStore();
+  const gigStats = useGigStats();
+  const applicationStats = useGigApplicationStats();
 
-      const gigs = gigsResponse.data;
-      const applications = applicationsResponse.data;
+  const loading = gigsLoading || gigApplicationsLoading;
 
-      setDashboardData({
-        gigs,
-        applications,
-        stats: {
-          totalGigs: gigs.length,
-          activeGigs: gigs.filter((gig: Gig) => gig.isActive).length,
-          totalApplications: applications.length,
-          pendingApplications: applications.filter(
-            (app: GigApplication) => app.status.toLowerCase() === 'pending'
-          ).length,
-        },
-      });
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch dashboard data',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  // Get recent data - filter user's gigs for startup
+  const userGigs = gigs.filter((gig) => gig.postedBy === user?.id);
+  const recentGigs = userGigs.slice(0, 5);
+  const recentApplications = gigApplications.slice(0, 5);
 
   if (loading) {
     return (
@@ -170,9 +137,6 @@ function StartupDashboardPage() {
     );
   }
 
-  const recentApplications = dashboardData.applications.slice(0, 5);
-  const recentGigs = dashboardData.gigs.slice(0, 5);
-
   return (
     <IndustrialLayout>
       <IndustrialContainer>
@@ -190,6 +154,7 @@ function StartupDashboardPage() {
             <div className="flex items-center gap-3">
               <IndustrialIcon
                 icon="factory"
+                size="lg"
                 className="text-industrial-accent"
               />
               <div>
@@ -197,20 +162,31 @@ function StartupDashboardPage() {
                   level={1}
                   className="text-industrial-foreground"
                 >
-                  Welcome back, {user?.companyName || user?.name}!
+                  Welcome back,{' '}
+                  {(currentProfile as any)?.companyName ||
+                    user?.companyName ||
+                    user?.name}
+                  !
                 </IndustrialHeader>
                 <p className="text-industrial-muted-foreground mt-1">
                   Manage your gigs, review applications, and grow your team
                 </p>
               </div>
             </div>
-            <Button
-              onClick={() => router.push('/startup/create-gig')}
-              className="shrink-0 bg-industrial-accent hover:bg-industrial-accent/90 text-industrial-dark"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create New Gig
-            </Button>
+            <div className="flex gap-3">
+              <Link href="/startup/profile">
+                <Button variant="industrial-secondary" size="sm">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Profile
+                </Button>
+              </Link>
+              <Link href="/startup/create-gig">
+                <Button variant="industrial-primary" size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Gig
+                </Button>
+              </Link>
+            </div>
           </motion.div>
 
           {/* Stats Cards */}
@@ -232,7 +208,7 @@ function StartupDashboardPage() {
                       Total Gigs
                     </p>
                     <p className="text-2xl font-bold text-industrial-foreground">
-                      {dashboardData.stats.totalGigs}
+                      {gigStats.total}
                     </p>
                   </div>
                 </div>
@@ -253,7 +229,7 @@ function StartupDashboardPage() {
                       Active Gigs
                     </p>
                     <p className="text-2xl font-bold text-industrial-foreground">
-                      {dashboardData.stats.activeGigs}
+                      {gigStats.active}
                     </p>
                   </div>
                 </div>
@@ -274,7 +250,7 @@ function StartupDashboardPage() {
                       Total Applications
                     </p>
                     <p className="text-2xl font-bold text-industrial-foreground">
-                      {dashboardData.stats.totalApplications}
+                      {applicationStats.total}
                     </p>
                   </div>
                 </div>
@@ -295,7 +271,7 @@ function StartupDashboardPage() {
                       Pending Reviews
                     </p>
                     <p className="text-2xl font-bold text-industrial-foreground">
-                      {dashboardData.stats.pendingApplications}
+                      {applicationStats.pending}
                     </p>
                   </div>
                 </div>
@@ -445,7 +421,7 @@ function StartupDashboardPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {recentApplications.map((application) => (
+                      {recentApplications.map((application: GigApplication) => (
                         <div
                           key={application.id}
                           className="flex items-start space-x-3 p-3 border border-industrial-border rounded-lg hover:bg-industrial-muted/50 transition-colors"

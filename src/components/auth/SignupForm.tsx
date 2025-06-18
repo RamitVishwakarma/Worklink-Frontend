@@ -104,13 +104,13 @@ export function SignupForm() {
   async function onSubmit(values: FormValues) {
     try {
       const response = await signupUser(values);
-      await signup(response.data.token, response.data.user);
+      await signup(response.token, response.user);
       toast({
         // Add success toast
         title: 'Account Created Successfully!',
-        description: `Welcome, ${response.data.user.email}! Redirecting to your dashboard...`,
+        description: `Welcome, ${response.user.email}! Redirecting to your dashboard...`,
       });
-      router.push(`/${response.data.user.userType}/dashboard`);
+      router.push(`/${response.user.userType}/dashboard`);
     } catch (error: unknown) {
       console.error('Signup failed:', error);
       let errorMessage =
@@ -263,15 +263,37 @@ export function SignupForm() {
                             }}
                           >
                             <FormControl>
-                              <SelectTrigger className="bg-slate-700 border-slate-600 text-slate-100 focus:ring-sky-500">
+                              <SelectTrigger className="bg-white border-industrial-gunmetal-300 text-industrial-gunmetal-800 focus:ring-industrial-safety-300 focus:border-industrial-safety-300 h-12 transition-all duration-200">
                                 <SelectValue placeholder="Select your role" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-slate-700 border-slate-600 text-slate-100">
-                              <SelectItem value="worker">Worker</SelectItem>
-                              <SelectItem value="startup">Startup</SelectItem>
-                              <SelectItem value="manufacturer">
-                                Manufacturer
+                            <SelectContent className="bg-white border-industrial-gunmetal-300">
+                              <SelectItem
+                                value="worker"
+                                className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <IndustrialIcon icon="wrench" size="sm" />
+                                  Worker
+                                </div>
+                              </SelectItem>
+                              <SelectItem
+                                value="startup"
+                                className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <IndustrialIcon icon="circuit" size="sm" />
+                                  Startup
+                                </div>
+                              </SelectItem>
+                              <SelectItem
+                                value="manufacturer"
+                                className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <IndustrialIcon icon="factory" size="sm" />
+                                  Manufacturer
+                                </div>
                               </SelectItem>
                             </SelectContent>
                           </Select>

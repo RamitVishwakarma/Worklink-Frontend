@@ -27,8 +27,7 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import { useAuthStore, useMachinesStore } from '@/lib/store';
 import { Machine, UserType } from '@/lib/types';
 import withAuth from '@/components/auth/withAuth';
 import {
@@ -74,74 +73,18 @@ const cardVariants = {
 };
 
 const WorkerMachinesPage = () => {
-  const [machines, setMachines] = useState<Machine[]>([]);
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [availabilityFilter, setAvailabilityFilter] = useState('');
-  const [applyingTo, setApplyingTo] = useState<string | null>(null);
 
   const { toast } = useToast();
   const { user } = useAuthStore();
-
-  const fetchMachines = async () => {
-    try {
-      const response = await api.get('/machines');
-      setMachines(response.data);
-      setFilteredMachines(response.data);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch machines',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleApplyToMachine = async (machineId: string) => {
-    if (!user) return;
-
-    setApplyingTo(machineId);
-    try {
-      await api.post(`/machines/${machineId}/apply`);
-      toast({
-        title: 'Success',
-        description: 'Application submitted successfully!',
-      });
-
-      // Update machine status locally
-      setMachines((prev) =>
-        prev.map((machine) =>
-          machine.id === machineId ? { ...machine, hasApplied: true } : machine
-        )
-      );
-      setFilteredMachines((prev) =>
-        prev.map((machine) =>
-          machine.id === machineId ? { ...machine, hasApplied: true } : machine
-        )
-      );
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description:
-          error.response?.data?.message || 'Failed to apply for machine',
-        variant: 'destructive',
-      });
-    } finally {
-      setApplyingTo(null);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.role === 'worker') {
-      fetchMachines();
-    }
-  }, [user]);
-
+  // Store data
+  const { machines, isLoading, applyToMachine, isApplying } =
+    useMachinesStore();
+  // Filter machines based on search and filter criteria
   useEffect(() => {
     let filtered = machines;
 
@@ -178,12 +121,39 @@ const WorkerMachinesPage = () => {
 
     setFilteredMachines(filtered);
   }, [machines, searchTerm, locationFilter, typeFilter, availabilityFilter]);
-
   const uniqueLocations = [
     ...new Set(machines.map((machine) => machine.location)),
   ];
   const uniqueTypes = [...new Set(machines.map((machine) => machine.type))];
-  if (loading) {
+  // Handle apply to machine
+  const handleApplyToMachine = async (
+    machineId: string,
+    userType: 'worker' | 'startup'
+  ) => {
+    if (!user?.id) {
+      toast({
+        title: 'Error',
+        description: 'You must be logged in to apply to machines.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      await applyToMachine(machineId, user.id, userType);
+      toast({
+        title: 'Success',
+        description: 'Successfully applied to machine!',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to apply to machine. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+  if (isLoading) {
     return (
       <IndustrialLayout>
         <IndustrialContainer className="py-8">
@@ -477,13 +447,13 @@ const WorkerMachinesPage = () => {
                         ) : (
                           <Button
                             variant="industrial-accent"
-                            onClick={() => handleApplyToMachine(machine.id)}
-                            disabled={
-                              !machine.isAvailable || applyingTo === machine.id
+                            onClick={() =>
+                              handleApplyToMachine(machine.id, 'worker')
                             }
+                            disabled={!machine.isAvailable || isApplying}
                             className="w-full"
                           >
-                            {applyingTo === machine.id ? (
+                            {isApplying ? (
                               <>
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                 Applying...

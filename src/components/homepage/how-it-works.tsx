@@ -64,10 +64,10 @@ export function HowItWorks() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="font-oswald font-bold text-3xl md:text-4xl text-white mb-4">
+          <h2 className="industrial-section-heading text-white mb-4">
             How It Works
           </h2>
-          <p className="text-industrial-navy-100 max-w-2xl mx-auto">
+          <p className="industrial-body-text text-industrial-navy-100 max-w-2xl mx-auto">
             Our streamlined process makes industrial connections simple and
             efficient.
           </p>
@@ -95,21 +95,21 @@ export function HowItWorks() {
 
                 <div className="p-6 relative">
                   {/* Step number - blueprint style */}
-                  <div className="absolute -top-12 right-6 w-24 h-24 bg-industrial-safety-300 flex items-center justify-center rounded-full text-industrial-gunmetal-800 font-oswald text-3xl font-bold border-4 border-white/10">
+                  <div className="absolute -top-12 right-6 w-24 h-24 bg-industrial-safety-300 flex items-center justify-center rounded-full text-industrial-gunmetal-800 font-industrial-display text-3xl font-black border-4 border-white/10">
                     {step.number}
                   </div>
 
-                  <h3 className="font-oswald text-2xl font-bold text-white mb-3 mt-4">
+                  <h3 className="industrial-card-title text-white mb-3 mt-4">
                     {step.title}
                   </h3>
-                  <p className="text-industrial-navy-100 mb-4">
+                  <p className="industrial-body-text text-industrial-navy-100 mb-4">
                     {step.description}
                   </p>
 
                   <Link href={step.actionLink}>
                     <Button
                       variant="outline"
-                      className="w-full border-industrial-safety-300 text-industrial-safety-300 hover:bg-industrial-safety-300 hover:text-industrial-gunmetal-800 transition-colors"
+                      className="w-full border-industrial-safety-300 text-industrial-safety-800 font-industrial-heading font-semibold tracking-wide hover:bg-industrial-safety-300 hover:text-industrial-gunmetal-800 transition-colors"
                     >
                       {step.actionText}
                     </Button>

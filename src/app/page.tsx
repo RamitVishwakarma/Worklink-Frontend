@@ -7,6 +7,7 @@ import { TrustIndicators } from '@/components/homepage/trust-indicators';
 import { QuickNavigation } from '@/components/ui/navigation';
 import { SiteMap } from '@/components/homepage/site-map';
 import { RoleSelector } from '@/components/homepage/role-selector';
+import { NewsletterSection } from '@/components/homepage/newsletter-section';
 
 const Page = () => {
   return (
@@ -21,10 +22,10 @@ const Page = () => {
       <section className="py-20 bg-industrial-gunmetal-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="font-oswald font-bold text-3xl md:text-4xl text-industrial-gunmetal-800 mb-4">
+            <h2 className="industrial-section-heading text-industrial-gunmetal-800 mb-4">
               Get Started Today
             </h2>
-            <p className="text-industrial-gunmetal-600 max-w-2xl mx-auto">
+            <p className="industrial-body-text text-industrial-gunmetal-600 max-w-2xl mx-auto">
               Choose your path and start connecting with the industrial
               community
             </p>
@@ -37,6 +38,7 @@ const Page = () => {
 
       <SiteMap />
       <TrustIndicators />
+      <NewsletterSection />
     </>
   );
 };

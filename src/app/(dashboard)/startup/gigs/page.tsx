@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -28,7 +28,13 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import {
+  useGigsStore,
+  useGigStats,
+  useApplicationsStore,
+  useGigApplicationStats,
+} from '@/lib/store';
+import { useGigOperations } from '@/hooks/useApiIntegration';
 import withAuth from '@/components/auth/withAuth';
 import { UserType, Gig } from '@/lib/types';
 import {
@@ -88,30 +94,24 @@ const getStatusBadge = (isActive: boolean, applicationCount: number = 0) => {
 };
 
 function StartupGigsPage() {
-  const [gigs, setGigs] = useState<Gig[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const { toast } = useToast();
   const { user } = useAuthStore();
+  const { toast } = useToast();
   const router = useRouter();
 
-  const fetchGigs = async () => {
-    try {
-      const response = await api.get('/gigs/my-gigs');
-      setGigs(response.data);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch your gigs',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Store data
+  const { gigs, isLoading: loading } = useGigsStore();
+  const gigStats = useGigStats();
+  const { gigApplications } = useApplicationsStore();
+  const applicationStats = useGigApplicationStats();
+  const { handleDeleteGig } = useGigOperations();
 
-  const handleDeleteGig = async (gigId: string) => {
+  // Local state
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Filter user's gigs (for startups)
+  const userGigs = gigs.filter((gig) => gig.postedBy === user?.id);
+
+  const handleDeleteGigAction = async (gigId: string) => {
     if (
       !confirm(
         'Are you sure you want to delete this gig? This action cannot be undone.'
@@ -120,14 +120,9 @@ function StartupGigsPage() {
       return;
     }
 
-    setDeletingId(gigId);
     try {
-      await api.delete(`/gigs/${gigId}`);
-      setGigs((prev) => prev.filter((gig) => gig.id !== gigId));
-      toast({
-        title: 'Success',
-        description: 'Gig deleted successfully',
-      });
+      setDeletingId(gigId);
+      await handleDeleteGig(gigId);
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -141,16 +136,17 @@ function StartupGigsPage() {
 
   const toggleGigStatus = async (gigId: string, currentStatus: boolean) => {
     try {
+      // This would need to be implemented in the store/API
+      // For now, we'll use the manual API call
+      const api = (await import('@/lib/api')).default;
       await api.patch(`/gigs/${gigId}/toggle-status`);
-      setGigs((prev) =>
-        prev.map((gig) =>
-          gig.id === gigId ? { ...gig, isActive: !currentStatus } : gig
-        )
-      );
+
       toast({
         title: 'Success',
         description: `Gig ${!currentStatus ? 'activated' : 'deactivated'} successfully`,
       });
+
+      // Refresh data - the auto-fetch system will handle this
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -160,10 +156,6 @@ function StartupGigsPage() {
       });
     }
   };
-
-  useEffect(() => {
-    fetchGigs();
-  }, []);
   if (loading) {
     return (
       <IndustrialLayout>
@@ -208,11 +200,10 @@ function StartupGigsPage() {
       </IndustrialLayout>
     );
   }
-
   const stats = {
-    total: gigs.length,
-    active: gigs.filter((gig) => gig.isActive).length,
-    totalApplications: gigs.reduce(
+    total: userGigs.length,
+    active: userGigs.filter((gig) => gig.isActive).length,
+    totalApplications: userGigs.reduce(
       (sum, gig) => sum + (gig.applicationCount || 0),
       0
     ),
@@ -360,9 +351,9 @@ function StartupGigsPage() {
                             Actions
                           </TableHead>
                         </TableRow>
-                      </TableHeader>
+                      </TableHeader>{' '}
                       <TableBody>
-                        {gigs.map((gig) => (
+                        {userGigs.map((gig) => (
                           <TableRow
                             key={gig.id}
                             className="border-industrial-border"

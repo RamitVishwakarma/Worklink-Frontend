@@ -21,7 +21,7 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import { useProfilesStore } from '@/lib/store';
 import withAuth from '@/components/auth/withAuth';
 import { UserType, StartupProfile } from '@/lib/types';
 import {
@@ -54,39 +54,38 @@ const itemVariants = {
 };
 
 function StartupProfilePage() {
-  const [profile, setProfile] = useState<StartupProfile | null>(null);
-  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<StartupProfile>>({});
 
   const { toast } = useToast();
   const { user, updateUser } = useAuthStore();
+  const {
+    currentProfile,
+    isLoading,
+    isUpdating,
+    fetchCurrentUserProfile,
+    updateCurrentUserProfile,
+  } = useProfilesStore();
+
+  const profile = currentProfile as StartupProfile | null;
 
   const fetchProfile = async () => {
     try {
-      const response = await api.get('/profile/startup');
-      const profileData = response.data;
-      setProfile(profileData);
-      setFormData(profileData);
+      await fetchCurrentUserProfile(UserType.STARTUP);
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to fetch profile',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
-
   const handleSave = async () => {
-    setSaving(true);
     try {
-      const response = await api.put('/profile/startup', formData);
-      const updatedProfile = response.data;
-
-      setProfile(updatedProfile);
+      const updatedProfile = (await updateCurrentUserProfile(
+        UserType.STARTUP,
+        formData
+      )) as StartupProfile;
       setEditing(false);
 
       // Update auth store with new profile data
@@ -107,8 +106,6 @@ function StartupProfilePage() {
           error.response?.data?.message || 'Failed to update profile',
         variant: 'destructive',
       });
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -126,11 +123,17 @@ function StartupProfilePage() {
       [field]: value,
     }));
   };
-
   useEffect(() => {
     fetchProfile();
   }, []);
-  if (loading) {
+
+  useEffect(() => {
+    if (profile) {
+      setFormData(profile);
+    }
+  }, [profile]);
+
+  if (isLoading) {
     return (
       <IndustrialLayout>
         <IndustrialContainer>
@@ -216,10 +219,11 @@ function StartupProfilePage() {
             <div className="flex items-center gap-2">
               {editing ? (
                 <>
+                  {' '}
                   <Button
                     variant="outline"
                     onClick={handleCancel}
-                    disabled={saving}
+                    disabled={isUpdating}
                     className="border-industrial-border hover:bg-industrial-muted text-industrial-foreground"
                   >
                     <X className="h-4 w-4 mr-2" />
@@ -227,11 +231,11 @@ function StartupProfilePage() {
                   </Button>
                   <Button
                     onClick={handleSave}
-                    disabled={saving}
+                    disabled={isUpdating}
                     className="bg-industrial-accent hover:bg-industrial-accent/90 text-industrial-dark"
                   >
                     <Save className="h-4 w-4 mr-2" />
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {isUpdating ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </>
               ) : (

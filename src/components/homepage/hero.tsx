@@ -28,7 +28,7 @@ export function Hero() {
               className="mb-4"
             >
               <div className="inline-block bg-industrial-safety-300 px-4 py-1 rounded-md mb-4">
-                <span className="font-oswald font-bold text-industrial-gunmetal-800 tracking-wider">
+                <span className="industrial-caption text-industrial-gunmetal-800">
                   INDUSTRIAL REVOLUTION 4.0
                 </span>
               </div>
@@ -38,7 +38,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="font-oswald font-bold text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight"
+              className="industrial-hero-text text-white mb-6 leading-tight"
             >
               Connecting Skilled Labor with Industrial Opportunity
             </motion.h1>
@@ -47,7 +47,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl"
+              className="industrial-body-text text-lg md:text-xl text-gray-200 mb-8 max-w-2xl"
             >
               The First Digital Marketplace for Blue-Collar Jobs and Machine
               Sharing. Connect, collaborate, and contribute to the future of
@@ -61,14 +61,19 @@ export function Hero() {
               className="flex flex-col sm:flex-row gap-4"
             >
               <Link href="/gigs">
-                <Button className="bg-industrial-safety-300 hover:bg-industrial-safety-400 text-industrial-gunmetal-800 font-bold text-lg px-8 py-6 rounded-md shadow-lg shadow-industrial-safety-300/20">
+                <Button
+                  variant="industrial-accent"
+                  size="xl"
+                  className="industrial-hero-text text-base sm:text-lg px-8 py-6 shadow-lg shadow-industrial-safety-300/20 hover:shadow-industrial-safety-300/30 transition-all duration-300"
+                >
                   Find Work
                 </Button>
               </Link>
               <Link href="/signup">
                 <Button
-                  variant="outline"
-                  className="border-2 border-gray-300 hover:bg-white/20 hover:text-black/70 font-bold text-lg px-8 py-6 rounded-md"
+                  variant="industrial-outline"
+                  size="xl"
+                  className="border-2 border-white/70 text-white hover:bg-white/20 hover:border-white hover:text-white font-bold text-base sm:text-lg px-8 py-6 transition-all duration-300"
                 >
                   Post Requirements
                 </Button>

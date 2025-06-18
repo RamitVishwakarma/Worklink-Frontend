@@ -152,8 +152,58 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-industrial-body;
+    /* Enhanced text rendering for better readability */
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1,
+      'calt' 1,
+      'pnum' 1,
+      'tnum' 0,
+      'onum' 1,
+      'lnum' 0,
+      'dlig' 0;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Industrial Typography Defaults */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-industrial-heading;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1,
+      'calt' 1,
+      'dlig' 1;
+  }
+
+  /* Display text for hero sections */
+  .display-text {
+    @apply font-industrial-display;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1,
+      'calt' 1,
+      'dlig' 1;
+  }
+
+  /* Monospace for technical content */
+  code,
+  pre,
+  .mono {
+    @apply font-industrial-mono;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1,
+      'calt' 1;
   }
 }
 
@@ -200,5 +250,60 @@
 
   .gear-reverse {
     animation: spin 8s linear infinite reverse;
+  }
+
+  /* Industrial Typography Utilities */
+  .text-industrial-display {
+    @apply font-industrial-display font-black tracking-tight;
+  }
+
+  .text-industrial-heading {
+    @apply font-industrial-heading font-bold tracking-tight;
+  }
+
+  .text-industrial-body {
+    @apply font-industrial-body font-medium;
+  }
+
+  .text-industrial-mono {
+    @apply font-industrial-mono font-medium;
+  }
+
+  /* Typography Styles for Industrial Theme */
+  .industrial-hero-text {
+    @apply font-industrial-display text-display-xl font-black tracking-tight text-white;
+  }
+
+  .industrial-section-heading {
+    @apply font-industrial-heading text-industrial-3xl font-bold tracking-tight;
+  }
+
+  .industrial-card-title {
+    @apply font-industrial-heading text-industrial-xl font-bold tracking-tight;
+  }
+
+  .industrial-body-text {
+    @apply font-industrial-body text-industrial-base leading-relaxed;
+  }
+
+  .industrial-caption {
+    @apply font-industrial-body text-industrial-sm font-medium tracking-wide uppercase;
+  }
+
+  /* Responsive Typography */
+  @screen sm {
+    .industrial-hero-text {
+      @apply text-display-2xl;
+    }
+  }
+
+  @screen lg {
+    .industrial-hero-text {
+      @apply text-display-2xl;
+    }
+
+    .industrial-section-heading {
+      @apply text-industrial-4xl;
+    }
   }
 }

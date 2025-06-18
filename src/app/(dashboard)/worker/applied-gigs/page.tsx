@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -28,7 +28,7 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import { useApplicationsStore, useGigApplicationStats } from '@/lib/store';
 import { GigApplication } from '@/lib/types';
 import {
   Clock,
@@ -100,38 +100,33 @@ const getStatusBadge = (status: string) => {
 };
 
 export default function AppliedGigsPage() {
-  const [applications, setApplications] = useState<GigApplication[]>([]);
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { toast } = useToast();
   const { user } = useAuthStore();
 
-  const fetchApplications = async () => {
+  // Store data
+  const { gigApplications: applications, gigApplicationsLoading: loading } =
+    useApplicationsStore();
+  const applicationStats = useGigApplicationStats();
+  const refreshApplications = async () => {
+    setRefreshing(true);
     try {
-      const response = await api.get('/applications/my-applications');
-      setApplications(response.data);
+      // Since applications are auto-fetched by AppProvider,
+      // we'll provide user feedback without actual refresh
+      toast({
+        title: 'Info',
+        description: 'Applications are automatically kept up to date',
+      });
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to fetch your applications',
+        description: 'Failed to refresh applications',
         variant: 'destructive',
       });
     } finally {
-      setLoading(false);
       setRefreshing(false);
     }
   };
-
-  const refreshApplications = async () => {
-    setRefreshing(true);
-    await fetchApplications();
-  };
-
-  useEffect(() => {
-    if (user?.role === 'worker') {
-      fetchApplications();
-    }
-  }, [user]);
   if (loading) {
     return (
       <IndustrialLayout>
@@ -186,19 +181,7 @@ export default function AppliedGigsPage() {
       </IndustrialLayout>
     );
   }
-
-  const stats = {
-    total: applications.length,
-    pending: applications.filter(
-      (app) => app.status.toLowerCase() === 'pending'
-    ).length,
-    approved: applications.filter(
-      (app) => app.status.toLowerCase() === 'approved'
-    ).length,
-    rejected: applications.filter(
-      (app) => app.status.toLowerCase() === 'rejected'
-    ).length,
-  };
+  const stats = applicationStats;
   return (
     <IndustrialLayout>
       <IndustrialContainer>
@@ -378,7 +361,7 @@ export default function AppliedGigsPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {applications.map((application) => (
+                        {applications.map((application: GigApplication) => (
                           <TableRow
                             key={application.id}
                             className="border-industrial-border hover:bg-industrial-muted/50"
@@ -434,7 +417,7 @@ export default function AppliedGigsPage() {
                   </div>
                   {/* Mobile View */}
                   <div className="md:hidden space-y-4">
-                    {applications.map((application) => (
+                    {applications.map((application: GigApplication) => (
                       <motion.div
                         key={application.id}
                         className="border border-industrial-border rounded-lg p-4 space-y-3 bg-industrial-background"

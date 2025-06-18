@@ -8,7 +8,7 @@ import api, {
 import { User, UserType } from '../types';
 import { useRouter } from 'next/navigation'; // Import for redirection, though direct usage in store is tricky
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   token: string | null;
   isLoading: boolean;
@@ -48,7 +48,7 @@ export const useAuthStore = create<AuthState>()(
           try {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             const response = await getCurrentUser();
-            userToSet = response.data.user;
+            userToSet = response.user;
           } catch (error) {
             console.error('Failed to fetch user after login:', error);
             get().setUserAndToken(null, null); // Clear auth state on error
@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthState>()(
           try {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             const response = await getCurrentUser();
-            get().setUserAndToken(response.data.user, token);
+            get().setUserAndToken(response.user, token);
           } catch (error) {
             console.error('Token validation failed:', error);
             get().setUserAndToken(null, null);

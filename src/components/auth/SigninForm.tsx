@@ -113,16 +113,15 @@ export function SigninForm() {
       transition: { duration: 0.4 },
     },
   };
-
   async function onSubmit(data: SigninFormValues) {
     try {
       const response = await signinUser(data);
-      await login(response.data.token, response.data.user);
+      await login(response.token, response.user);
       toast({
         title: 'Signed In Successfully',
-        description: `Welcome back, ${response.data.user.email}! Redirecting...`,
+        description: `Welcome back, ${response.user.email}! Redirecting...`,
       });
-      router.push(`/${response.data.user.userType}/dashboard`);
+      router.push(`/${response.user.userType}/dashboard`);
     } catch (error: unknown) {
       console.error('Signin failed:', error);
       let errorMessage = 'An unexpected error occurred. Please try again.';
@@ -151,7 +150,7 @@ export function SigninForm() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-md"
+          className="w-full max-w-md py-4"
         >
           <IndustrialCard
             variant="industrial"

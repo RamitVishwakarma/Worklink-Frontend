@@ -44,11 +44,7 @@ import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-import api, {
-  getMachinesByManufacturer,
-  deleteMachine,
-  toggleMachineAvailability,
-} from '@/lib/api';
+import { useMachinesStore } from '@/lib/store';
 import { Machine, UserType } from '@/lib/types';
 import withAuth from '@/components/auth/withAuth';
 import { useRouter } from 'next/navigation';
@@ -110,9 +106,14 @@ function YourMachinesPage() {
   const { user } = useAuthStore();
   const router = useRouter();
   const { toast } = useToast();
-  const [machines, setMachines] = useState<Machine[]>([]);
+  const {
+    userMachines: machines,
+    isLoading: loading,
+    fetchUserMachines,
+    deleteMachine,
+    toggleMachineAvailability,
+  } = useMachinesStore();
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -120,32 +121,11 @@ function YourMachinesPage() {
   const [togglingMachine, setTogglingMachine] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [machineToDelete, setMachineToDelete] = useState<Machine | null>(null);
-  const fetchMachines = async () => {
-    if (!user?.id) return;
-
-    setLoading(true);
-    try {
-      const response = await getMachinesByManufacturer(user.id);
-      const machinesData = response.data?.machines || response.data || [];
-      setMachines(machinesData);
-      setFilteredMachines(machinesData);
-    } catch (error: any) {
-      console.error('Error fetching machines:', error);
-      toast({
-        title: 'Error',
-        description:
-          error.response?.data?.message || 'Failed to fetch your machines',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDeleteMachine = async (machine: Machine) => {
     setMachineToDelete(machine);
     setDeleteDialogOpen(true);
   };
+
   const confirmDeleteMachine = async () => {
     if (!machineToDelete) return;
 
@@ -156,12 +136,6 @@ function YourMachinesPage() {
         title: 'Success',
         description: `Machine "${machineToDelete.name}" deleted successfully!`,
       });
-
-      // Remove machine from local state
-      setMachines((prev) => prev.filter((m) => m.id !== machineToDelete.id));
-      setFilteredMachines((prev) =>
-        prev.filter((m) => m.id !== machineToDelete.id)
-      );
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -189,22 +163,6 @@ function YourMachinesPage() {
         title: 'Success',
         description: `Machine ${newStatus ? 'activated' : 'deactivated'} successfully!`,
       });
-
-      // Update machine status locally
-      setMachines((prev) =>
-        prev.map((machine) =>
-          machine.id === machineId
-            ? { ...machine, availability: newStatus, isAvailable: newStatus }
-            : machine
-        )
-      );
-      setFilteredMachines((prev) =>
-        prev.map((machine) =>
-          machine.id === machineId
-            ? { ...machine, availability: newStatus, isAvailable: newStatus }
-            : machine
-        )
-      );
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -217,12 +175,11 @@ function YourMachinesPage() {
       setTogglingMachine(null);
     }
   };
-
   useEffect(() => {
-    if (user?.userType === UserType.MANUFACTURER) {
-      fetchMachines();
+    if (user?.userType === UserType.MANUFACTURER && user?.id) {
+      fetchUserMachines(user.id);
     }
-  }, [user]);
+  }, [user, fetchUserMachines]);
 
   useEffect(() => {
     let filtered = machines;

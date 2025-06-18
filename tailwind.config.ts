@@ -155,8 +155,24 @@ export default {
           'Arial Black',
           'sans-serif',
         ],
+        'industrial-display': [
+          'var(--font-industrial-display)',
+          'Bebas Neue',
+          'Oswald',
+          'Impact',
+          'Arial Black',
+          'sans-serif',
+        ],
         'industrial-body': [
           'var(--font-industrial-body)',
+          'Source Sans Pro',
+          'Inter',
+          'Roboto',
+          'system-ui',
+          'sans-serif',
+        ],
+        'industrial-secondary': [
+          'var(--font-industrial-secondary)',
           'Inter',
           'Roboto',
           'system-ui',
@@ -169,6 +185,17 @@ export default {
           'Consolas',
           'monospace',
         ],
+
+        // Aliases for easier use
+        body: [
+          'var(--font-industrial-body)',
+          'Source Sans Pro',
+          'system-ui',
+          'sans-serif',
+        ],
+        heading: ['var(--font-industrial-heading)', 'Oswald', 'sans-serif'],
+        display: ['var(--font-industrial-display)', 'Bebas Neue', 'sans-serif'],
+        mono: ['var(--font-industrial-mono)', 'JetBrains Mono', 'monospace'],
       },
 
       backgroundImage: {
@@ -260,31 +287,108 @@ export default {
       },
 
       fontSize: {
-        'industrial-xs': ['0.75rem', { lineHeight: '1rem', fontWeight: '600' }],
+        // Industrial Typography Scale
+        'industrial-xs': [
+          '0.75rem',
+          { lineHeight: '1rem', fontWeight: '600', letterSpacing: '0.025em' },
+        ],
         'industrial-sm': [
           '0.875rem',
-          { lineHeight: '1.25rem', fontWeight: '600' },
+          {
+            lineHeight: '1.25rem',
+            fontWeight: '600',
+            letterSpacing: '0.025em',
+          },
         ],
         'industrial-base': [
           '1rem',
-          { lineHeight: '1.5rem', fontWeight: '500' },
+          { lineHeight: '1.5rem', fontWeight: '500', letterSpacing: '0' },
         ],
         'industrial-lg': [
           '1.125rem',
-          { lineHeight: '1.75rem', fontWeight: '600' },
+          { lineHeight: '1.75rem', fontWeight: '600', letterSpacing: '0' },
         ],
         'industrial-xl': [
           '1.25rem',
-          { lineHeight: '1.75rem', fontWeight: '700' },
+          {
+            lineHeight: '1.75rem',
+            fontWeight: '700',
+            letterSpacing: '-0.025em',
+          },
         ],
-        'industrial-2xl': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
+        'industrial-2xl': [
+          '1.5rem',
+          { lineHeight: '2rem', fontWeight: '700', letterSpacing: '-0.025em' },
+        ],
         'industrial-3xl': [
           '1.875rem',
-          { lineHeight: '2.25rem', fontWeight: '800' },
+          {
+            lineHeight: '2.25rem',
+            fontWeight: '800',
+            letterSpacing: '-0.025em',
+          },
         ],
         'industrial-4xl': [
           '2.25rem',
-          { lineHeight: '2.5rem', fontWeight: '800' },
+          {
+            lineHeight: '2.5rem',
+            fontWeight: '800',
+            letterSpacing: '-0.025em',
+          },
+        ],
+        'industrial-5xl': [
+          '3rem',
+          { lineHeight: '3rem', fontWeight: '900', letterSpacing: '-0.025em' },
+        ],
+        'industrial-6xl': [
+          '3.75rem',
+          {
+            lineHeight: '3.75rem',
+            fontWeight: '900',
+            letterSpacing: '-0.025em',
+          },
+        ],
+        'industrial-7xl': [
+          '4.5rem',
+          { lineHeight: '4.5rem', fontWeight: '900', letterSpacing: '-0.05em' },
+        ],
+        'industrial-8xl': [
+          '6rem',
+          { lineHeight: '6rem', fontWeight: '900', letterSpacing: '-0.05em' },
+        ],
+        'industrial-9xl': [
+          '8rem',
+          { lineHeight: '8rem', fontWeight: '900', letterSpacing: '-0.05em' },
+        ],
+
+        // Display Typography (for hero sections, banners)
+        'display-sm': [
+          '2.25rem',
+          {
+            lineHeight: '2.5rem',
+            fontWeight: '900',
+            letterSpacing: '-0.025em',
+          },
+        ],
+        'display-md': [
+          '2.875rem',
+          {
+            lineHeight: '3.25rem',
+            fontWeight: '900',
+            letterSpacing: '-0.025em',
+          },
+        ],
+        'display-lg': [
+          '3.5rem',
+          { lineHeight: '4rem', fontWeight: '900', letterSpacing: '-0.025em' },
+        ],
+        'display-xl': [
+          '4.5rem',
+          { lineHeight: '5rem', fontWeight: '900', letterSpacing: '-0.05em' },
+        ],
+        'display-2xl': [
+          '5.5rem',
+          { lineHeight: '6rem', fontWeight: '900', letterSpacing: '-0.05em' },
         ],
       },
     },

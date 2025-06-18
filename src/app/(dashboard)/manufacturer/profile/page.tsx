@@ -8,11 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuthStore } from '@/lib/store/authStore';
+import { useAuthStore, useProfilesStore } from '@/lib/store';
 import { useToast } from '@/hooks/use-toast';
 import withAuth from '@/components/auth/withAuth';
 import { UserType, ManufacturerProfile } from '@/lib/types';
-import api from '@/lib/api';
 import {
   User,
   Building,
@@ -30,12 +29,16 @@ import {
 
 function ManufacturerProfilePage() {
   const { user, updateUser } = useAuthStore();
+  const {
+    currentProfile,
+    isLoading,
+    isUpdating,
+    fetchCurrentUserProfile,
+    updateCurrentUserProfile,
+  } = useProfilesStore();
   const { toast } = useToast();
 
-  const [profile, setProfile] = useState<ManufacturerProfile | null>(null);
-  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
@@ -56,40 +59,43 @@ function ManufacturerProfilePage() {
     }
   }, [user]);
 
+  // Update form data when profile loads
+  useEffect(() => {
+    if (currentProfile) {
+      const manufacturerProfile = currentProfile as ManufacturerProfile;
+      setFormData({
+        companyName: manufacturerProfile.companyName || '',
+        industry: manufacturerProfile.industry || '',
+        description: manufacturerProfile.description || '',
+        address: manufacturerProfile.address || '',
+        city: manufacturerProfile.city || '',
+        state: manufacturerProfile.state || '',
+        zipCode: manufacturerProfile.zipCode || '',
+        phone: manufacturerProfile.phone || '',
+        website: manufacturerProfile.website || '',
+        contactPerson: manufacturerProfile.contactPerson || '',
+        contactEmail: manufacturerProfile.contactEmail || '',
+      });
+    }
+  }, [currentProfile]);
+
   const fetchProfile = async () => {
     try {
-      setLoading(true);
-      const response = await api.get('/manufacturer/profile');
-      setProfile(response.data);
-      setFormData({
-        companyName: response.data.companyName || '',
-        industry: response.data.industry || '',
-        description: response.data.description || '',
-        address: response.data.address || '',
-        city: response.data.city || '',
-        state: response.data.state || '',
-        zipCode: response.data.zipCode || '',
-        phone: response.data.phone || '',
-        website: response.data.website || '',
-        contactPerson: response.data.contactPerson || '',
-        contactEmail: response.data.contactEmail || '',
-      });
+      await fetchCurrentUserProfile(UserType.MANUFACTURER);
     } catch (error: any) {
       toast({
         title: 'Error',
         description: 'Failed to fetch profile data',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
-
   const handleSave = async () => {
     try {
-      setSaving(true);
-      const response = await api.put('/manufacturer/profile', formData);
-      setProfile(response.data);
+      const updatedProfile = await updateCurrentUserProfile(
+        UserType.MANUFACTURER,
+        formData
+      );
 
       // Update user in auth store if company name changed
       if (formData.companyName !== user?.companyName) {
@@ -107,25 +113,24 @@ function ManufacturerProfilePage() {
         description: 'Failed to update profile',
         variant: 'destructive',
       });
-    } finally {
-      setSaving(false);
     }
   };
 
   const handleCancel = () => {
-    if (profile) {
+    if (currentProfile) {
+      const manufacturerProfile = currentProfile as ManufacturerProfile;
       setFormData({
-        companyName: profile.companyName || '',
-        industry: profile.industry || '',
-        description: profile.description || '',
-        address: profile.address || '',
-        city: profile.city || '',
-        state: profile.state || '',
-        zipCode: profile.zipCode || '',
-        phone: profile.phone || '',
-        website: profile.website || '',
-        contactPerson: profile.contactPerson || '',
-        contactEmail: profile.contactEmail || '',
+        companyName: manufacturerProfile.companyName || '',
+        industry: manufacturerProfile.industry || '',
+        description: manufacturerProfile.description || '',
+        address: manufacturerProfile.address || '',
+        city: manufacturerProfile.city || '',
+        state: manufacturerProfile.state || '',
+        zipCode: manufacturerProfile.zipCode || '',
+        phone: manufacturerProfile.phone || '',
+        website: manufacturerProfile.website || '',
+        contactPerson: manufacturerProfile.contactPerson || '',
+        contactEmail: manufacturerProfile.contactEmail || '',
       });
     }
     setEditing(false);
@@ -174,14 +179,14 @@ function ManufacturerProfilePage() {
                 variant="outline"
                 size="sm"
                 onClick={handleCancel}
-                disabled={saving}
+                disabled={isUpdating}
               >
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button size="sm" onClick={handleSave} disabled={saving}>
+              <Button size="sm" onClick={handleSave} disabled={isUpdating}>
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Changes'}
+                {isUpdating ? 'Saving...' : 'Save Changes'}
               </Button>
             </>
           ) : (
@@ -201,9 +206,9 @@ function ManufacturerProfilePage() {
               <CardTitle className="text-lg font-semibold">
                 Profile Statistics
               </CardTitle>
-            </CardHeader>
+            </CardHeader>{' '}
             <CardContent className="space-y-4">
-              {loading ? (
+              {isLoading ? (
                 <>
                   <Skeleton className="h-16 w-full" />
                   <Skeleton className="h-16 w-full" />
@@ -219,7 +224,8 @@ function ManufacturerProfilePage() {
                           Total Machines
                         </p>
                         <p className="text-2xl font-bold text-blue-600">
-                          {profile?.totalMachines || 0}
+                          {(currentProfile as ManufacturerProfile)
+                            ?.totalMachines || 0}
                         </p>
                       </div>
                     </div>
@@ -233,7 +239,8 @@ function ManufacturerProfilePage() {
                           Active Machines
                         </p>
                         <p className="text-2xl font-bold text-green-600">
-                          {profile?.activeMachines || 0}
+                          {(currentProfile as ManufacturerProfile)
+                            ?.activeMachines || 0}
                         </p>
                       </div>
                     </div>
@@ -245,16 +252,17 @@ function ManufacturerProfilePage() {
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
                           Member Since
-                        </p>
+                        </p>{' '}
                         <p className="text-lg font-semibold text-purple-600">
-                          {profile?.memberSince
-                            ? new Date(profile.memberSince).toLocaleDateString(
-                                'en-US',
-                                {
-                                  month: 'short',
-                                  year: 'numeric',
-                                }
-                              )
+                          {(currentProfile as ManufacturerProfile)?.memberSince
+                            ? new Date(
+                                (
+                                  currentProfile as ManufacturerProfile
+                                ).memberSince
+                              ).toLocaleDateString('en-US', {
+                                month: 'short',
+                                year: 'numeric',
+                              })
                             : 'N/A'}
                         </p>
                       </div>
@@ -273,9 +281,9 @@ function ManufacturerProfilePage() {
               <CardTitle className="text-lg font-semibold">
                 Company Information
               </CardTitle>
-            </CardHeader>
+            </CardHeader>{' '}
             <CardContent>
-              {loading ? (
+              {isLoading ? (
                 <div className="space-y-6">
                   {Array.from({ length: 8 }).map((_, i) => (
                     <div key={i} className="space-y-2">
@@ -305,7 +313,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <Building className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.companyName || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)
+                            ?.companyName || 'Not specified'}
                         </span>
                       </div>
                     )}
@@ -327,7 +336,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <Factory className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.industry || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)?.industry ||
+                            'Not specified'}
                         </span>
                       </div>
                     )}
@@ -352,7 +362,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <User className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.contactPerson || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)
+                            ?.contactPerson || 'Not specified'}
                         </span>
                       </div>
                     )}
@@ -378,7 +389,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <Mail className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.contactEmail || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)
+                            ?.contactEmail || 'Not specified'}
                         </span>
                       </div>
                     )}
@@ -400,7 +412,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <Phone className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.phone || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)?.phone ||
+                            'Not specified'}
                         </span>
                       </div>
                     )}
@@ -422,7 +435,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <Globe className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.website || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)?.website ||
+                            'Not specified'}
                         </span>
                       </div>
                     )}
@@ -444,7 +458,8 @@ function ManufacturerProfilePage() {
                       <div className="mt-2 flex items-center space-x-2">
                         <MapPin className="h-4 w-4 text-gray-500" />
                         <span className="text-gray-900 dark:text-white">
-                          {profile?.address || 'Not specified'}
+                          {(currentProfile as ManufacturerProfile)?.address ||
+                            'Not specified'}
                         </span>
                       </div>
                     )}
@@ -464,7 +479,8 @@ function ManufacturerProfilePage() {
                       />
                     ) : (
                       <div className="mt-2 text-gray-900 dark:text-white">
-                        {profile?.city || 'Not specified'}
+                        {(currentProfile as ManufacturerProfile)?.city ||
+                          'Not specified'}
                       </div>
                     )}
                   </div>
@@ -483,7 +499,8 @@ function ManufacturerProfilePage() {
                       />
                     ) : (
                       <div className="mt-2 text-gray-900 dark:text-white">
-                        {profile?.state || 'Not specified'}
+                        {(currentProfile as ManufacturerProfile)?.state ||
+                          'Not specified'}
                       </div>
                     )}
                   </div>
@@ -502,7 +519,8 @@ function ManufacturerProfilePage() {
                       />
                     ) : (
                       <div className="mt-2 text-gray-900 dark:text-white">
-                        {profile?.zipCode || 'Not specified'}
+                        {(currentProfile as ManufacturerProfile)?.zipCode ||
+                          'Not specified'}
                       </div>
                     )}
                   </div>
@@ -526,7 +544,8 @@ function ManufacturerProfilePage() {
                       />
                     ) : (
                       <div className="mt-2 text-gray-900 dark:text-white">
-                        {profile?.description || 'No description provided'}
+                        {(currentProfile as ManufacturerProfile)?.description ||
+                          'No description provided'}
                       </div>
                     )}
                   </div>

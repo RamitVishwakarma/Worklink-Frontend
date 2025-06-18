@@ -101,10 +101,9 @@ export function QuickNavigation() {
       description: 'Manage machines and applications',
     },
   ];
-
   return (
     <div className="bg-white rounded-industrial border border-industrial-border p-6 shadow-industrial">
-      <h3 className="font-oswald font-bold text-xl text-industrial-gunmetal-800 mb-4">
+      <h3 className="industrial-card-title text-industrial-gunmetal-800 mb-4">
         Quick Access
       </h3>
       <Navigation items={quickNavItems} />

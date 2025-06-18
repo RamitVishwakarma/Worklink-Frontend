@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   IndustrialCard,
   IndustrialCardContent,
@@ -18,10 +18,15 @@ import {
 } from '@/components/ui/industrial-layout';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useAuthStore } from '@/lib/store/authStore';
-import { useToast } from '@/hooks/use-toast';
+import { AuthenticatedAppShell } from '@/components/providers/AppProvider';
 import withAuth from '@/components/auth/withAuth';
-import { UserType, Machine, MachineApplication } from '@/lib/types';
-import api from '@/lib/api';
+import { UserType, MachineApplication } from '@/lib/types';
+import {
+  useMachinesStore,
+  useMachineStats,
+  useApplicationsStore,
+  useMachineApplicationStats,
+} from '@/lib/store';
 import {
   Settings,
   Plus,
@@ -40,74 +45,19 @@ import Link from 'next/link';
 
 function ManufacturerDashboardPage() {
   const { user } = useAuthStore();
-  const { toast } = useToast();
 
-  const [machines, setMachines] = useState<Machine[]>([]);
-  const [applications, setApplications] = useState<MachineApplication[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalMachines: 0,
-    activeMachines: 0,
-    totalApplications: 0,
-    pendingApplications: 0,
-    approvedApplications: 0,
-    rejectedApplications: 0,
-  });
+  // Store data
+  const { machines, isLoading: machinesLoading } = useMachinesStore();
+  const { machineApplications, machineApplicationsLoading } =
+    useApplicationsStore();
+  const machineStats = useMachineStats();
+  const applicationStats = useMachineApplicationStats();
 
-  useEffect(() => {
-    if (user) {
-      fetchDashboardData();
-    }
-  }, [user]);
+  const loading = machinesLoading || machineApplicationsLoading;
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      const [machinesResponse, applicationsResponse] = await Promise.all([
-        api.get('/manufacturer/machines'),
-        api.get('/manufacturer/machine-applications'),
-      ]);
-
-      const machinesData = machinesResponse.data;
-      const applicationsData = applicationsResponse.data;
-
-      setMachines(machinesData);
-      setApplications(applicationsData);
-
-      // Calculate stats
-      const totalMachines = machinesData.length;
-      const activeMachines = machinesData.filter(
-        (m: Machine) => m.isAvailable
-      ).length;
-      const totalApplications = applicationsData.length;
-      const pendingApplications = applicationsData.filter(
-        (app: MachineApplication) => app.status === 'pending'
-      ).length;
-      const approvedApplications = applicationsData.filter(
-        (app: MachineApplication) => app.status === 'approved'
-      ).length;
-      const rejectedApplications = applicationsData.filter(
-        (app: MachineApplication) => app.status === 'rejected'
-      ).length;
-
-      setStats({
-        totalMachines,
-        activeMachines,
-        totalApplications,
-        pendingApplications,
-        approvedApplications,
-        rejectedApplications,
-      });
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch dashboard data',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Get recent machines and applications for display
+  const recentMachines = machines.slice(0, 3);
+  const recentApplications = machineApplications.slice(0, 3);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -196,7 +146,7 @@ function ManufacturerDashboardPage() {
                           Total Machines
                         </p>
                         <p className="text-3xl font-bold text-industrial-primary">
-                          {stats.totalMachines}
+                          {machineStats.total}
                         </p>
                       </div>
                       <IndustrialIcon
@@ -206,7 +156,7 @@ function ManufacturerDashboardPage() {
                       />
                     </div>
                     <p className="text-xs text-industrial-muted mt-2">
-                      {stats.activeMachines} currently active
+                      {machineStats.active} currently active
                     </p>
                   </IndustrialCardContent>
                 </IndustrialCard>
@@ -222,13 +172,13 @@ function ManufacturerDashboardPage() {
                           Total Applications
                         </p>
                         <p className="text-3xl font-bold text-industrial-primary">
-                          {stats.totalApplications}
+                          {applicationStats.total}
                         </p>
                       </div>
                       <Users className="h-8 w-8 text-emerald-500" />
                     </div>
                     <p className="text-xs text-industrial-muted mt-2">
-                      {stats.pendingApplications} pending review
+                      {applicationStats.pending} pending review
                     </p>
                   </IndustrialCardContent>
                 </IndustrialCard>
@@ -244,7 +194,7 @@ function ManufacturerDashboardPage() {
                           Approved Applications
                         </p>
                         <p className="text-3xl font-bold text-emerald-600">
-                          {stats.approvedApplications}
+                          {applicationStats.approved}
                         </p>
                       </div>
                       <CheckCircle className="h-8 w-8 text-emerald-500" />
@@ -266,7 +216,7 @@ function ManufacturerDashboardPage() {
                           Pending Applications
                         </p>
                         <p className="text-3xl font-bold text-industrial-accent">
-                          {stats.pendingApplications}
+                          {applicationStats.pending}
                         </p>
                       </div>
                       <Clock className="h-8 w-8 text-industrial-accent" />
@@ -288,7 +238,7 @@ function ManufacturerDashboardPage() {
                           Active Machines
                         </p>
                         <p className="text-3xl font-bold text-blue-600">
-                          {stats.activeMachines}
+                          {machineStats.active}
                         </p>
                       </div>
                       <TrendingUp className="h-8 w-8 text-blue-500" />
@@ -310,7 +260,7 @@ function ManufacturerDashboardPage() {
                           Rejected Applications
                         </p>
                         <p className="text-3xl font-bold text-red-600">
-                          {stats.rejectedApplications}
+                          {applicationStats.rejected}
                         </p>
                       </div>
                       <XCircle className="h-8 w-8 text-red-500" />
@@ -447,7 +397,7 @@ function ManufacturerDashboardPage() {
                       </div>
                     ))}
                   </div>
-                ) : applications.length === 0 ? (
+                ) : machineApplications.length === 0 ? (
                   <div className="text-center py-8">
                     <Users className="h-12 w-12 text-industrial-muted mx-auto mb-4" />
                     <p className="text-industrial-secondary">
@@ -456,65 +406,67 @@ function ManufacturerDashboardPage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {applications.slice(0, 5).map((application) => (
-                      <div
-                        key={application.id}
-                        className="flex items-center justify-between p-4 border-2 border-industrial-gunmetal-300 rounded-lg hover:bg-metal-grid transition-colors shadow-industrial-sm hover:shadow-industrial-md hover:border-industrial-gunmetal-400"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <div className="h-10 w-10 bg-gradient-to-br from-industrial-navy-500 to-industrial-navy-600 rounded-lg flex items-center justify-center shadow-industrial-sm">
-                            {application.applicantType === 'worker' ? (
-                              <IndustrialIcon
-                                icon="hardhat"
-                                size="sm"
-                                className="text-white"
-                              />
-                            ) : (
-                              <IndustrialIcon
-                                icon="cog"
-                                size="sm"
-                                className="text-white"
-                              />
-                            )}
+                    {recentApplications.map(
+                      (application: MachineApplication) => (
+                        <div
+                          key={application.id}
+                          className="flex items-center justify-between p-4 border-2 border-industrial-gunmetal-300 rounded-lg hover:bg-metal-grid transition-colors shadow-industrial-sm hover:shadow-industrial-md hover:border-industrial-gunmetal-400"
+                        >
+                          <div className="flex items-center space-x-4">
+                            <div className="h-10 w-10 bg-gradient-to-br from-industrial-navy-500 to-industrial-navy-600 rounded-lg flex items-center justify-center shadow-industrial-sm">
+                              {application.applicantType === 'worker' ? (
+                                <IndustrialIcon
+                                  icon="hardhat"
+                                  size="sm"
+                                  className="text-white"
+                                />
+                              ) : (
+                                <IndustrialIcon
+                                  icon="cog"
+                                  size="sm"
+                                  className="text-white"
+                                />
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-industrial-gunmetal-800">
+                                {application.applicantType === 'worker'
+                                  ? 'Worker'
+                                  : 'Startup'}{' '}
+                                - {application.applicantId}
+                              </h3>
+                              <p className="text-sm text-industrial-secondary flex items-center gap-1">
+                                <IndustrialIcon
+                                  icon="wrench"
+                                  size="sm"
+                                  className="text-industrial-secondary"
+                                />
+                                Applied for {application.machine?.name}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-medium text-industrial-gunmetal-800">
-                              {application.applicantType === 'worker'
-                                ? 'Worker'
-                                : 'Startup'}{' '}
-                              - {application.applicantId}
-                            </h3>
-                            <p className="text-sm text-industrial-secondary flex items-center gap-1">
-                              <IndustrialIcon
-                                icon="wrench"
-                                size="sm"
-                                className="text-industrial-secondary"
-                              />
-                              Applied for {application.machine?.name}
-                            </p>
+                          <div className="flex items-center space-x-3">
+                            <Badge
+                              variant={
+                                application.status === 'approved'
+                                  ? 'industrial-success'
+                                  : application.status === 'rejected'
+                                    ? 'industrial-danger'
+                                    : 'industrial-accent'
+                              }
+                              className="uppercase text-xs font-bold"
+                            >
+                              {application.status}
+                            </Badge>
+                            <span className="text-xs text-industrial-gunmetal-600 bg-industrial-gunmetal-100 px-2 py-1 rounded">
+                              {new Date(
+                                application.appliedAt
+                              ).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-3">
-                          <Badge
-                            variant={
-                              application.status === 'approved'
-                                ? 'industrial-success'
-                                : application.status === 'rejected'
-                                  ? 'industrial-danger'
-                                  : 'industrial-accent'
-                            }
-                            className="uppercase text-xs font-bold"
-                          >
-                            {application.status}
-                          </Badge>
-                          <span className="text-xs text-industrial-gunmetal-600 bg-industrial-gunmetal-100 px-2 py-1 rounded">
-                            {new Date(
-                              application.appliedAt
-                            ).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </IndustrialCardContent>

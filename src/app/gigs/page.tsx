@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   IndustrialCard,
@@ -28,7 +28,8 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useToast } from '@/hooks/use-toast';
-import { getAllGigs, applyToGig } from '@/lib/api';
+import { useGigsStore } from '@/lib/store';
+import { useGigOperations } from '@/hooks/useApiIntegration';
 import { Gig } from '@/lib/types';
 import {
   Briefcase,
@@ -51,34 +52,17 @@ export default function GigsPage() {
   const { toast } = useToast();
   const router = useRouter();
 
-  const [gigs, setGigs] = useState<Gig[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Store data
+  const { gigs, isLoading: loading } = useGigsStore();
+  const { handleApplyToGig } = useGigOperations();
+
+  // Local state for filters and UI
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [jobTypeFilter, setJobTypeFilter] = useState('');
   const [applyingTo, setApplyingTo] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchGigs();
-  }, []);
-
-  const fetchGigs = async () => {
-    try {
-      setLoading(true);
-      const response = await getAllGigs();
-      setGigs(response.data);
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: 'Failed to load gigs. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleApplyToGig = async (gigId: string) => {
+  const handleGigApplication = async (gigId: string) => {
     if (!user) {
       toast({
         title: 'Authentication Required',
@@ -100,13 +84,7 @@ export default function GigsPage() {
 
     try {
       setApplyingTo(gigId);
-      await applyToGig(gigId, user.id, {});
-      toast({
-        title: 'Success',
-        description: 'Successfully applied for the gig!',
-      });
-      // Refresh gigs or update application status
-      fetchGigs();
+      await handleApplyToGig(gigId, 'Interested in this position!');
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -367,7 +345,7 @@ export default function GigsPage() {
                       <Button
                         variant="industrial-accent"
                         className="w-full"
-                        onClick={() => handleApplyToGig(gig._id)}
+                        onClick={() => handleGigApplication(gig._id)}
                         disabled={
                           applyingTo === gig._id || user?.userType !== 'worker'
                         }

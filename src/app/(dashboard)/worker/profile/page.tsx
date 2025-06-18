@@ -16,7 +16,8 @@ import {
   Calendar,
   Briefcase,
 } from 'lucide-react';
-import { getWorkerProfile, updateWorkerProfile } from '@/lib/api';
+import { useAuthStore } from '@/lib/store/authStore';
+import { useProfilesStore } from '@/lib/store';
 import { IndustrialLayout } from '@/components/ui/industrial-layout';
 import {
   IndustrialCard,
@@ -38,17 +39,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { UserType } from '@/lib/types';
 
 const profileSchema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 characters'),
   location: z.string().min(2, 'Location is required'),
   bio: z.string().max(500, 'Bio must not exceed 500 characters'),
   skills: z.string(),
   experience: z.string(),
-  availability: z.enum(['available', 'busy', 'unavailable']),
+  portfolio: z.string().optional(),
 });
 
 type ProfileData = z.infer<typeof profileSchema> & {
@@ -71,50 +72,53 @@ const itemVariants = {
 };
 
 export default function WorkerProfilePage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const { user } = useAuthStore();
+  const { currentProfile, isLoading, isUpdating, fetchProfile, updateProfile } =
+    useProfilesStore();
   const { toast } = useToast();
-
   const form = useForm<ProfileData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      name: '',
       email: '',
       phone: '',
       location: '',
       bio: '',
       skills: '',
       experience: '',
-      availability: 'available',
+      portfolio: '',
     },
   });
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    if (user?.id) {
+      handleFetchProfile();
+    }
+  }, [user]);
 
-  const fetchProfile = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const response = await getWorkerProfile(user.id);
-      const data = response.data;
-
-      setProfileData(data);
+  useEffect(() => {
+    if (currentProfile) {
+      const profile = currentProfile as any; // Type assertion for now
       form.reset({
-        firstName: data.firstName || '',
-        lastName: data.lastName || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        location: data.location || '',
-        bio: data.bio || '',
-        skills: Array.isArray(data.skills)
-          ? data.skills.join(', ')
-          : data.skills || '',
-        experience: data.experience || '',
-        availability: data.availability || 'available',
+        name: profile.name || '',
+        email: profile.email || '',
+        phone: profile.phone || '',
+        location: profile.location || '',
+        bio: profile.bio || '',
+        skills: Array.isArray(profile.skills)
+          ? profile.skills.join(', ')
+          : profile.skills || '',
+        experience: profile.experience || '',
+        portfolio: profile.portfolio || '',
       });
+    }
+  }, [currentProfile, form]);
+
+  const handleFetchProfile = async () => {
+    if (!user?.id) return;
+
+    try {
+      await fetchProfile(user.id, UserType.WORKER);
     } catch (error) {
       console.error('Error fetching profile:', error);
       toast({
@@ -122,15 +126,13 @@ export default function WorkerProfilePage() {
         description: 'Failed to load profile data',
         variant: 'destructive',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const onSubmit = async (data: ProfileData) => {
-    setIsUpdating(true);
+    if (!user?.id) return;
+
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
       const updateData = {
         ...data,
         skills: data.skills
@@ -139,14 +141,12 @@ export default function WorkerProfilePage() {
           .filter(Boolean),
       };
 
-      await updateWorkerProfile(user.id, updateData);
+      await updateProfile(user.id, UserType.WORKER, updateData);
 
       toast({
         title: 'Success',
         description: 'Profile updated successfully',
       });
-
-      fetchProfile();
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
@@ -154,8 +154,6 @@ export default function WorkerProfilePage() {
         description: 'Failed to update profile',
         variant: 'destructive',
       });
-    } finally {
-      setIsUpdating(false);
     }
   };
 
@@ -196,64 +194,42 @@ export default function WorkerProfilePage() {
               Manage your personal information and professional details
             </p>
           </div>
-        </motion.div>
-
-        {/* Profile Stats */}
-        {profileData && (
+        </motion.div>{' '}
+        {/* Profile Overview */}
+        {currentProfile && (
           <motion.div variants={itemVariants}>
             <IndustrialCard variant="industrial">
+              <IndustrialCardHeader>
+                <IndustrialCardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Profile Overview
+                </IndustrialCardTitle>
+              </IndustrialCardHeader>
               <IndustrialCardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <div className="flex items-center space-x-3">
-                    <User className="h-6 w-6 text-industrial-safety-500" />
-                    <div>
-                      <p className="text-sm text-industrial-gray-300">Status</p>
-                      <IndustrialBadge
-                        variant={
-                          profileData.availability === 'available'
-                            ? 'success'
-                            : profileData.availability === 'busy'
-                              ? 'warning'
-                              : 'secondary'
-                        }
-                      >
-                        {profileData.availability}
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="space-y-4 flex-1">
+                    <div className="flex items-center gap-2">
+                      {' '}
+                      <IndustrialBadge variant="success">
+                        Active
                       </IndustrialBadge>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="h-6 w-6 text-industrial-safety-500" />
-                    <div>
-                      <p className="text-sm text-industrial-gray-300">
-                        Location
-                      </p>
-                      <p className="font-medium text-industrial-gray-100">
-                        {profileData.location || 'Not specified'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Briefcase className="h-6 w-6 text-industrial-safety-500" />
-                    <div>
-                      <p className="text-sm text-industrial-gray-300">
-                        Experience
-                      </p>
-                      <p className="font-medium text-industrial-gray-100">
-                        {profileData.experience || 'Not specified'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="h-6 w-6 text-industrial-safety-500" />
-                    <div>
-                      <p className="text-sm text-industrial-gray-300">
-                        Member Since
-                      </p>
-                      <p className="font-medium text-industrial-gray-100">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center gap-2 text-sm text-industrial-gray-300">
+                        <MapPin className="h-4 w-4" />
+                        {(currentProfile as any).location || 'Not specified'}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-industrial-gray-300">
+                        <Briefcase className="h-4 w-4" />
+                        {(currentProfile as any).experience || 'Not specified'}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-industrial-gray-300">
+                        <Calendar className="h-4 w-4" />
+                        Member since{' '}
                         {new Date(
-                          profileData.createdAt || Date.now()
+                          (currentProfile as any).createdAt || Date.now()
                         ).toLocaleDateString()}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -261,7 +237,6 @@ export default function WorkerProfilePage() {
             </IndustrialCard>
           </motion.div>
         )}
-
         {/* Profile Form */}
         <motion.div variants={itemVariants}>
           <IndustrialCard variant="industrial">
@@ -277,34 +252,18 @@ export default function WorkerProfilePage() {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-6"
                 >
+                  {' '}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
-                      name="firstName"
+                      name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>First Name</FormLabel>
+                          <FormLabel>Full Name</FormLabel>
                           <FormControl>
                             <IndustrialInput
                               {...field}
-                              placeholder="Enter your first name"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Last Name</FormLabel>
-                          <FormControl>
-                            <IndustrialInput
-                              {...field}
-                              placeholder="Enter your last name"
+                              placeholder="Enter your full name"
                             />
                           </FormControl>
                           <FormMessage />
@@ -363,29 +322,7 @@ export default function WorkerProfilePage() {
                         </FormItem>
                       )}
                     />
-
-                    <FormField
-                      control={form.control}
-                      name="availability"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Availability</FormLabel>
-                          <FormControl>
-                            <select
-                              {...field}
-                              className="w-full px-4 py-3 bg-industrial-gray-600 border border-industrial-gray-500 rounded-lg text-industrial-gray-100 focus:border-industrial-accent focus:ring-1 focus:ring-industrial-accent"
-                            >
-                              <option value="available">Available</option>
-                              <option value="busy">Busy</option>
-                              <option value="unavailable">Unavailable</option>
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
@@ -420,8 +357,7 @@ export default function WorkerProfilePage() {
                         </FormItem>
                       )}
                     />
-                  </div>
-
+                  </div>{' '}
                   <FormField
                     control={form.control}
                     name="bio"
@@ -439,7 +375,22 @@ export default function WorkerProfilePage() {
                       </FormItem>
                     )}
                   />
-
+                  <FormField
+                    control={form.control}
+                    name="portfolio"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Portfolio URL (Optional)</FormLabel>
+                        <FormControl>
+                          <IndustrialInput
+                            {...field}
+                            placeholder="https://your-portfolio.com"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <motion.div
                     className="flex justify-end"
                     whileHover={{ scale: 1.02 }}

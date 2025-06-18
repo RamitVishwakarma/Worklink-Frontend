@@ -21,32 +21,6 @@ export function Footer() {
       id="contact"
     >
       <div className="container mx-auto px-4">
-        {/* Newsletter */}
-        <div className="max-w-5xl mx-auto bg-industrial-navy-800 rounded-xl p-8 mb-16 relative shadow-xl -mt-32">
-          <div className="absolute top-0 left-0 w-full h-2 bg-industrial-safety-300 rounded-t-xl"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="font-oswald text-2xl font-bold mb-2">
-                Stay Connected
-              </h3>
-              <p className="text-industrial-navy-100 mb-2">
-                Get updates on new opportunities and platform features.
-              </p>
-            </div>
-            <div>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter your email"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:ring-industrial-safety-300"
-                />
-                <Button className="bg-industrial-safety-300 hover:bg-industrial-safety-400 text-industrial-gunmetal-800 font-medium whitespace-nowrap">
-                  Subscribe
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* About */}
           <div>
@@ -143,18 +117,21 @@ export function Footer() {
                 <span className="text-gray-400">
                   123 Industrial Way, <br />
                   Manufacturing District, <br />
-                  NY 10001
+                  Delhi 110001
                 </span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-industrial-safety-300 mr-3" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <span className="text-gray-400">+91 93057-86097</span>
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 text-industrial-safety-300 mr-3" />
-                <span className="text-gray-400">
-                  contact@industrialconnect.com
-                </span>
+                <a
+                  href="mailto:vishwakarmaramit@gmail.com"
+                  className="text-gray-400 hover:text-industrial-safety-300 transition-colors duration-300 break-all"
+                >
+                  vishwakarmaramit@gmail.com
+                </a>
               </li>
             </ul>
           </div>

@@ -44,12 +44,12 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { useAuthStore } from '@/lib/store/authStore';
 import {
-  getMachineApplications,
-  approveOrRejectApplication,
-  getMachineDetails,
-} from '@/lib/api';
+  useMachinesStore,
+  useApplicationsStore,
+  useMachineApplicationStats,
+  useAuthStore,
+} from '@/lib/store';
 import { Machine, MachineApplication, UserType } from '@/lib/types';
 import withAuth from '@/components/auth/withAuth';
 import {
@@ -89,18 +89,25 @@ const itemVariants = {
 };
 
 function MachineApplicationsPage() {
+  const {
+    machines,
+    applications,
+    isLoading,
+    isUpdating,
+    fetchApplications,
+    updateApplicationStatus,
+  } = useMachinesStore();
   const { user } = useAuthStore();
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
   const machineId = params.id as string;
 
-  const [machine, setMachine] = useState<Machine | null>(null);
-  const [applications, setApplications] = useState<MachineApplication[]>([]);
+  // Get current machine from store
+  const machine = machines.find((m) => m._id === machineId) || null;
   const [filteredApplications, setFilteredApplications] = useState<
     MachineApplication[]
   >([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -120,21 +127,9 @@ function MachineApplicationsPage() {
   const fetchMachineAndApplications = async () => {
     if (!user?.id || !machineId) return;
 
-    setLoading(true);
     try {
-      // Fetch machine details and applications in parallel
-      const [machineResponse, applicationsResponse] = await Promise.all([
-        getMachineDetails(machineId),
-        getMachineApplications(user.id, machineId),
-      ]);
-
-      setMachine(machineResponse.data);
-      const applicationsData =
-        applicationsResponse.data?.applications ||
-        applicationsResponse.data ||
-        [];
-      setApplications(applicationsData);
-      setFilteredApplications(applicationsData);
+      // Fetch applications using store
+      await fetchApplications(user.id, machineId);
     } catch (error: any) {
       console.error('Error fetching data:', error);
       toast({
@@ -144,8 +139,6 @@ function MachineApplicationsPage() {
           'Failed to fetch machine applications',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -159,15 +152,14 @@ function MachineApplicationsPage() {
       action,
     });
   };
-
   const confirmApplicationAction = async () => {
     const { application, action } = confirmDialog;
     if (!application || !action) return;
 
-    setProcessingApplication(application.id);
+    setProcessingApplication(application._id);
     try {
-      await approveOrRejectApplication(
-        application.id,
+      await updateApplicationStatus(
+        application._id,
         action === 'approve' ? 'approved' : 'rejected'
       );
 
@@ -175,19 +167,6 @@ function MachineApplicationsPage() {
         title: 'Success',
         description: `Application ${action === 'approve' ? 'approved' : 'rejected'} successfully!`,
       });
-
-      // Update application status locally
-      const updatedStatus = action === 'approve' ? 'approved' : 'rejected';
-      setApplications((prev) =>
-        prev.map((app) =>
-          app.id === application.id ? { ...app, status: updatedStatus } : app
-        )
-      );
-      setFilteredApplications((prev) =>
-        prev.map((app) =>
-          app.id === application.id ? { ...app, status: updatedStatus } : app
-        )
-      );
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -274,7 +253,7 @@ function MachineApplicationsPage() {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <IndustrialLayout>
         <IndustrialContainer>

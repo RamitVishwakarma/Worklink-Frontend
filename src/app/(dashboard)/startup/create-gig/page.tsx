@@ -27,8 +27,7 @@ import {
 } from '@/components/ui/industrial-layout';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useToast } from '@/hooks/use-toast';
-import { useAuthStore } from '@/lib/store/authStore';
-import api from '@/lib/api';
+import { useAuthStore, useGigsStore } from '@/lib/store';
 import withAuth from '@/components/auth/withAuth';
 import { UserType } from '@/lib/types';
 import {
@@ -85,10 +84,10 @@ function CreateGigPage() {
   });
   const [newRequirement, setNewRequirement] = useState('');
   const [newBenefit, setNewBenefit] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const { toast } = useToast();
   const { user } = useAuthStore();
+  const { createGig, isCreating } = useGigsStore();
   const router = useRouter();
 
   const jobTypes = [
@@ -144,7 +143,6 @@ function CreateGigPage() {
       benefits: prev.benefits.filter((ben) => ben !== benefit),
     }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -162,7 +160,6 @@ function CreateGigPage() {
       return;
     }
 
-    setLoading(true);
     try {
       const gigData = {
         ...formData,
@@ -170,7 +167,7 @@ function CreateGigPage() {
         company: user?.companyName || user?.name || 'Unknown Company',
       };
 
-      await api.post('/gigs', gigData);
+      await createGig(gigData);
 
       toast({
         title: 'Success',
@@ -184,8 +181,6 @@ function CreateGigPage() {
         description: error.response?.data?.message || 'Failed to create gig',
         variant: 'destructive',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -571,13 +566,14 @@ function CreateGigPage() {
                   </IndustrialCardContent>
                 </IndustrialCard>
                 <div className="flex flex-col gap-2">
+                  {' '}
                   <Button
                     type="submit"
-                    disabled={loading}
+                    disabled={isCreating}
                     className="w-full"
                     variant="industrial-accent"
                   >
-                    {loading ? (
+                    {isCreating ? (
                       <>
                         <Clock className="h-4 w-4 mr-2 animate-spin" />
                         Creating...
@@ -589,12 +585,11 @@ function CreateGigPage() {
                       </>
                     )}
                   </Button>
-
                   <Button
                     type="button"
                     variant="industrial-outline"
                     onClick={() => router.back()}
-                    disabled={loading}
+                    disabled={isCreating}
                     className="w-full"
                   >
                     Cancel
