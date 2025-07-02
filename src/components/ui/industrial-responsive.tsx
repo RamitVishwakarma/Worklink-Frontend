@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 // Breakpoint definitions matching Tailwind CSS defaults
 export const breakpoints = {
@@ -477,7 +478,7 @@ export const ResponsiveImage = React.forwardRef<
     };
 
     return (
-      <img
+      <Image
         ref={ref}
         className={cn(
           'w-full h-auto',

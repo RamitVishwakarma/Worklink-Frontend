@@ -23,7 +23,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   IndustrialLayout,
   IndustrialContainer,
-  IndustrialHeader,
 } from '@/components/ui/industrial-layout';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import { useToast } from '@/hooks/use-toast';
@@ -36,7 +35,7 @@ import {
 } from '@/lib/store';
 import { useGigOperations } from '@/hooks/useApiIntegration';
 import withAuth from '@/components/auth/withAuth';
-import { UserType, Gig } from '@/lib/types';
+import { UserType } from '@/lib/types';
 import {
   Plus,
   Edit,
@@ -49,7 +48,6 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertTriangle,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

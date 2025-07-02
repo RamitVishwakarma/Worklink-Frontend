@@ -17,14 +17,8 @@ import {
   IndustrialHeader,
 } from '@/components/ui/industrial-layout';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
-import {
-  IndustrialGrid,
-  IndustrialDashboardGrid,
-} from '@/components/ui/industrial-grid-system';
 import { IndustrialAccessibilityProvider } from '@/components/ui/industrial-accessibility-enhanced';
-import designTokens from '@/components/ui/industrial-design-tokens';
 import { useAuthStore } from '@/lib/store/authStore';
-import { AuthenticatedAppShell } from '@/components/providers/AppProvider';
 import withAuth from '@/components/auth/withAuth';
 import { UserType, MachineApplication } from '@/lib/types';
 import {
@@ -44,8 +38,6 @@ import {
   TrendingUp,
   Eye,
   Edit,
-  Cog,
-  Wrench,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -71,7 +63,7 @@ function ManufacturerDashboardPage() {
   const loading = machinesLoading || machineApplicationsLoading;
 
   // Get recent machines and applications for display
-  const recentMachines = machines.slice(0, 3);
+  // const recentMachines = machines.slice(0, 3);
   const recentApplications = machineApplications.slice(0, 3);
 
   const containerVariants = {

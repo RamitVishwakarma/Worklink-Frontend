@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 const steps = [
   {
@@ -85,7 +86,7 @@ export function HowItWorks() {
             >
               <div className="bg-industrial-navy-800/50 backdrop-blur-sm border border-industrial-navy-600 rounded-lg overflow-hidden group hover:shadow-lg hover:shadow-industrial-navy-500/10 transition-all duration-300">
                 <div className="relative h-48 overflow-hidden">
-                  <img
+                  <Image
                     src={step.image}
                     alt={step.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

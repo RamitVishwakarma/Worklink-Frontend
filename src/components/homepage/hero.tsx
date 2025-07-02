@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export function Hero() {
   return (
@@ -11,7 +12,7 @@ export function Hero() {
       {/* Hero background with overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-industrial-gunmetal-800/90 to-industrial-gunmetal-800/70 z-10" />
-        <img
+        <Image
           src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
           alt="Industrial workers"
           className="object-cover w-full h-full"
