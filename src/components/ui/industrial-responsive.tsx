@@ -455,10 +455,19 @@ interface ResponsiveImageProps
 
 export const ResponsiveImage = React.forwardRef<
   HTMLImageElement,
-  ResponsiveImageProps
+  ResponsiveImageProps & { src: string; width?: number; height?: number }
 >(
   (
-    { className, aspectRatio = 'auto', objectFit = 'cover', alt, ...props },
+    {
+      className,
+      aspectRatio = 'auto',
+      objectFit = 'cover',
+      alt,
+      src,
+      width,
+      height,
+      ...props
+    },
     ref
   ) => {
     const aspectRatioClasses = {
@@ -480,13 +489,16 @@ export const ResponsiveImage = React.forwardRef<
     return (
       <Image
         ref={ref}
+        src={src}
+        width={width || 500}
+        height={height || 300}
         className={cn(
           'w-full h-auto',
           aspectRatioClasses[aspectRatio],
           objectFitClasses[objectFit],
           className
         )}
-        alt={alt}
+        alt={alt ?? 'Responsive image'}
         {...props}
       />
     );
