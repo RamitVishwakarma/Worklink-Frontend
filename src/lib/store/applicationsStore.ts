@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import { workerAPI, startupAPI, manufacturerAPI } from '../api';
 import type { MachineApplication, GigApplication } from '../types';
 import { useAuthStore } from './authStore';
@@ -31,6 +32,7 @@ export interface ApplicationsState {
     status: 'approved' | 'rejected',
     type: 'machine' | 'gig'
   ) => Promise<boolean>;
+  fetchApplications: () => Promise<void>; // New method to fetch all applications for current user
   clearError: () => void;
   setFilters: (filters: Partial<ApplicationsState['filters']>) => void;
   resetFilters: () => void;
@@ -61,11 +63,19 @@ export const useApplicationsStore = create<ApplicationsState>()(
       applyToMachine: async (machineId: string, message?: string) => {
         try {
           const { user } = useAuthStore.getState();
-          if (!user?.id) {
+          const userType = user?.userType;
+
+          if (!user || !userType) {
             throw new Error('User not authenticated');
           }
 
-          await workerAPI.applyToMachine(machineId, user.id, { message });
+          if (userType === 'worker') {
+            await workerAPI.applyToMachine(machineId, { message });
+          } else if (userType === 'startup') {
+            await startupAPI.applyToMachine(machineId, { message });
+          } else {
+            throw new Error('Invalid user type for machine application');
+          }
           return true;
         } catch (error) {
           console.error('Failed to apply to machine:', error);
@@ -75,16 +85,50 @@ export const useApplicationsStore = create<ApplicationsState>()(
 
       applyToGig: async (gigId: string, message?: string) => {
         try {
-          const { user } = useAuthStore.getState();
-          if (!user?.id) {
-            throw new Error('User not authenticated');
-          }
-
-          await workerAPI.applyToGig(gigId, user.id, { message });
+          await workerAPI.applyToGig(gigId, { message });
           return true;
         } catch (error) {
           console.error('Failed to apply to gig:', error);
           return false;
+        }
+      },
+
+      fetchApplications: async () => {
+        const { user } = useAuthStore.getState();
+        const userType = user?.userType;
+
+        if (!user || !userType) {
+          console.error('User not authenticated');
+          return;
+        }
+
+        try {
+          if (userType === 'worker') {
+            // For workers, fetch their applied gigs - no separate machine applications endpoint
+            set({ gigApplicationsLoading: true });
+            const appliedGigs = await workerAPI.getAppliedGigs();
+            set({
+              gigApplications: appliedGigs,
+              gigApplicationsLoading: false,
+            });
+          } else if (userType === 'manufacturer') {
+            // For manufacturers, fetch applications to their machines
+            set({ machineApplicationsLoading: true });
+            const applications = await manufacturerAPI.getMachineApplications();
+            set({
+              machineApplications: applications,
+              machineApplicationsLoading: false,
+            });
+          }
+          // Startups don't have a specific applications endpoint in current API
+        } catch (error) {
+          console.error('Failed to fetch applications:', error);
+          set({
+            machineApplicationsLoading: false,
+            gigApplicationsLoading: false,
+            machineApplicationsError: 'Failed to fetch applications',
+            gigApplicationsError: 'Failed to fetch applications',
+          });
         }
       },
 
@@ -107,8 +151,7 @@ export const useApplicationsStore = create<ApplicationsState>()(
               ),
             }));
           } else {
-            // Note: startupAPI.updateApplicationStatus doesn't exist in current API
-            // This would need to be implemented if gig application status updates are needed
+            // Note: Gig application status updates not implemented in current API
             throw new Error('Gig application status updates not implemented');
           }
 
@@ -145,112 +188,140 @@ export const useApplicationsStore = create<ApplicationsState>()(
   )
 );
 
-// Selectors for computed values
-export const useFilteredMachineApplications = () => {
-  return useApplicationsStore((state) => {
-    const { machineApplications, filters } = state;
+// Stable selectors - defined outside of hooks to prevent recreation
+const filteredMachineApplicationsSelector = (state: ApplicationsState) => {
+  const { machineApplications = [], filters } = state;
 
-    let filtered = [...machineApplications];
+  // Ensure we have an array to work with
+  const safeApplications = Array.isArray(machineApplications)
+    ? machineApplications
+    : [];
+  let filtered = [...safeApplications];
 
-    // Filter by status
-    if (filters.status !== 'all') {
-      filtered = filtered.filter((app) => app.status === filters.status);
+  // Filter by status
+  if (filters.status !== 'all') {
+    filtered = filtered.filter((app) => app.status === filters.status);
+  }
+
+  // Sort
+  filtered.sort((a, b) => {
+    const aValue = a[filters.sortBy as keyof MachineApplication];
+    const bValue = b[filters.sortBy as keyof MachineApplication];
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return filters.sortOrder === 'asc'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     }
 
-    // Sort
-    filtered.sort((a, b) => {
-      const aValue = a[filters.sortBy as keyof MachineApplication];
-      const bValue = b[filters.sortBy as keyof MachineApplication];
+    if (aValue instanceof Date && bValue instanceof Date) {
+      return filters.sortOrder === 'asc'
+        ? aValue.getTime() - bValue.getTime()
+        : bValue.getTime() - aValue.getTime();
+    }
 
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return filters.sortOrder === 'asc'
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      if (aValue instanceof Date && bValue instanceof Date) {
-        return filters.sortOrder === 'asc'
-          ? aValue.getTime() - bValue.getTime()
-          : bValue.getTime() - aValue.getTime();
-      }
-
-      return 0;
-    });
-
-    return filtered;
+    return 0;
   });
+
+  return filtered;
+};
+
+// Selectors for computed values
+export const useFilteredMachineApplications = () => {
+  return useApplicationsStore(useShallow(filteredMachineApplicationsSelector));
+};
+
+const filteredGigApplicationsSelector = (state: ApplicationsState) => {
+  const { gigApplications = [], filters } = state;
+
+  // Ensure we have an array to work with
+  const safeApplications = Array.isArray(gigApplications)
+    ? gigApplications
+    : [];
+  let filtered = [...safeApplications];
+
+  // Filter by status
+  if (filters.status !== 'all') {
+    filtered = filtered.filter((app) => app.status === filters.status);
+  }
+
+  // Sort
+  filtered.sort((a, b) => {
+    const aValue = a[filters.sortBy as keyof GigApplication];
+    const bValue = b[filters.sortBy as keyof GigApplication];
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return filters.sortOrder === 'asc'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+
+    if (aValue instanceof Date && bValue instanceof Date) {
+      return filters.sortOrder === 'asc'
+        ? aValue.getTime() - bValue.getTime()
+        : bValue.getTime() - aValue.getTime();
+    }
+
+    return 0;
+  });
+
+  return filtered;
 };
 
 export const useFilteredGigApplications = () => {
-  return useApplicationsStore((state) => {
-    const { gigApplications, filters } = state;
-
-    let filtered = [...gigApplications];
-
-    // Filter by status
-    if (filters.status !== 'all') {
-      filtered = filtered.filter((app) => app.status === filters.status);
-    }
-
-    // Sort
-    filtered.sort((a, b) => {
-      const aValue = a[filters.sortBy as keyof GigApplication];
-      const bValue = b[filters.sortBy as keyof GigApplication];
-
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return filters.sortOrder === 'asc'
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      if (aValue instanceof Date && bValue instanceof Date) {
-        return filters.sortOrder === 'asc'
-          ? aValue.getTime() - bValue.getTime()
-          : bValue.getTime() - aValue.getTime();
-      }
-
-      return 0;
-    });
-
-    return filtered;
-  });
+  return useApplicationsStore(useShallow(filteredGigApplicationsSelector));
 };
 
 // Application statistics selectors
+const machineApplicationStatsSelector = (state: ApplicationsState) => {
+  const { machineApplications = [] } = state;
+
+  // Ensure we have an array to work with
+  const safeApplications = Array.isArray(machineApplications)
+    ? machineApplications
+    : [];
+
+  const total = safeApplications.length;
+  const pending = safeApplications.filter(
+    (app) => app.status === 'pending'
+  ).length;
+  const approved = safeApplications.filter(
+    (app) => app.status === 'approved'
+  ).length;
+  const rejected = safeApplications.filter(
+    (app) => app.status === 'rejected'
+  ).length;
+
+  return { total, pending, approved, rejected };
+};
+
 export const useMachineApplicationStats = () => {
-  return useApplicationsStore((state) => {
-    const { machineApplications } = state;
+  return useApplicationsStore(useShallow(machineApplicationStatsSelector));
+};
 
-    const total = machineApplications.length;
-    const pending = machineApplications.filter(
-      (app) => app.status === 'pending'
-    ).length;
-    const approved = machineApplications.filter(
-      (app) => app.status === 'approved'
-    ).length;
-    const rejected = machineApplications.filter(
-      (app) => app.status === 'rejected'
-    ).length;
+// Stable selectors - defined outside of hooks to prevent recreation
+const gigApplicationStatsSelector = (state: ApplicationsState) => {
+  const { gigApplications = [] } = state;
 
-    return { total, pending, approved, rejected };
-  });
+  // Ensure we have an array to work with
+  const safeApplications = Array.isArray(gigApplications)
+    ? gigApplications
+    : [];
+
+  const total = safeApplications.length;
+  const pending = safeApplications.filter(
+    (app) => app.status === 'pending'
+  ).length;
+  const approved = safeApplications.filter(
+    (app) => app.status === 'approved'
+  ).length;
+  const rejected = safeApplications.filter(
+    (app) => app.status === 'rejected'
+  ).length;
+
+  return { total, pending, approved, rejected };
 };
 
 export const useGigApplicationStats = () => {
-  return useApplicationsStore((state) => {
-    const { gigApplications } = state;
-
-    const total = gigApplications.length;
-    const pending = gigApplications.filter(
-      (app) => app.status === 'pending'
-    ).length;
-    const approved = gigApplications.filter(
-      (app) => app.status === 'approved'
-    ).length;
-    const rejected = gigApplications.filter(
-      (app) => app.status === 'rejected'
-    ).length;
-
-    return { total, pending, approved, rejected };
-  });
+  return useApplicationsStore(useShallow(gigApplicationStatsSelector));
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -45,19 +45,62 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+// Advanced industrial animation system with precision easing
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94], // Industrial precision easing
+      staggerChildren: 0.15,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30, rotateX: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+};
+
+const metalCardVariants = {
+  hidden: { opacity: 0, y: 20, rotateX: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+  hover: {
+    scale: 1.02,
+    y: -2,
+    boxShadow:
+      '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    transition: { duration: 0.3 },
+  },
+};
+
+const headerVariants = {
+  hidden: { opacity: 0, y: -30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
 };
 
 interface CreateGigForm {
@@ -189,6 +232,7 @@ function CreateGigPage() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0];
   };
+
   return (
     <IndustrialLayout>
       <IndustrialContainer>
@@ -199,44 +243,133 @@ function CreateGigPage() {
           animate="visible"
         >
           {' '}
-          {/* Header */}
-          <motion.div variants={itemVariants}>
-            <div className="flex items-center gap-3 mb-4">
-              <IndustrialIcon icon="factory" size="lg" color="accent" />
-              <div>
-                <IndustrialHeader level={1} className="mb-2">
-                  Create New Gig
-                </IndustrialHeader>
-                <p className="text-industrial-muted-foreground">
-                  Post a new job opportunity and find the perfect candidates
-                </p>
+          {/* Enhanced Header with Industrial Styling */}
+          <motion.div variants={headerVariants} className="relative">
+            {/* Animated Metal Accent Bar */}
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
+              className="absolute top-0 left-0 h-1 bg-gradient-to-r from-industrial-accent via-industrial-safety-400 to-industrial-accent rounded-full"
+            />
+
+            <div className="flex items-center gap-4 pt-4">
+              {/* 3D Factory Icon with Hover Animation */}
+              <motion.div
+                whileHover={{
+                  rotateY: 15,
+                  scale: 1.1,
+                  rotateX: 5,
+                }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="relative"
+              >
+                <motion.div
+                  animate={{
+                    rotateZ: [0, 1, -1, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    repeatDelay: 2,
+                  }}
+                >
+                  <IndustrialIcon
+                    icon="factory"
+                    size="xl"
+                    className="text-industrial-accent drop-shadow-lg"
+                  />
+                </motion.div>
+
+                {/* Industrial glow effect */}
+                <div className="absolute inset-0 bg-gradient-radial from-industrial-accent/20 to-transparent rounded-full blur-xl" />
+              </motion.div>
+
+              <div className="flex-1">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-industrial-foreground via-industrial-accent to-industrial-foreground bg-clip-text text-transparent mb-2">
+                    Create New Gig
+                  </h1>
+                  <p className="text-industrial-muted-foreground text-lg">
+                    Post a new job opportunity and find the perfect industrial
+                    candidates
+                  </p>
+                </motion.div>
               </div>
+
+              {/* Metal texture overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-industrial-gunmetal-50/5 to-transparent pointer-events-none" />
             </div>
-          </motion.div>
+          </motion.div>{' '}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Main Form */}
-              <motion.div
+              {/* Enhanced Main Form with Industrial Styling */}
+              {/* <motion.div
                 className="lg:col-span-2 space-y-6"
                 variants={itemVariants}
-              >
-                <IndustrialCard>
-                  {' '}
-                  <IndustrialCardHeader>
-                    <IndustrialCardTitle className="flex items-center gap-2">
-                      <IndustrialIcon icon="gear" size="md" color="primary" />
-                      Job Details
+              > */}
+              {/* Job Details Card - Enhanced */}
+              <motion.div variants={metalCardVariants} whileHover="hover">
+                <IndustrialCard className="relative overflow-hidden border-l-4 border-l-industrial-accent bg-gradient-to-br from-industrial-gunmetal-50 to-industrial-gunmetal-100">
+                  {/* Metal grid pattern overlay */}
+                  <div className="absolute inset-0 opacity-[0.03]">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: `
+                          radial-gradient(circle at 1px 1px, rgba(156, 163, 175, 0.3) 1px, transparent 0),
+                          linear-gradient(45deg, transparent 24%, rgba(156, 163, 175, 0.1) 25%, rgba(156, 163, 175, 0.1) 26%, transparent 27%, transparent 74%, rgba(156, 163, 175, 0.1) 75%, rgba(156, 163, 175, 0.1) 76%, transparent 77%)
+                        `,
+                        backgroundSize: '20px 20px, 60px 60px',
+                      }}
+                    />
+                  </div>
+
+                  {/* Gradient overlay for industrial feel */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-industrial-accent/5 to-transparent opacity-50" />
+
+                  <IndustrialCardHeader className="relative z-10">
+                    <IndustrialCardTitle className="flex items-center gap-3">
+                      <motion.div
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                        }}
+                      >
+                        <IndustrialIcon
+                          icon="gear"
+                          size="md"
+                          className="text-industrial-accent"
+                        />
+                      </motion.div>
+                      <span className="text-industrial-foreground font-bold">
+                        Job Details
+                      </span>
                     </IndustrialCardTitle>
-                    <IndustrialCardDescription>
-                      Basic information about the position
+                    <IndustrialCardDescription className="text-industrial-muted-foreground">
+                      Essential information about the position
                     </IndustrialCardDescription>
                   </IndustrialCardHeader>
-                  <IndustrialCardContent className="space-y-4">
+
+                  <IndustrialCardContent className="space-y-6 relative z-10">
                     <div className="space-y-2">
+                      {' '}
                       <Label
                         htmlFor="title"
-                        className="text-industrial-foreground"
+                        className="text-industrial-foreground font-semibold flex items-center gap-2"
                       >
+                        <IndustrialIcon
+                          icon="factory"
+                          size="sm"
+                          className="text-industrial-accent"
+                        />
                         Job Title *
                       </Label>
                       <IndustrialInput
@@ -247,15 +380,16 @@ function CreateGigPage() {
                         }
                         placeholder="e.g. Senior Frontend Developer"
                         required
+                        className="border-industrial-border bg-white/80 focus:bg-white transition-colors"
                       />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label
                           htmlFor="location"
-                          className="text-industrial-foreground"
+                          className="text-industrial-foreground font-semibold flex items-center gap-2"
                         >
+                          <MapPin className="h-4 w-4 text-industrial-accent" />
                           Location *
                         </Label>
                         <div className="relative">
@@ -266,18 +400,18 @@ function CreateGigPage() {
                             onChange={(e) =>
                               handleInputChange('location', e.target.value)
                             }
-                            placeholder="e.g. New York, NY"
-                            className="pl-10"
+                            placeholder="e.g. Detroit, MI"
+                            className="pl-10 border-industrial-border bg-white/80 focus:bg-white transition-colors"
                             required
                           />
                         </div>
-                      </div>
-
+                      </div>{' '}
                       <div className="space-y-2">
                         <Label
                           htmlFor="jobType"
-                          className="text-industrial-foreground"
+                          className="text-industrial-foreground font-semibold flex items-center gap-2"
                         >
+                          <Briefcase className="h-4 w-4 text-industrial-accent" />
                           Job Type *
                         </Label>
                         <Select
@@ -286,26 +420,30 @@ function CreateGigPage() {
                             handleInputChange('jobType', value)
                           }
                         >
-                          <SelectTrigger className="border-industrial-border bg-industrial-muted/20">
+                          <SelectTrigger className="border-industrial-border bg-white/80 focus:bg-white transition-colors">
                             <SelectValue placeholder="Select job type" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="bg-industrial-background border-industrial-border">
                             {jobTypes.map((type) => (
-                              <SelectItem key={type} value={type}>
+                              <SelectItem
+                                key={type}
+                                value={type}
+                                className="hover:bg-industrial-muted/50"
+                              >
                                 {type}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    </div>{' '}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label
                           htmlFor="salary"
-                          className="text-industrial-foreground"
+                          className="text-industrial-foreground font-semibold flex items-center gap-2"
                         >
+                          <DollarSign className="h-4 w-4 text-industrial-accent" />
                           Salary (Annual)
                         </Label>
                         <div className="relative">
@@ -319,7 +457,7 @@ function CreateGigPage() {
                               handleInputChange('salary', e.target.value)
                             }
                             placeholder="e.g. 80000"
-                            className="pl-10"
+                            className="pl-10 border-industrial-border bg-white/80 focus:bg-white transition-colors"
                           />
                         </div>
                       </div>
@@ -327,8 +465,9 @@ function CreateGigPage() {
                       <div className="space-y-2">
                         <Label
                           htmlFor="deadline"
-                          className="text-industrial-foreground"
+                          className="text-industrial-foreground font-semibold flex items-center gap-2"
                         >
+                          <Calendar className="h-4 w-4 text-industrial-accent" />
                           Application Deadline
                         </Label>
                         <div className="relative">
@@ -344,257 +483,492 @@ function CreateGigPage() {
                                 e.target.value
                               )
                             }
-                            className="pl-10"
+                            className="pl-10 border-industrial-border bg-white/80 focus:bg-white transition-colors"
                           />
                         </div>
                       </div>
-                    </div>
-
+                    </div>{' '}
                     <div className="space-y-2">
                       <Label
                         htmlFor="description"
-                        className="text-industrial-foreground"
+                        className="text-industrial-foreground font-semibold flex items-center gap-2"
                       >
+                        <IndustrialIcon
+                          icon="gear"
+                          size="sm"
+                          className="text-industrial-accent"
+                        />
                         Job Description *
                       </Label>
                       <textarea
                         id="description"
-                        className="flex min-h-[120px] w-full rounded-md border border-industrial-border bg-industrial-muted/20 px-3 py-2 text-sm text-industrial-foreground ring-offset-background placeholder:text-industrial-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-industrial-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex min-h-[120px] w-full rounded-md border border-industrial-border bg-white/80 focus:bg-white px-3 py-2 text-sm text-industrial-foreground ring-offset-background placeholder:text-industrial-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-industrial-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                         value={formData.description}
                         onChange={(e) =>
                           handleInputChange('description', e.target.value)
                         }
-                        placeholder="Describe the role, responsibilities, and what you're looking for..."
+                        placeholder="Describe the role, responsibilities, and what you're looking for in an industrial setting..."
                         required
                       />
                     </div>
                   </IndustrialCardContent>
                 </IndustrialCard>{' '}
-                <IndustrialCard>
-                  <IndustrialCardHeader>
-                    <IndustrialCardTitle className="flex items-center gap-2">
-                      <IndustrialIcon icon="wrench" size="md" color="primary" />
-                      Requirements
-                    </IndustrialCardTitle>
-                    <IndustrialCardDescription>
-                      Skills and qualifications needed for this position
-                    </IndustrialCardDescription>
-                  </IndustrialCardHeader>
-                  <IndustrialCardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <IndustrialInput
-                        value={newRequirement}
-                        onChange={(e) => setNewRequirement(e.target.value)}
-                        placeholder="Add a requirement..."
-                        onKeyPress={(e) =>
-                          e.key === 'Enter' &&
-                          (e.preventDefault(), addRequirement())
-                        }
+                {/* Requirements Card - Enhanced */}
+                <motion.div variants={metalCardVariants} whileHover="hover">
+                  <IndustrialCard className="relative overflow-hidden border-l-4 border-l-industrial-safety-400 bg-gradient-to-br from-industrial-safety-50 to-industrial-safety-100">
+                    {/* Metal grid pattern overlay */}
+                    <div className="absolute inset-0 opacity-[0.03]">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `
+                          radial-gradient(circle at 1px 1px, rgba(234, 179, 8, 0.3) 1px, transparent 0),
+                          linear-gradient(45deg, transparent 24%, rgba(234, 179, 8, 0.1) 25%, rgba(234, 179, 8, 0.1) 26%, transparent 27%, transparent 74%, rgba(234, 179, 8, 0.1) 75%, rgba(234, 179, 8, 0.1) 76%, transparent 77%)
+                        `,
+                          backgroundSize: '20px 20px, 60px 60px',
+                        }}
                       />
-                      <Button
-                        type="button"
-                        onClick={addRequirement}
-                        size="sm"
-                        variant="industrial-accent"
-                        className="shrink-0"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
                     </div>
 
-                    {formData.requirements.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {formData.requirements.map((requirement, index) => (
-                          <Badge
-                            key={index}
-                            variant="industrial-secondary"
-                            className="flex items-center gap-1"
+                    {/* Safety yellow gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-industrial-safety-400/5 to-transparent opacity-50" />
+
+                    <IndustrialCardHeader className="relative z-10">
+                      <IndustrialCardTitle className="flex items-center gap-3">
+                        <motion.div
+                          animate={{ rotate: [0, 10, -10, 0] }}
+                          transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                          }}
+                        >
+                          <IndustrialIcon
+                            icon="wrench"
+                            size="md"
+                            className="text-industrial-safety-400"
+                          />
+                        </motion.div>
+                        <span className="text-industrial-foreground font-bold">
+                          Requirements
+                        </span>
+                      </IndustrialCardTitle>
+                      <IndustrialCardDescription className="text-industrial-muted-foreground">
+                        Skills and qualifications needed for this position
+                      </IndustrialCardDescription>
+                    </IndustrialCardHeader>
+
+                    <IndustrialCardContent className="space-y-4 relative z-10">
+                      <div className="flex gap-2">
+                        <IndustrialInput
+                          value={newRequirement}
+                          onChange={(e) => setNewRequirement(e.target.value)}
+                          placeholder="Add a requirement..."
+                          onKeyPress={(e) =>
+                            e.key === 'Enter' &&
+                            (e.preventDefault(), addRequirement())
+                          }
+                          className="border-industrial-border bg-white/80 focus:bg-white transition-colors"
+                        />
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            type="button"
+                            onClick={addRequirement}
+                            size="sm"
+                            variant="industrial-accent"
+                            className="shrink-0 shadow-lg hover:shadow-xl transition-shadow"
                           >
-                            {requirement}
-                            <X
-                              className="h-3 w-3 cursor-pointer hover:text-destructive"
-                              onClick={() => removeRequirement(requirement)}
-                            />
-                          </Badge>
-                        ))}
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </motion.div>
                       </div>
-                    )}
-                  </IndustrialCardContent>
-                </IndustrialCard>{' '}
-                <IndustrialCard>
-                  <IndustrialCardHeader>
-                    <IndustrialCardTitle className="flex items-center gap-2">
-                      <IndustrialIcon icon="cog" size="md" color="primary" />
-                      Benefits
-                    </IndustrialCardTitle>
-                    <IndustrialCardDescription>
-                      What you offer to employees
-                    </IndustrialCardDescription>
-                  </IndustrialCardHeader>
-                  <IndustrialCardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <IndustrialInput
-                        value={newBenefit}
-                        onChange={(e) => setNewBenefit(e.target.value)}
-                        placeholder="Add a benefit..."
-                        onKeyPress={(e) =>
-                          e.key === 'Enter' &&
-                          (e.preventDefault(), addBenefit())
-                        }
+
+                      {formData.requirements.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {formData.requirements.map((requirement, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              whileHover={{ scale: 1.05 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Badge
+                                variant="industrial-secondary"
+                                className="flex items-center gap-1 shadow-sm hover:shadow-md transition-shadow"
+                              >
+                                {requirement}
+                                <X
+                                  className="h-3 w-3 cursor-pointer hover:text-destructive transition-colors"
+                                  onClick={() => removeRequirement(requirement)}
+                                />
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
+                    </IndustrialCardContent>
+                  </IndustrialCard>
+                </motion.div>{' '}
+                {/* Benefits Card - Enhanced */}
+                <motion.div variants={metalCardVariants} whileHover="hover">
+                  <IndustrialCard className="relative overflow-hidden border-l-4 border-l-industrial-navy-400 bg-gradient-to-br from-industrial-navy-50 to-industrial-navy-100">
+                    {/* Metal grid pattern overlay */}
+                    <div className="absolute inset-0 opacity-[0.03]">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `
+                          radial-gradient(circle at 1px 1px, rgba(30, 64, 175, 0.3) 1px, transparent 0),
+                          linear-gradient(45deg, transparent 24%, rgba(30, 64, 175, 0.1) 25%, rgba(30, 64, 175, 0.1) 26%, transparent 27%, transparent 74%, rgba(30, 64, 175, 0.1) 75%, rgba(30, 64, 175, 0.1) 76%, transparent 77%)
+                        `,
+                          backgroundSize: '20px 20px, 60px 60px',
+                        }}
                       />
-                      <Button
-                        type="button"
-                        onClick={addBenefit}
-                        size="sm"
-                        variant="industrial-accent"
-                        className="shrink-0"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
                     </div>
 
-                    {formData.benefits.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {formData.benefits.map((benefit, index) => (
-                          <Badge
-                            key={index}
-                            variant="industrial-outline"
-                            className="flex items-center gap-1"
+                    {/* Navy blue gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-industrial-navy-400/5 to-transparent opacity-50" />
+
+                    <IndustrialCardHeader className="relative z-10">
+                      <IndustrialCardTitle className="flex items-center gap-3">
+                        <motion.div
+                          animate={{ rotate: [0, 360] }}
+                          transition={{
+                            duration: 8,
+                            repeat: Infinity,
+                            ease: 'linear',
+                          }}
+                        >
+                          <IndustrialIcon
+                            icon="cog"
+                            size="md"
+                            className="text-industrial-navy-400"
+                          />
+                        </motion.div>
+                        <span className="text-industrial-foreground font-bold">
+                          Benefits
+                        </span>
+                      </IndustrialCardTitle>
+                      <IndustrialCardDescription className="text-industrial-muted-foreground">
+                        What you offer to employees
+                      </IndustrialCardDescription>
+                    </IndustrialCardHeader>
+
+                    <IndustrialCardContent className="space-y-4 relative z-10">
+                      <div className="flex gap-2">
+                        <IndustrialInput
+                          value={newBenefit}
+                          onChange={(e) => setNewBenefit(e.target.value)}
+                          placeholder="Add a benefit..."
+                          onKeyPress={(e) =>
+                            e.key === 'Enter' &&
+                            (e.preventDefault(), addBenefit())
+                          }
+                          className="border-industrial-border bg-white/80 focus:bg-white transition-colors"
+                        />
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            type="button"
+                            onClick={addBenefit}
+                            size="sm"
+                            variant="industrial-accent"
+                            className="shrink-0 shadow-lg hover:shadow-xl transition-shadow"
                           >
-                            {benefit}
-                            <X
-                              className="h-3 w-3 cursor-pointer hover:text-destructive"
-                              onClick={() => removeBenefit(benefit)}
-                            />
-                          </Badge>
-                        ))}
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </motion.div>
                       </div>
-                    )}
-                  </IndustrialCardContent>
-                </IndustrialCard>
+
+                      {formData.benefits.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {formData.benefits.map((benefit, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              whileHover={{ scale: 1.05 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Badge
+                                variant="industrial-outline"
+                                className="flex items-center gap-1 shadow-sm hover:shadow-md transition-shadow"
+                              >
+                                {benefit}
+                                <X
+                                  className="h-3 w-3 cursor-pointer hover:text-destructive transition-colors"
+                                  onClick={() => removeBenefit(benefit)}
+                                />
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
+                    </IndustrialCardContent>
+                  </IndustrialCard>
+                </motion.div>
               </motion.div>
 
-              {/* Preview/Summary */}
+              {/* Enhanced Preview/Summary Section */}
               <motion.div className="space-y-6" variants={itemVariants}>
-                {' '}
-                <IndustrialCard>
-                  <IndustrialCardHeader>
-                    <IndustrialCardTitle className="flex items-center gap-2">
-                      <IndustrialIcon
-                        icon="factory"
-                        size="md"
-                        color="primary"
+                <motion.div variants={metalCardVariants} whileHover="hover">
+                  <IndustrialCard className="relative overflow-hidden border-l-4 border-l-emerald-500 bg-gradient-to-br from-emerald-50 to-emerald-100">
+                    {/* Metal grid pattern overlay */}
+                    <div className="absolute inset-0 opacity-[0.03]">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `
+                          radial-gradient(circle at 1px 1px, rgba(16, 185, 129, 0.3) 1px, transparent 0),
+                          linear-gradient(45deg, transparent 24%, rgba(16, 185, 129, 0.1) 25%, rgba(16, 185, 129, 0.1) 26%, transparent 27%, transparent 74%, rgba(16, 185, 129, 0.1) 75%, rgba(16, 185, 129, 0.1) 76%, transparent 77%)
+                        `,
+                          backgroundSize: '20px 20px, 60px 60px',
+                        }}
                       />
-                      Preview
-                    </IndustrialCardTitle>
-                    <IndustrialCardDescription>
-                      How your gig will appear to workers
-                    </IndustrialCardDescription>
-                  </IndustrialCardHeader>
-                  <IndustrialCardContent className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-lg text-industrial-foreground">
-                        {formData.title || 'Job Title'}
-                      </h3>
-                      <p className="text-sm text-industrial-muted-foreground flex items-center gap-1">
-                        <Building2 className="h-3 w-3" />
-                        {user?.companyName || user?.name || 'Your Company'}
-                      </p>
                     </div>
 
-                    <div className="space-y-2">
-                      {formData.location && (
-                        <div className="flex items-center gap-2 text-sm text-industrial-foreground">
-                          <MapPin className="h-4 w-4 text-industrial-muted-foreground" />
-                          {formData.location}
-                        </div>
-                      )}
+                    {/* Emerald gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-50" />
 
-                      {formData.jobType && (
-                        <div className="flex items-center gap-2 text-sm text-industrial-foreground">
-                          <Briefcase className="h-4 w-4 text-industrial-muted-foreground" />
-                          {formData.jobType}
-                        </div>
-                      )}
+                    <IndustrialCardHeader className="relative z-10">
+                      <IndustrialCardTitle className="flex items-center gap-3">
+                        <motion.div
+                          whileHover={{
+                            rotateY: 360,
+                            scale: 1.2,
+                          }}
+                          transition={{ duration: 0.6 }}
+                        >
+                          <IndustrialIcon
+                            icon="factory"
+                            size="md"
+                            className="text-emerald-500"
+                          />
+                        </motion.div>
+                        <span className="text-industrial-foreground font-bold">
+                          Live Preview
+                        </span>
+                      </IndustrialCardTitle>
+                      <IndustrialCardDescription className="text-industrial-muted-foreground">
+                        How your gig will appear to industrial workers
+                      </IndustrialCardDescription>
+                    </IndustrialCardHeader>
 
-                      {formData.salary && (
-                        <div className="flex items-center gap-2 text-sm text-industrial-foreground">
-                          <DollarSign className="h-4 w-4 text-industrial-muted-foreground" />
-                          ${Number(formData.salary).toLocaleString()}/year
-                        </div>
-                      )}
+                    <IndustrialCardContent className="space-y-6 relative z-10">
+                      {/* Job Title and Company */}
+                      <motion.div
+                        whileHover={{ x: 5 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <h3 className="font-bold text-xl text-industrial-foreground bg-gradient-to-r from-industrial-foreground to-industrial-accent bg-clip-text">
+                          {formData.title || 'Job Title Preview'}
+                        </h3>
+                        <p className="text-sm text-industrial-muted-foreground flex items-center gap-2 mt-1">
+                          <Building2 className="h-4 w-4 text-industrial-accent" />
+                          {user?.companyName || user?.name || 'Your Company'}
+                        </p>
+                      </motion.div>
 
-                      {formData.applicationDeadline && (
-                        <div className="flex items-center gap-2 text-sm text-industrial-foreground">
-                          <Clock className="h-4 w-4 text-industrial-muted-foreground" />
-                          Apply by{' '}
-                          {new Date(
-                            formData.applicationDeadline
-                          ).toLocaleDateString()}
-                        </div>
-                      )}
-                    </div>
+                      {/* Job Details Grid */}
+                      <div className="grid grid-cols-1 gap-3">
+                        {formData.location && (
+                          <motion.div
+                            className="flex items-center gap-3 p-2 rounded-lg bg-white/50 border border-industrial-border/50"
+                            whileHover={{ scale: 1.02, x: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <MapPin className="h-4 w-4 text-industrial-accent" />
+                            <span className="text-sm font-medium text-industrial-foreground">
+                              {formData.location}
+                            </span>
+                          </motion.div>
+                        )}
 
-                    {formData.requirements.length > 0 && (
-                      <div>
-                        <h4 className="font-medium text-sm mb-2 text-industrial-foreground">
-                          Requirements
-                        </h4>
-                        <div className="flex flex-wrap gap-1">
-                          {formData.requirements
-                            .slice(0, 3)
-                            .map((req, index) => (
-                              <Badge
-                                key={index}
-                                variant="industrial-secondary"
-                                className="text-xs"
-                              >
-                                {req}
-                              </Badge>
-                            ))}
-                          {formData.requirements.length > 3 && (
-                            <Badge
-                              variant="industrial-secondary"
-                              className="text-xs"
-                            >
-                              +{formData.requirements.length - 3} more
-                            </Badge>
-                          )}
-                        </div>
+                        {formData.jobType && (
+                          <motion.div
+                            className="flex items-center gap-3 p-2 rounded-lg bg-white/50 border border-industrial-border/50"
+                            whileHover={{ scale: 1.02, x: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Briefcase className="h-4 w-4 text-industrial-accent" />
+                            <span className="text-sm font-medium text-industrial-foreground">
+                              {formData.jobType}
+                            </span>
+                          </motion.div>
+                        )}
+
+                        {formData.salary && (
+                          <motion.div
+                            className="flex items-center gap-3 p-2 rounded-lg bg-white/50 border border-industrial-border/50"
+                            whileHover={{ scale: 1.02, x: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <DollarSign className="h-4 w-4 text-emerald-500" />
+                            <span className="text-sm font-bold text-emerald-600">
+                              ${Number(formData.salary).toLocaleString()}/year
+                            </span>
+                          </motion.div>
+                        )}
+
+                        {formData.applicationDeadline && (
+                          <motion.div
+                            className="flex items-center gap-3 p-2 rounded-lg bg-white/50 border border-industrial-border/50"
+                            whileHover={{ scale: 1.02, x: 5 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <Clock className="h-4 w-4 text-industrial-safety-400" />
+                            <span className="text-sm font-medium text-industrial-foreground">
+                              Apply by{' '}
+                              {new Date(
+                                formData.applicationDeadline
+                              ).toLocaleDateString()}
+                            </span>
+                          </motion.div>
+                        )}
                       </div>
-                    )}
-                  </IndustrialCardContent>
-                </IndustrialCard>
-                <div className="flex flex-col gap-2">
-                  {' '}
-                  <Button
-                    type="submit"
-                    disabled={isCreating}
-                    className="w-full"
-                    variant="industrial-accent"
+
+                      {/* Requirements and Benefits Preview */}
+                      {formData.requirements.length > 0 && (
+                        <div className="space-y-3">
+                          <h4 className="font-bold text-sm text-industrial-foreground flex items-center gap-2">
+                            <IndustrialIcon
+                              icon="wrench"
+                              size="sm"
+                              className="text-industrial-safety-400"
+                            />
+                            Requirements
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.requirements
+                              .slice(0, 3)
+                              .map((req, index) => (
+                                <motion.div
+                                  key={index}
+                                  whileHover={{ scale: 1.05 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <Badge
+                                    variant="industrial-secondary"
+                                    className="text-xs shadow-sm"
+                                  >
+                                    {req}
+                                  </Badge>
+                                </motion.div>
+                              ))}
+                            {formData.requirements.length > 3 && (
+                              <Badge
+                                variant="industrial-secondary"
+                                className="text-xs bg-industrial-accent/20 text-industrial-accent border-industrial-accent/30"
+                              >
+                                +{formData.requirements.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {formData.benefits.length > 0 && (
+                        <div className="space-y-3">
+                          <h4 className="font-bold text-sm text-industrial-foreground flex items-center gap-2">
+                            <IndustrialIcon
+                              icon="cog"
+                              size="sm"
+                              className="text-industrial-navy-400"
+                            />
+                            Benefits
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.benefits
+                              .slice(0, 3)
+                              .map((benefit, index) => (
+                                <motion.div
+                                  key={index}
+                                  whileHover={{ scale: 1.05 }}
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  <Badge
+                                    variant="industrial-outline"
+                                    className="text-xs shadow-sm"
+                                  >
+                                    {benefit}
+                                  </Badge>
+                                </motion.div>
+                              ))}
+                            {formData.benefits.length > 3 && (
+                              <Badge
+                                variant="industrial-outline"
+                                className="text-xs bg-industrial-navy-400/20 text-industrial-navy-400 border-industrial-navy-400/30"
+                              >
+                                +{formData.benefits.length - 3} more
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </IndustrialCardContent>
+                  </IndustrialCard>
+                </motion.div>
+
+                {/* Enhanced Action Buttons */}
+                <motion.div
+                  className="flex flex-col gap-3"
+                  variants={itemVariants}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {isCreating ? (
-                      <>
-                        <Clock className="h-4 w-4 mr-2 animate-spin" />
-                        Creating...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="h-4 w-4 mr-2" />
-                        Create Gig
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="industrial-outline"
-                    onClick={() => router.back()}
-                    disabled={isCreating}
-                    className="w-full"
+                    <Button
+                      type="submit"
+                      disabled={isCreating}
+                      className="w-full h-12 bg-gradient-to-r from-industrial-accent to-industrial-safety-400 hover:from-industrial-accent/90 hover:to-industrial-safety-400/90 text-industrial-dark font-bold shadow-xl hover:shadow-2xl transition-all duration-300"
+                      variant="industrial-accent"
+                    >
+                      {isCreating ? (
+                        <>
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                            className="mr-2"
+                          >
+                            <IndustrialIcon icon="gear" size="sm" />
+                          </motion.div>
+                          Creating Gig...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-5 w-5 mr-2" />
+                          Create Industrial Gig
+                        </>
+                      )}
+                    </Button>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Cancel
-                  </Button>
-                </div>
+                    <Button
+                      type="button"
+                      variant="industrial-outline"
+                      onClick={() => router.back()}
+                      disabled={isCreating}
+                      className="w-full h-10 border-industrial-border hover:bg-industrial-muted/50 text-industrial-foreground transition-all duration-300"
+                    >
+                      Cancel
+                    </Button>
+                  </motion.div>
+                </motion.div>
               </motion.div>
             </div>
           </form>

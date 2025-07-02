@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import { publicAPI, startupAPI, workerAPI } from '../api';
 import type { Gig, GigApplication } from '../types';
 
@@ -23,15 +24,11 @@ export interface GigsState {
 
   // Actions
   fetchGigs: (params?: any) => Promise<void>;
-  fetchUserGigs: (startupId: string) => Promise<void>;
-  fetchAppliedGigs: (workerId: string) => Promise<void>;
+  fetchUserGigs: () => Promise<void>; // No userId needed - uses JWT
+  fetchAppliedGigs: () => Promise<void>; // No userId needed - uses JWT
   createGig: (gigData: any) => Promise<void>;
   deleteGig: (gigId: string) => Promise<void>;
-  applyToGig: (
-    gigId: string,
-    workerId: string,
-    applicationData?: any
-  ) => Promise<void>;
+  applyToGig: (gigId: string, applicationData?: any) => Promise<void>; // No workerId needed
 
   // Utility actions
   setSearchTerm: (term: string) => void;
@@ -71,10 +68,10 @@ export const useGigsStore = create<GigsState>()(
         }
       },
 
-      fetchUserGigs: async (startupId: string) => {
+      fetchUserGigs: async () => {
         set({ isLoading: true });
         try {
-          const userGigs = await startupAPI.getGigs(startupId);
+          const userGigs = await startupAPI.getGigs();
           set({ userGigs, isLoading: false });
         } catch (error) {
           console.error('Failed to fetch user gigs:', error);
@@ -82,10 +79,10 @@ export const useGigsStore = create<GigsState>()(
         }
       },
 
-      fetchAppliedGigs: async (workerId: string) => {
+      fetchAppliedGigs: async () => {
         set({ isLoading: true });
         try {
-          const appliedGigs = await workerAPI.getAppliedGigs(workerId);
+          const appliedGigs = await workerAPI.getAppliedGigs();
           set({ appliedGigs, isLoading: false });
         } catch (error) {
           console.error('Failed to fetch applied gigs:', error);
@@ -126,16 +123,11 @@ export const useGigsStore = create<GigsState>()(
         }
       },
 
-      applyToGig: async (
-        gigId: string,
-        workerId: string,
-        applicationData = {}
-      ) => {
+      applyToGig: async (gigId: string, applicationData = {}) => {
         set({ isApplying: true });
         try {
           const application = await workerAPI.applyToGig(
             gigId,
-            workerId,
             applicationData
           );
           const { appliedGigs } = get();
@@ -176,14 +168,23 @@ export const useGigsStore = create<GigsState>()(
   )
 );
 
-// Derived hook for gig statistics
-export const useGigStats = () => {
-  const { gigs, userGigs } = useGigsStore();
+// Gig stats selector - defined outside of hook to prevent recreation
+const gigStatsSelector = (state: GigsState) => {
+  const { gigs = [], userGigs = [] } = state;
+
+  // Ensure we have arrays to work with
+  const safeGigs = Array.isArray(gigs) ? gigs : [];
+  const safeUserGigs = Array.isArray(userGigs) ? userGigs : [];
 
   return {
-    total: userGigs.length || gigs.length,
+    total: safeUserGigs.length || safeGigs.length,
     active:
-      userGigs.filter((gig) => gig.status === 'active').length ||
-      gigs.filter((gig) => gig.status === 'active').length,
+      safeUserGigs.filter((gig) => gig.status === 'active').length ||
+      safeGigs.filter((gig) => gig.status === 'active').length,
   };
+};
+
+// Derived hook for gig statistics with shallow comparison
+export const useGigStats = () => {
+  return useGigsStore(useShallow(gigStatsSelector));
 };

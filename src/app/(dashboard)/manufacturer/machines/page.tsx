@@ -107,12 +107,16 @@ function YourMachinesPage() {
   const router = useRouter();
   const { toast } = useToast();
   const {
-    userMachines: machines,
+    userMachines: rawMachines,
     isLoading: loading,
     fetchUserMachines,
     deleteMachine,
     toggleMachineAvailability,
   } = useMachinesStore();
+
+  // Defensive array check
+  const machines = Array.isArray(rawMachines) ? rawMachines : [];
+
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -129,9 +133,10 @@ function YourMachinesPage() {
   const confirmDeleteMachine = async () => {
     if (!machineToDelete) return;
 
-    setDeletingMachine(machineToDelete.id);
+    const machineId = machineToDelete._id || machineToDelete.id;
+    setDeletingMachine(machineId);
     try {
-      await deleteMachine(machineToDelete.id);
+      await deleteMachine(machineId);
       toast({
         title: 'Success',
         description: `Machine "${machineToDelete.name}" deleted successfully!`,
@@ -176,21 +181,19 @@ function YourMachinesPage() {
     }
   };
   useEffect(() => {
-    if (user?.userType === UserType.MANUFACTURER && user?.id) {
-      fetchUserMachines(user.id);
-    }
-  }, [user, fetchUserMachines]);
+    fetchUserMachines();
+  }, [fetchUserMachines]);
 
   useEffect(() => {
-    let filtered = machines;
+    let filtered = Array.isArray(machines) ? [...machines] : [];
 
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(
         (machine) =>
-          machine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          machine.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          machine.description.toLowerCase().includes(searchTerm.toLowerCase())
+          machine.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          machine.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          machine.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -208,16 +211,16 @@ function YourMachinesPage() {
     // Type filter
     if (typeFilter !== 'all') {
       filtered = filtered.filter((machine) =>
-        machine.type.toLowerCase().includes(typeFilter.toLowerCase())
+        machine.type?.toLowerCase().includes(typeFilter.toLowerCase())
       );
     }
 
     setFilteredMachines(filtered);
   }, [machines, searchTerm, statusFilter, typeFilter]);
 
-  const machineTypes = Array.from(new Set(machines.map((m) => m.type))).filter(
-    Boolean
-  );
+  const machineTypes = Array.isArray(machines)
+    ? Array.from(new Set(machines.map((m) => m.type).filter(Boolean)))
+    : [];
 
   if (loading) {
     return (
@@ -308,10 +311,11 @@ function YourMachinesPage() {
                       Available
                     </p>
                     <p className="text-2xl font-bold text-industrial-accent">
-                      {
-                        machines.filter((m) => m.availability || m.isAvailable)
-                          .length
-                      }
+                      {Array.isArray(machines)
+                        ? machines.filter(
+                            (m) => m.availability || m.isAvailable
+                          ).length
+                        : 0}
                     </p>
                   </div>{' '}
                   <IndustrialIcon
@@ -330,11 +334,11 @@ function YourMachinesPage() {
                       Unavailable
                     </p>
                     <p className="text-2xl font-bold text-red-500">
-                      {
-                        machines.filter(
-                          (m) => !(m.availability || m.isAvailable)
-                        ).length
-                      }
+                      {Array.isArray(machines)
+                        ? machines.filter(
+                            (m) => !(m.availability || m.isAvailable)
+                          ).length
+                        : 0}
                     </p>
                   </div>
                   <IndustrialIcon icon="gear" className="text-red-500" />
@@ -395,11 +399,12 @@ function YourMachinesPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    {machineTypes.map((type) => (
-                      <SelectItem key={type} value={type.toLowerCase()}>
-                        {type}
-                      </SelectItem>
-                    ))}
+                    {Array.isArray(machineTypes) &&
+                      machineTypes.map((type) => (
+                        <SelectItem key={type} value={type.toLowerCase()}>
+                          {type}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -454,181 +459,194 @@ function YourMachinesPage() {
             ) : (
               <AnimatePresence mode="popLayout">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredMachines.map((machine) => (
-                    <motion.div
-                      key={machine.id}
-                      variants={cardVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      layout
-                    >
-                      <IndustrialCard className="group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
-                        {/* Background Pattern */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-industrial-background to-industrial-muted/5 opacity-50" />
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-industrial-primary/10 to-transparent" />
+                  {Array.isArray(filteredMachines) &&
+                    filteredMachines.map((machine) => (
+                      <motion.div
+                        key={machine._id || machine.id}
+                        variants={cardVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        layout
+                      >
+                        <IndustrialCard className="group hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                          {/* Background Pattern */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-industrial-background to-industrial-muted/5 opacity-50" />
+                          <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-industrial-primary/10 to-transparent" />
 
-                        <div className="relative">
-                          <IndustrialCardHeader className="pb-3">
-                            <div className="flex justify-between items-start">
-                              <div className="flex-1">
-                                <IndustrialCardTitle className="text-lg group-hover:text-industrial-primary transition-colors">
-                                  {machine.name}
-                                </IndustrialCardTitle>
-                                <IndustrialCardDescription className="flex items-center gap-1 mt-1">
-                                  <IndustrialIcon icon="wrench" size="sm" />
-                                  {machine.type}
-                                </IndustrialCardDescription>
+                          <div className="relative">
+                            <IndustrialCardHeader className="pb-3">
+                              <div className="flex justify-between items-start">
+                                <div className="flex-1">
+                                  <IndustrialCardTitle className="text-lg group-hover:text-industrial-primary transition-colors">
+                                    {machine.name}
+                                  </IndustrialCardTitle>
+                                  <IndustrialCardDescription className="flex items-center gap-1 mt-1">
+                                    <IndustrialIcon icon="wrench" size="sm" />
+                                    {machine.type}
+                                  </IndustrialCardDescription>
+                                </div>
+
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-8 w-8 p-0 hover:bg-industrial-muted"
+                                    >
+                                      <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="w-48"
+                                  >
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        router.push(
+                                          `/manufacturer/machines/${machine._id || machine.id}`
+                                        )
+                                      }
+                                    >
+                                      <Eye className="h-4 w-4 mr-2" />
+                                      View Details
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        router.push(
+                                          `/manufacturer/machines/${machine._id || machine.id}/applications`
+                                        )
+                                      }
+                                    >
+                                      <Users className="h-4 w-4 mr-2" />
+                                      View Applications
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleToggleAvailability(
+                                          machine._id || machine.id,
+                                          machine.availability ||
+                                            machine.isAvailable ||
+                                            false
+                                        )
+                                      }
+                                      disabled={
+                                        togglingMachine ===
+                                        (machine._id || machine.id)
+                                      }
+                                    >
+                                      {togglingMachine ===
+                                      (machine._id || machine.id) ? (
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                      ) : machine.availability ||
+                                        machine.isAvailable ? (
+                                        <ToggleLeft className="h-4 w-4 mr-2" />
+                                      ) : (
+                                        <ToggleRight className="h-4 w-4 mr-2" />
+                                      )}
+                                      {machine.availability ||
+                                      machine.isAvailable
+                                        ? 'Deactivate'
+                                        : 'Activate'}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleDeleteMachine(machine)
+                                      }
+                                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                      disabled={
+                                        deletingMachine ===
+                                        (machine._id || machine.id)
+                                      }
+                                    >
+                                      {deletingMachine ===
+                                      (machine._id || machine.id) ? (
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                      ) : (
+                                        <Trash2 className="h-4 w-4 mr-2" />
+                                      )}
+                                      Delete
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </div>
+                            </IndustrialCardHeader>
 
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-8 w-8 p-0 hover:bg-industrial-muted"
-                                  >
-                                    <MoreVertical className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                  align="end"
-                                  className="w-48"
-                                >
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      router.push(
-                                        `/manufacturer/machines/${machine.id}`
-                                      )
-                                    }
-                                  >
-                                    <Eye className="h-4 w-4 mr-2" />
-                                    View Details
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      router.push(
-                                        `/manufacturer/machines/${machine.id}/applications`
-                                      )
-                                    }
-                                  >
-                                    <Users className="h-4 w-4 mr-2" />
-                                    View Applications
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      handleToggleAvailability(
-                                        machine.id,
-                                        machine.availability ||
-                                          machine.isAvailable ||
-                                          false
-                                      )
-                                    }
-                                    disabled={togglingMachine === machine.id}
-                                  >
-                                    {togglingMachine === machine.id ? (
-                                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                    ) : machine.availability ||
-                                      machine.isAvailable ? (
-                                      <ToggleLeft className="h-4 w-4 mr-2" />
-                                    ) : (
-                                      <ToggleRight className="h-4 w-4 mr-2" />
-                                    )}
-                                    {machine.availability || machine.isAvailable
-                                      ? 'Deactivate'
-                                      : 'Activate'}
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    onClick={() => handleDeleteMachine(machine)}
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                    disabled={deletingMachine === machine.id}
-                                  >
-                                    {deletingMachine === machine.id ? (
-                                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                    ) : (
-                                      <Trash2 className="h-4 w-4 mr-2" />
-                                    )}
-                                    Delete
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </div>
-                          </IndustrialCardHeader>
+                            <IndustrialCardContent className="space-y-4">
+                              <p className="text-sm text-industrial-muted-foreground line-clamp-2">
+                                {machine.description}
+                              </p>
 
-                          <IndustrialCardContent className="space-y-4">
-                            <p className="text-sm text-industrial-muted-foreground line-clamp-2">
-                              {machine.description}
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                              <div className="flex items-center gap-2">
-                                {' '}
-                                <IndustrialIcon
-                                  icon="factory"
-                                  size="sm"
-                                  className="text-industrial-muted-foreground"
-                                />
-                                <span className="text-industrial-muted-foreground truncate">
-                                  {machine.location}
-                                </span>
-                              </div>
-
-                              {machine.pricePerHour && (
+                              <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div className="flex items-center gap-2">
                                   {' '}
                                   <IndustrialIcon
-                                    icon="bolt"
+                                    icon="factory"
                                     size="sm"
-                                    className="text-industrial-accent"
+                                    className="text-industrial-muted-foreground"
                                   />
-                                  <span className="text-industrial-accent font-medium">
-                                    ${machine.pricePerHour}/hr
+                                  <span className="text-industrial-muted-foreground truncate">
+                                    {machine.location}
                                   </span>
                                 </div>
-                              )}
-                            </div>
 
-                            <div className="flex items-center justify-between pt-2">
-                              <Badge
-                                variant={
-                                  machine.availability || machine.isAvailable
-                                    ? 'default'
-                                    : 'secondary'
-                                }
-                                className={
-                                  machine.availability || machine.isAvailable
-                                    ? 'bg-industrial-accent text-industrial-background'
-                                    : 'bg-industrial-muted text-industrial-muted-foreground'
-                                }
-                              >
-                                {' '}
-                                <IndustrialIcon
-                                  icon={
+                                {machine.pricePerHour && (
+                                  <div className="flex items-center gap-2">
+                                    {' '}
+                                    <IndustrialIcon
+                                      icon="bolt"
+                                      size="sm"
+                                      className="text-industrial-accent"
+                                    />
+                                    <span className="text-industrial-accent font-medium">
+                                      ${machine.pricePerHour}/hr
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex items-center justify-between pt-2">
+                                <Badge
+                                  variant={
                                     machine.availability || machine.isAvailable
-                                      ? 'gear'
-                                      : 'gear'
+                                      ? 'default'
+                                      : 'secondary'
                                   }
-                                  size="sm"
-                                  className="mr-1"
-                                />
-                                {machine.availability || machine.isAvailable
-                                  ? 'Available'
-                                  : 'Unavailable'}
-                              </Badge>
+                                  className={
+                                    machine.availability || machine.isAvailable
+                                      ? 'bg-industrial-accent text-industrial-background'
+                                      : 'bg-industrial-muted text-industrial-muted-foreground'
+                                  }
+                                >
+                                  {' '}
+                                  <IndustrialIcon
+                                    icon={
+                                      machine.availability ||
+                                      machine.isAvailable
+                                        ? 'gear'
+                                        : 'gear'
+                                    }
+                                    size="sm"
+                                    className="mr-1"
+                                  />
+                                  {machine.availability || machine.isAvailable
+                                    ? 'Available'
+                                    : 'Unavailable'}
+                                </Badge>
 
-                              <span className="text-xs text-industrial-muted-foreground">
-                                {new Date(
-                                  machine.createdAt
-                                ).toLocaleDateString()}
-                              </span>
-                            </div>
-                          </IndustrialCardContent>
-                        </div>
-                      </IndustrialCard>
-                    </motion.div>
-                  ))}
+                                <span className="text-xs text-industrial-muted-foreground">
+                                  {new Date(
+                                    machine.createdAt
+                                  ).toLocaleDateString()}
+                                </span>
+                              </div>
+                            </IndustrialCardContent>
+                          </div>
+                        </IndustrialCard>
+                      </motion.div>
+                    ))}
                 </div>
               </AnimatePresence>
             )}

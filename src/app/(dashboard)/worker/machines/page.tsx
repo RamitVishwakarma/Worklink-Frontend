@@ -81,12 +81,29 @@ const WorkerMachinesPage = () => {
 
   const { toast } = useToast();
   const { user } = useAuthStore();
-  // Store data
-  const { machines, isLoading, applyToMachine, isApplying } =
-    useMachinesStore();
+
+  // Store data with safe destructuring
+  const machinesStore = useMachinesStore();
+  const machines = machinesStore?.machines || [];
+  const isLoading = machinesStore?.isLoading || false;
+  const applyToMachine =
+    machinesStore?.applyToMachine || (() => Promise.resolve());
+  const isApplying = machinesStore?.isApplying || false;
+  const fetchMachines =
+    machinesStore?.fetchMachines || (() => Promise.resolve());
+
+  // Fetch machines on component mount
+  useEffect(() => {
+    if (fetchMachines) {
+      fetchMachines();
+    }
+  }, [fetchMachines]);
   // Filter machines based on search and filter criteria
   useEffect(() => {
-    let filtered = machines;
+    // Ensure machines is always an array
+    const safeMachines =
+      Array.isArray(machines) && machines !== null ? machines : [];
+    let filtered = [...safeMachines]; // Create a copy to avoid mutation
 
     if (searchTerm) {
       filtered = filtered.filter(
@@ -121,10 +138,20 @@ const WorkerMachinesPage = () => {
 
     setFilteredMachines(filtered);
   }, [machines, searchTerm, locationFilter, typeFilter, availabilityFilter]);
+
+  // Ensure machines is always an array before creating unique lists
+  const safeMachinesForFilters =
+    Array.isArray(machines) && machines !== null ? machines : [];
   const uniqueLocations = [
-    ...new Set(machines.map((machine) => machine.location)),
+    ...new Set(
+      safeMachinesForFilters.map((machine) => machine?.location).filter(Boolean)
+    ),
   ];
-  const uniqueTypes = [...new Set(machines.map((machine) => machine.type))];
+  const uniqueTypes = [
+    ...new Set(
+      safeMachinesForFilters.map((machine) => machine?.type).filter(Boolean)
+    ),
+  ];
   // Handle apply to machine
   const handleApplyToMachine = async (
     machineId: string,
@@ -140,7 +167,12 @@ const WorkerMachinesPage = () => {
     }
 
     try {
-      await applyToMachine(machineId, user.id, userType);
+      // Pass user data as applicationData object
+      await applyToMachine(machineId, {
+        applicantId: user.id,
+        userType: userType,
+        message: `Application from ${user.name || user.email}`,
+      });
       toast({
         title: 'Success',
         description: 'Successfully applied to machine!',
@@ -320,7 +352,8 @@ const WorkerMachinesPage = () => {
           {/* Results Count */}
           <motion.div variants={itemVariants}>
             <p className="text-sm text-industrial-secondary font-industrial-body my-4">
-              Showing {filteredMachines.length} of {machines.length} machines
+              Showing {filteredMachines?.length || 0} of{' '}
+              {safeMachinesForFilters?.length || 0} machines
             </p>
           </motion.div>
 
@@ -329,7 +362,7 @@ const WorkerMachinesPage = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={containerVariants}
           >
-            {filteredMachines.length === 0 ? (
+            {!filteredMachines || filteredMachines.length === 0 ? (
               <motion.div className="col-span-full" variants={itemVariants}>
                 <IndustrialCard variant="industrial">
                   <IndustrialCardContent className="flex flex-col items-center justify-center py-16">
@@ -353,7 +386,7 @@ const WorkerMachinesPage = () => {
                 </IndustrialCard>
               </motion.div>
             ) : (
-              filteredMachines.map((machine) => (
+              (filteredMachines || []).map((machine) => (
                 <motion.div
                   key={machine.id}
                   variants={cardVariants}

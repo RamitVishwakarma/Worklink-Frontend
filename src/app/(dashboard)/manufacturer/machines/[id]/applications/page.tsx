@@ -125,11 +125,11 @@ function MachineApplicationsPage() {
   });
 
   const fetchMachineAndApplications = async () => {
-    if (!user?.id || !machineId) return;
+    if (!user || !machineId) return;
 
     try {
-      // Fetch applications using store
-      await fetchApplications(user.id, machineId);
+      // Fetch applications using store (no user ID needed)
+      await fetchApplications();
     } catch (error: any) {
       console.error('Error fetching data:', error);
       toast({

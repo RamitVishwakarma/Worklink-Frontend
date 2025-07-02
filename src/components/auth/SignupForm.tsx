@@ -35,10 +35,11 @@ import {
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/authStore';
-import { signupUser } from '@/lib/api';
+import { authAPI } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
+import { UserType } from '@/lib/types';
 
 const baseSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -54,6 +55,8 @@ const workerSchema = baseSchema.extend({
   skills: z
     .string()
     .min(1, { message: 'Skills are required (comma-separated).' }),
+  city: z.string().optional(),
+  state: z.string().optional(),
 });
 
 const startupSchema = baseSchema.extend({
@@ -86,7 +89,7 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export function SignupForm() {
-  const { signup } = useAuthStore();
+  const signup = useAuthStore((state) => state.signup);
   const router = useRouter();
   const { toast } = useToast(); // Initialize useToast
 
@@ -96,37 +99,125 @@ export function SignupForm() {
       email: '',
       password: '',
       confirmPassword: '',
-    },
+      userType: undefined, // Will be set when user selects
+      // Worker fields
+      fullName: '',
+      skills: '',
+      city: '',
+      state: '',
+      // Startup/Manufacturer fields
+      companyName: '',
+      workSector: '',
+      industry: '',
+    } as any, // Cast to any due to discriminated union complexities
   });
 
   const userType = form.watch('userType');
 
   async function onSubmit(values: FormValues) {
     try {
-      const response = await signupUser(values);
-      await signup(response.token, response.user);
-      toast({
-        // Add success toast
-        title: 'Account Created Successfully!',
-        description: `Welcome, ${response.user.email}! Redirecting to your dashboard...`,
-      });
-      router.push(`/${response.user.userType}/dashboard`);
+      let response;
+
+      // Call the appropriate signup API based on user type
+      if (values.userType === 'worker') {
+        const workerData = {
+          name: values.fullName,
+          email: values.email,
+          password: values.password,
+          skills: values.skills.split(',').map((skill) => skill.trim()),
+          ...(values.city &&
+            values.state && {
+              location: {
+                city: values.city,
+                state: values.state,
+              },
+            }),
+        };
+        response = await authAPI.workerSignup(workerData);
+      } else if (values.userType === 'startup') {
+        const startupData = {
+          companyName: values.companyName,
+          companyEmail: values.email,
+          password: values.password,
+          workSector: values.workSector,
+          location: {
+            city: values.city,
+            state: values.state,
+          },
+        };
+        response = await authAPI.startupSignup(startupData);
+      } else if (values.userType === 'manufacturer') {
+        const manufacturerData = {
+          companyName: values.companyName,
+          companyEmail: values.email,
+          password: values.password,
+          workSector: values.industry,
+          location: {
+            city: values.city,
+            state: values.state,
+          },
+        };
+        response = await authAPI.manufacturerSignup(manufacturerData);
+      }
+
+      if (response) {
+        // Clean token by removing 'Bearer ' prefix if it exists
+        const cleanToken = response.token.replace('Bearer ', '');
+
+        // Store the token and user data
+        localStorage.setItem('token', cleanToken);
+        localStorage.setItem('userType', values.userType);
+
+        // Extract user data from response (ensure userType is included)
+        const userTypeEnum =
+          values.userType === 'worker'
+            ? UserType.WORKER
+            : values.userType === 'startup'
+              ? UserType.STARTUP
+              : UserType.MANUFACTURER;
+
+        const userData = {
+          ...response.user,
+          userType: userTypeEnum, // Ensure userType is properly typed
+        };
+
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        // Update auth store with the clean token and user data
+        await signup(cleanToken, userData);
+
+        toast({
+          title: 'Account Created Successfully!',
+          description: `Welcome! Redirecting to your dashboard...`,
+        });
+
+        router.push(`/${values.userType}/dashboard`);
+      }
     } catch (error: unknown) {
       console.error('Signup failed:', error);
       let errorMessage =
         'An unexpected error occurred during signup. Please try again.';
+
       if (
         error instanceof AxiosError &&
         error.response &&
-        error.response.data &&
-        typeof error.response.data.message === 'string'
+        error.response.data
       ) {
-        errorMessage = error.response.data.message;
+        const responseData = error.response.data;
+
+        // Handle validation errors
+        if (responseData.errors && Array.isArray(responseData.errors)) {
+          errorMessage = responseData.errors.join(', ');
+        } else if (responseData.message) {
+          errorMessage = responseData.message;
+        } else if (typeof responseData.error === 'string') {
+          errorMessage = responseData.error;
+        }
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       toast({
-        // Add error toast
         variant: 'destructive',
         title: 'Sign Up Failed',
         description: errorMessage,
@@ -245,17 +336,26 @@ export function SignupForm() {
                             I am a...
                           </FormLabel>
                           <Select
+                            value={field.value || ''}
                             onValueChange={(
                               value: 'worker' | 'startup' | 'manufacturer'
                             ) => {
                               field.onChange(value);
-                              // Reset form with only common fields to avoid discriminated union issues
+                              // Reset form with proper default values to maintain controlled inputs
                               const baseValues = {
-                                email: form.getValues('email'),
-                                password: form.getValues('password'),
+                                email: form.getValues('email') || '',
+                                password: form.getValues('password') || '',
                                 confirmPassword:
-                                  form.getValues('confirmPassword'),
+                                  form.getValues('confirmPassword') || '',
                                 userType: value,
+                                // Always include all possible fields with empty string defaults
+                                fullName: '',
+                                skills: '',
+                                city: '',
+                                state: '',
+                                companyName: '',
+                                workSector: '',
+                                industry: '',
                               };
 
                               // Cast to any to avoid TypeScript discriminated union issues during reset
@@ -319,6 +419,7 @@ export function SignupForm() {
                                   placeholder="you@example.com"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -342,6 +443,7 @@ export function SignupForm() {
                                   placeholder="••••••••"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -365,6 +467,7 @@ export function SignupForm() {
                                   placeholder="••••••••"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -392,6 +495,7 @@ export function SignupForm() {
                                   placeholder="John Doe"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -414,6 +518,55 @@ export function SignupForm() {
                                   placeholder="e.g., React, Node.js, Welding"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
+                                  className="h-12"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </motion.div>
+
+                      {/* Optional location fields for workers */}
+                      <motion.div variants={formFieldVariants}>
+                        <FormField
+                          control={form.control}
+                          name="city"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="font-industrial-body font-semibold">
+                                City (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <IndustrialInput
+                                  placeholder="New York"
+                                  variant="industrial"
+                                  {...field}
+                                  value={field.value || ''}
+                                  className="h-12"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </motion.div>
+                      <motion.div variants={formFieldVariants}>
+                        <FormField
+                          control={form.control}
+                          name="state"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="font-industrial-body font-semibold">
+                                State (Optional)
+                              </FormLabel>
+                              <FormControl>
+                                <IndustrialInput
+                                  placeholder="NY"
+                                  variant="industrial"
+                                  {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -441,6 +594,7 @@ export function SignupForm() {
                                   placeholder="Acme Corp"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -463,6 +617,7 @@ export function SignupForm() {
                                   placeholder="San Francisco"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -485,6 +640,7 @@ export function SignupForm() {
                                   placeholder="CA"
                                   variant="industrial"
                                   {...field}
+                                  value={field.value || ''}
                                   className="h-12"
                                 />
                               </FormControl>
@@ -511,6 +667,7 @@ export function SignupForm() {
                                 placeholder="e.g., Technology, Healthcare"
                                 variant="industrial"
                                 {...field}
+                                value={field.value || ''}
                                 className="h-12"
                               />
                             </FormControl>
@@ -536,6 +693,7 @@ export function SignupForm() {
                                 placeholder="e.g., Automotive, Aerospace"
                                 variant="industrial"
                                 {...field}
+                                value={field.value || ''}
                                 className="h-12"
                               />
                             </FormControl>

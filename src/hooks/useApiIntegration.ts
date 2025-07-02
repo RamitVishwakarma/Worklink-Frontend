@@ -23,7 +23,7 @@ export const useAutoFetch = () => {
     try {
       // Always fetch user profile
       await fetchCurrentUserProfile(user.userType); // Fetch role-specific data
-      switch (user.role) {
+      switch (user.userType) {
         case 'worker':
           await Promise.all([fetchGigs(), fetchMachines()]);
           break;
@@ -101,7 +101,7 @@ export const useGigOperations = () => {
   );
   const handleApplyToGig = useCallback(
     async (gigId: string, message?: string) => {
-      if (user?.role !== 'worker') {
+      if (user?.userType !== 'worker') {
         addError('Permission Denied', 'Only workers can apply to gigs');
         return false;
       }
@@ -138,7 +138,7 @@ export const useApplicationOperations = () => {
       type: 'machine' | 'gig',
       applicantName?: string
     ) => {
-      if (!['manufacturer', 'startup'].includes(user?.role || '')) {
+      if (!['manufacturer', 'startup'].includes(user?.userType || '')) {
         addError('Permission Denied', 'You cannot approve applications');
         return false;
       }
@@ -165,7 +165,7 @@ export const useApplicationOperations = () => {
       type: 'machine' | 'gig',
       applicantName?: string
     ) => {
-      if (!['manufacturer', 'startup'].includes(user?.role || '')) {
+      if (!['manufacturer', 'startup'].includes(user?.userType || '')) {
         addError('Permission Denied', 'You cannot reject applications');
         return false;
       }

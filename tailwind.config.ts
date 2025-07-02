@@ -241,11 +241,44 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        'industrial-sm': '0.125rem',
+        'industrial-md': '0.375rem',
+        'industrial-lg': '0.5rem',
+        'industrial-xl': '0.75rem',
+        'industrial-2xl': '1rem',
       },
 
       spacing: {
         grid: '1.5rem',
         industrial: '0.75rem',
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+        '34': '8.5rem',
+        '38': '9.5rem',
+        '42': '10.5rem',
+        '46': '11.5rem',
+        '50': '12.5rem',
+        '54': '13.5rem',
+        '58': '14.5rem',
+        '62': '15.5rem',
+        '66': '16.5rem',
+        '70': '17.5rem',
+        '74': '18.5rem',
+        '78': '19.5rem',
+        '82': '20.5rem',
+        '86': '21.5rem',
+        '90': '22.5rem',
+        '94': '23.5rem',
+        '98': '24.5rem',
+        'industrial-xs': '0.375rem',
+        'industrial-sm': '0.5rem',
+        'industrial-md': '0.75rem',
+        'industrial-lg': '1rem',
+        'industrial-xl': '1.5rem',
+        'industrial-2xl': '2rem',
+        'industrial-3xl': '3rem',
       },
 
       keyframes: {
@@ -391,7 +424,201 @@ export default {
           { lineHeight: '6rem', fontWeight: '900', letterSpacing: '-0.05em' },
         ],
       },
+
+      // Enhanced Industrial Grid System
+      gridTemplateColumns: {
+        'auto-fit-120': 'repeat(auto-fit, minmax(120px, 1fr))',
+        'auto-fit-200': 'repeat(auto-fit, minmax(200px, 1fr))',
+        'auto-fit-250': 'repeat(auto-fit, minmax(250px, 1fr))',
+        'auto-fit-300': 'repeat(auto-fit, minmax(300px, 1fr))',
+        'auto-fill-120': 'repeat(auto-fill, minmax(120px, 1fr))',
+        'auto-fill-200': 'repeat(auto-fill, minmax(200px, 1fr))',
+        'auto-fill-250': 'repeat(auto-fill, minmax(250px, 1fr))',
+        'auto-fill-300': 'repeat(auto-fill, minmax(300px, 1fr))',
+        'dashboard': 'repeat(auto-fit, minmax(280px, 1fr))',
+        'cards': 'repeat(auto-fit, minmax(320px, 1fr))',
+        'table': 'repeat(auto-fit, minmax(150px, 1fr))',
+      },
+
+      // Industrial Container Queries
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+          xl: '3rem',
+          '2xl': '4rem',
+        },
+        screens: {
+          'xs': '475px',
+          'sm': '640px',
+          'md': '768px',
+          'lg': '1024px',
+          'xl': '1280px',
+          '2xl': '1536px',
+          '3xl': '1920px',
+        },
+      },
+
+      // Industrial Animation Timing
+      transitionDuration: {
+        '2000': '2000ms',
+        '3000': '3000ms',
+        '4000': '4000ms',
+        '5000': '5000ms',
+      },
+
+      // Industrial Z-Index Scale
+      zIndex: {
+        'dropdown': '1000',
+        'sticky': '1020',
+        'fixed': '1030',
+        'modal-backdrop': '1040',
+        'modal': '1050',
+        'popover': '1060',
+        'tooltip': '1070',
+        'toast': '1080',
+        'system-bar': '1090',
+      },
+
+      // Industrial Aspect Ratios
+      aspectRatio: {
+        'industrial-card': '4 / 3',
+        'industrial-banner': '16 / 9',
+        'industrial-square': '1 / 1',
+        'industrial-portrait': '3 / 4',
+        'industrial-landscape': '16 / 10',
+      },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    
+    // Custom Industrial Plugin
+    function({ addUtilities, addComponents }: any) {
+      // Industrial Pattern Utilities
+      addUtilities({
+        '.metal-grid': {
+          backgroundImage: `linear-gradient(rgba(108, 117, 125, 0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(108, 117, 125, 0.1) 1px, transparent 1px)`,
+          backgroundSize: '20px 20px',
+        },
+        '.brushed-steel': {
+          background: `linear-gradient(90deg, 
+                       rgba(108, 117, 125, 0.1) 0%, 
+                       rgba(108, 117, 125, 0.05) 50%, 
+                       rgba(108, 117, 125, 0.1) 100%)`,
+        },
+        '.industrial-gradient': {
+          background: `linear-gradient(135deg, 
+                       #2C3E50 0%, 
+                       #34495E 25%, 
+                       #1E3A8A 75%, 
+                       #1E40AF 100%)`,
+        },
+        '.gear-spin': {
+          animation: 'spin 8s linear infinite',
+        },
+        '.gear-reverse': {
+          animation: 'spin 8s linear infinite reverse',
+        },
+        '.metal-shimmer': {
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '0',
+            left: '-100%',
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+            animation: 'shimmer 2s infinite',
+          },
+        },
+        '.industrial-focus': {
+          '&:focus-visible': {
+            outline: '2px solid var(--industrial-accent)',
+            outlineOffset: '2px',
+            borderRadius: '0.25rem',
+          },
+        },
+      });
+
+      // Industrial Component Classes
+      addComponents({
+        '.industrial-card': {
+          backgroundColor: 'white',
+          border: '1px solid rgb(206, 212, 218)',
+          borderRadius: '0.5rem',
+          boxShadow: '0 4px 6px -1px rgba(44, 62, 80, 0.1), 0 2px 4px -1px rgba(44, 62, 80, 0.06)',
+          padding: '1.5rem',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            boxShadow: '0 10px 15px -3px rgba(44, 62, 80, 0.1), 0 4px 6px -2px rgba(44, 62, 80, 0.05)',
+            transform: 'translateY(-1px)',
+          },
+        },
+        '.industrial-button': {
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '0.25rem',
+          fontSize: '0.875rem',
+          fontWeight: '500',
+          padding: '0.5rem 1rem',
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
+          border: 'none',
+          '&:focus-visible': {
+            outline: '2px solid var(--industrial-accent)',
+            outlineOffset: '2px',
+          },
+          '&:disabled': {
+            opacity: '0.5',
+            cursor: 'not-allowed',
+          },
+        },
+        '.industrial-input': {
+          display: 'flex',
+          width: '100%',
+          borderRadius: '0.25rem',
+          border: '1px solid rgb(173, 181, 189)',
+          backgroundColor: 'white',
+          padding: '0.5rem 0.75rem',
+          fontSize: '0.875rem',
+          transition: 'all 0.2s ease',
+          '&:focus': {
+            outline: 'none',
+            borderColor: 'rgb(30, 58, 138)',
+            boxShadow: '0 0 0 3px rgba(30, 58, 138, 0.1)',
+          },
+          '&::placeholder': {
+            color: 'rgb(107, 114, 126)',
+          },
+        },
+      });
+
+      // Industrial Animation Keyframes
+      addUtilities({
+        '@keyframes shimmer': {
+          '0%': { left: '-100%' },
+          '100%': { left: '100%' },
+        },
+        '@keyframes industrial-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.8' },
+        },
+        '@keyframes gear-rotate': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        '@keyframes metal-glow': {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(253, 224, 71, 0.3)' },
+          '50%': { boxShadow: '0 0 20px rgba(253, 224, 71, 0.5)' },
+        },
+      });
+    },
+  ],
 } satisfies Config;

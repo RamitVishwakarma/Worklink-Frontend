@@ -1,6 +1,7 @@
 import React from 'react';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 
 export interface Notification {
   id: string;
@@ -168,12 +169,14 @@ export const useNotificationsStore = create<NotificationsState>()(
 export const useNotificationsByCategory = (
   category?: Notification['category']
 ) => {
-  return useNotificationsStore((state) => {
-    if (!category) return state.notifications;
-    return state.notifications.filter(
+  const notifications = useNotificationsStore((state) => state.notifications);
+
+  return React.useMemo(() => {
+    if (!category) return notifications;
+    return notifications.filter(
       (notification) => notification.category === category
     );
-  });
+  }, [notifications, category]);
 };
 
 // Hydration-safe version of useUnreadNotifications
@@ -185,20 +188,24 @@ export const useUnreadNotifications = () => {
     setIsClient(true);
   }, []);
 
-  // Return empty array during SSR/hydration to prevent mismatches
-  if (!isClient) {
-    return [];
-  }
+  return React.useMemo(() => {
+    // Return empty array during SSR/hydration to prevent mismatches
+    if (!isClient) {
+      return [];
+    }
 
-  return notifications.filter((notification) => !notification.read);
+    return notifications.filter((notification) => !notification.read);
+  }, [isClient, notifications]);
 };
 
 export const useRecentNotifications = (limit: number = 5) => {
-  return useNotificationsStore((state) =>
-    state.notifications
+  const notifications = useNotificationsStore((state) => state.notifications);
+
+  return React.useMemo(() => {
+    return [...notifications]
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-      .slice(0, limit)
-  );
+      .slice(0, limit);
+  }, [notifications, limit]);
 };
 
 // Notification helper functions
@@ -250,38 +257,52 @@ export const createWarningNotification = (
   category,
 });
 
+// Notification operations selector - defined outside of hook to prevent recreation
+const notificationOperationsSelector = (state: NotificationsState) => ({
+  addNotification: state.addNotification,
+});
+
 // Hook for easy notification creation
 export const useNotifications = () => {
-  const addNotification = useNotificationsStore(
-    (state) => state.addNotification
+  const { addNotification } = useNotificationsStore(
+    useShallow(notificationOperationsSelector)
   );
 
-  return {
-    addNotification,
-    addSuccess: (
-      title: string,
-      message: string,
-      category?: Notification['category']
-    ) => addNotification(createSuccessNotification(title, message, category)),
-    addError: (
-      title: string,
-      message: string,
-      category?: Notification['category']
-    ) => addNotification(createErrorNotification(title, message, category)),
-    addInfo: (
-      title: string,
-      message: string,
-      category?: Notification['category'],
-      actionUrl?: string,
-      actionLabel?: string
-    ) =>
-      addNotification(
-        createInfoNotification(title, message, category, actionUrl, actionLabel)
-      ),
-    addWarning: (
-      title: string,
-      message: string,
-      category?: Notification['category']
-    ) => addNotification(createWarningNotification(title, message, category)),
-  };
+  return React.useMemo(
+    () => ({
+      addNotification,
+      addSuccess: (
+        title: string,
+        message: string,
+        category?: Notification['category']
+      ) => addNotification(createSuccessNotification(title, message, category)),
+      addError: (
+        title: string,
+        message: string,
+        category?: Notification['category']
+      ) => addNotification(createErrorNotification(title, message, category)),
+      addInfo: (
+        title: string,
+        message: string,
+        category?: Notification['category'],
+        actionUrl?: string,
+        actionLabel?: string
+      ) =>
+        addNotification(
+          createInfoNotification(
+            title,
+            message,
+            category,
+            actionUrl,
+            actionLabel
+          )
+        ),
+      addWarning: (
+        title: string,
+        message: string,
+        category?: Notification['category']
+      ) => addNotification(createWarningNotification(title, message, category)),
+    }),
+    [addNotification]
+  );
 };

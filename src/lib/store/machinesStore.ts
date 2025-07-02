@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import { publicAPI, manufacturerAPI, workerAPI, startupAPI } from '../api';
+import { useAuthStore } from './authStore';
 import type { Machine, MachineApplication } from '../types';
 
 export interface MachinesState {
@@ -25,23 +27,15 @@ export interface MachinesState {
 
   // Actions
   fetchMachines: (params?: any) => Promise<void>;
-  fetchUserMachines: (manufacturerId: string) => Promise<void>;
-  fetchApplications: (
-    manufacturerId: string,
-    machineId: string
-  ) => Promise<void>;
+  fetchUserMachines: () => Promise<void>; // No manufacturerId needed - uses JWT
+  fetchApplications: () => Promise<void>; // No manufacturerId/machineId needed - uses JWT
   addMachine: (machineData: any) => Promise<void>;
   deleteMachine: (machineId: string) => Promise<void>;
   toggleMachineAvailability: (
     machineId: string,
     availability: boolean
   ) => Promise<void>;
-  applyToMachine: (
-    machineId: string,
-    applicantId: string,
-    applicantType: 'worker' | 'startup',
-    applicationData?: any
-  ) => Promise<void>;
+  applyToMachine: (machineId: string, applicationData?: any) => Promise<void>; // No applicantId/type needed - uses JWT
   updateApplicationStatus: (
     applicationId: string,
     status: 'approved' | 'rejected'
@@ -88,11 +82,10 @@ export const useMachinesStore = create<MachinesState>()(
         }
       },
 
-      fetchUserMachines: async (manufacturerId: string) => {
+      fetchUserMachines: async () => {
         set({ isLoading: true });
         try {
-          const userMachines =
-            await manufacturerAPI.getMachines(manufacturerId);
+          const userMachines = await manufacturerAPI.getMachines();
           set({ userMachines, isLoading: false });
         } catch (error) {
           console.error('Failed to fetch user machines:', error);
@@ -100,13 +93,10 @@ export const useMachinesStore = create<MachinesState>()(
         }
       },
 
-      fetchApplications: async (manufacturerId: string, machineId: string) => {
+      fetchApplications: async () => {
         set({ isLoading: true });
         try {
-          const applications = await manufacturerAPI.getMachineApplications(
-            manufacturerId,
-            machineId
-          );
+          const applications = await manufacturerAPI.getMachineApplications();
           set({ applications, isLoading: false });
         } catch (error) {
           console.error('Failed to fetch applications:', error);
@@ -179,28 +169,27 @@ export const useMachinesStore = create<MachinesState>()(
         }
       },
 
-      applyToMachine: async (
-        machineId: string,
-        applicantId: string,
-        applicantType: 'worker' | 'startup',
-        applicationData = {}
-      ) => {
+      applyToMachine: async (machineId: string, applicationData = {}) => {
         set({ isApplying: true });
         try {
+          // The API will determine if this is a worker or startup based on JWT
           let application: MachineApplication;
 
-          if (applicantType === 'worker') {
+          // Check the user type from auth store to determine which API to use
+          const userType = useAuthStore.getState().user?.userType;
+
+          if (userType === 'worker') {
             application = await workerAPI.applyToMachine(
               machineId,
-              applicantId,
+              applicationData
+            );
+          } else if (userType === 'startup') {
+            application = await startupAPI.applyToMachine(
+              machineId,
               applicationData
             );
           } else {
-            application = await startupAPI.applyToMachine(
-              machineId,
-              applicantId,
-              applicationData
-            );
+            throw new Error('Invalid user type for machine application');
           }
 
           // Update local state to show machine as applied
@@ -278,22 +267,32 @@ export const useMachinesStore = create<MachinesState>()(
   )
 );
 
-// Stats hook for machines
-export const useMachineStats = () => {
-  const { userMachines, applications } = useMachinesStore();
+// Stats selector - defined outside of hook to prevent recreation
+const machineStatsSelector = (state: MachinesState) => {
+  const { userMachines = [], applications = [] } = state;
+
+  // Ensure we have arrays to work with
+  const safeMachines = Array.isArray(userMachines) ? userMachines : [];
+  const safeApplications = Array.isArray(applications) ? applications : [];
 
   return {
-    total: userMachines.length,
-    active: userMachines.filter((machine) => machine.availability).length,
-    inactive: userMachines.filter((machine) => !machine.availability).length,
-    totalApplications: applications.length,
-    pendingApplications: applications.filter((app) => app.status === 'pending')
-      .length,
-    approvedApplications: applications.filter(
+    total: safeMachines.length,
+    active: safeMachines.filter((machine) => machine.availability).length,
+    inactive: safeMachines.filter((machine) => !machine.availability).length,
+    totalApplications: safeApplications.length,
+    pendingApplications: safeApplications.filter(
+      (app) => app.status === 'pending'
+    ).length,
+    approvedApplications: safeApplications.filter(
       (app) => app.status === 'approved'
     ).length,
-    rejectedApplications: applications.filter(
+    rejectedApplications: safeApplications.filter(
       (app) => app.status === 'rejected'
     ).length,
   };
+};
+
+// Stats hook for machines with shallow comparison
+export const useMachineStats = () => {
+  return useMachinesStore(useShallow(machineStatsSelector));
 };

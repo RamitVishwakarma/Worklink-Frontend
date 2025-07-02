@@ -98,7 +98,9 @@ export default function GigsPage() {
     }
   };
 
-  const filteredGigs = gigs.filter((gig) => {
+  // Ensure gigs is an array before filtering
+  const safeGigs = Array.isArray(gigs) ? gigs : [];
+  const filteredGigs = safeGigs.filter((gig) => {
     const matchesSearch =
       gig.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       gig.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -246,7 +248,7 @@ export default function GigsPage() {
             transition={{ delay: 0.2 }}
           >
             <p className="text-sm text-industrial-muted-foreground">
-              Showing {filteredGigs.length} of {gigs.length} gigs
+              Showing {filteredGigs.length} of {safeGigs.length} gigs
             </p>
           </motion.div>
 

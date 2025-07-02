@@ -38,7 +38,7 @@ export function Header() {
 
   const getDashboardLink = () => {
     if (!user) return '/';
-    switch (user.role) {
+    switch (user.userType) {
       case 'worker':
         return '/worker/dashboard';
       case 'startup':
@@ -178,7 +178,7 @@ export function Header() {
                         {user?.email}
                       </p>
                       <p className="text-xs leading-none text-industrial-accent capitalize">
-                        {user?.role}
+                        {user?.userType}
                       </p>
                     </div>
                   </DropdownMenuLabel>

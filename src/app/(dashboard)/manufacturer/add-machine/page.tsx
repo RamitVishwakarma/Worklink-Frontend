@@ -106,7 +106,7 @@ function AddMachinePage() {
     try {
       await addMachine({
         ...data,
-        manufacturerId: user.id,
+        // manufacturerId not needed - extracted from JWT in backend
       });
 
       toast({

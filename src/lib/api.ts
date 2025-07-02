@@ -3,8 +3,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from '@/hooks/use-toast';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 // Create enhanced axios instance
 const api = axios.create({
@@ -323,219 +322,162 @@ import type {
 
 // Auth endpoints
 export const authAPI = {
-  signup: (userData: any): Promise<AuthResponse> =>
-    apiPost('/auth/signup', userData, {
+  // Worker authentication
+  workerSignup: (userData: any): Promise<AuthResponse> =>
+    apiPost('/worker/signup', userData, {
       showSuccessToast: true,
-      successMessage: 'Account created successfully!',
+      successMessage: 'Worker account created successfully!',
     }),
 
-  signin: (credentials: any): Promise<AuthResponse> =>
-    apiPost('/auth/signin', credentials, {
+  workerSignin: (credentials: any): Promise<AuthResponse> =>
+    apiPost('/worker/signin', credentials, {
       showSuccessToast: true,
       successMessage: 'Welcome back!',
     }),
 
-  getCurrentUser: (): Promise<{ user: User }> => apiGet('/auth/me'),
-
-  refreshToken: (): Promise<AuthResponse> => apiPost('/auth/refresh'),
-
-  logout: (): Promise<void> =>
-    apiPost(
-      '/auth/logout',
-      {},
-      {
-        showSuccessToast: true,
-        successMessage: 'Logged out successfully',
-      }
-    ),
-
-  // Profile endpoints for current authenticated user
-  getWorkerProfile: (): Promise<WorkerProfile> => apiGet('/profile/worker'),
-
-  updateWorkerProfile: (
-    profileData: Partial<WorkerProfile>
-  ): Promise<WorkerProfile> =>
-    apiPut('/profile/worker', profileData, {
+  // Startup authentication
+  startupSignup: (userData: any): Promise<AuthResponse> =>
+    apiPost('/startup/signup', userData, {
       showSuccessToast: true,
-      successMessage: 'Profile updated successfully!',
+      successMessage: 'Startup account created successfully!',
     }),
 
-  getStartupProfile: (): Promise<StartupProfile> => apiGet('/profile/startup'),
-
-  updateStartupProfile: (
-    profileData: Partial<StartupProfile>
-  ): Promise<StartupProfile> =>
-    apiPut('/profile/startup', profileData, {
+  startupSignin: (credentials: any): Promise<AuthResponse> =>
+    apiPost('/startup/signin', credentials, {
       showSuccessToast: true,
-      successMessage: 'Profile updated successfully!',
+      successMessage: 'Welcome back!',
     }),
 
-  getManufacturerProfile: (): Promise<ManufacturerProfile> =>
-    apiGet('/profile/manufacturer'),
-
-  updateManufacturerProfile: (
-    profileData: Partial<ManufacturerProfile>
-  ): Promise<ManufacturerProfile> =>
-    apiPut('/profile/manufacturer', profileData, {
+  // Manufacturer authentication
+  manufacturerSignup: (userData: any): Promise<AuthResponse> =>
+    apiPost('/manufacturer/signup', userData, {
       showSuccessToast: true,
-      successMessage: 'Profile updated successfully!',
+      successMessage: 'Manufacturer account created successfully!',
+    }),
+
+  manufacturerSignin: (credentials: any): Promise<AuthResponse> =>
+    apiPost('/manufacturer/signin', credentials, {
+      showSuccessToast: true,
+      successMessage: 'Welcome back!',
     }),
 };
 
 // Worker endpoints
 export const workerAPI = {
-  getProfile: (workerId: string): Promise<WorkerProfile> =>
-    apiGet(`/workers/${workerId}/profile`),
+  getProfile: (): Promise<WorkerProfile> => apiGet('/worker/profile'),
 
   updateProfile: (
-    workerId: string,
     profileData: Partial<WorkerProfile>
   ): Promise<WorkerProfile> =>
-    apiPut(`/workers/${workerId}/profile`, profileData, {
+    apiPut('/worker/profile', profileData, {
       showSuccessToast: true,
       successMessage: 'Profile updated successfully!',
     }),
 
-  getAppliedGigs: (workerId: string): Promise<GigApplication[]> =>
-    apiGet(`/workers/${workerId}/applications`),
+  getAppliedGigs: (): Promise<GigApplication[]> =>
+    apiGet('/worker/applied-gigs'),
 
-  applyToGig: (
-    gigId: string,
-    workerId: string,
-    applicationData: any
-  ): Promise<GigApplication> =>
-    apiPost(
-      `/gigs/${gigId}/apply`,
-      { workerId, ...applicationData },
-      {
-        showSuccessToast: true,
-        successMessage: 'Successfully applied for the gig!',
-      }
-    ),
+  applyToGig: (gigId: string, applicationData: any): Promise<GigApplication> =>
+    apiPost(`/worker/apply-gig/${gigId}`, applicationData, {
+      showSuccessToast: true,
+      successMessage: 'Successfully applied for the gig!',
+    }),
 
   applyToMachine: (
     machineId: string,
-    workerId: string,
     applicationData: any
   ): Promise<MachineApplication> =>
-    apiPost(
-      `/machines/${machineId}/apply`,
-      {
-        applicantId: workerId,
-        applicantType: 'worker',
-        ...applicationData,
-      },
-      {
-        showSuccessToast: true,
-        successMessage: 'Successfully applied to use the machine!',
-      }
-    ),
+    apiPost(`/worker/apply-machine/${machineId}`, applicationData, {
+      showSuccessToast: true,
+      successMessage: 'Successfully applied to use the machine!',
+    }),
 };
 
 // Startup endpoints
 export const startupAPI = {
-  getProfile: (startupId: string): Promise<StartupProfile> =>
-    apiGet(`/startups/${startupId}/profile`),
+  getProfile: (): Promise<StartupProfile> => apiGet('/startup/profile'),
 
   updateProfile: (
-    startupId: string,
     profileData: Partial<StartupProfile>
   ): Promise<StartupProfile> =>
-    apiPut(`/startups/${startupId}/profile`, profileData, {
+    apiPut('/startup/profile', profileData, {
       showSuccessToast: true,
       successMessage: 'Profile updated successfully!',
     }),
 
   createGig: (gigData: any): Promise<Gig> =>
-    apiPost('/gigs', gigData, {
+    apiPost('/startup/create-gig', gigData, {
       showSuccessToast: true,
       successMessage: 'Gig posted successfully!',
     }),
 
-  getGigs: (startupId: string): Promise<Gig[]> =>
-    apiGet(`/startups/${startupId}/gigs`),
+  getGigs: (): Promise<Gig[]> => apiGet('/startup/your-gigs'),
 
   deleteGig: (gigId: string): Promise<void> =>
-    apiDelete(`/gigs/${gigId}`, {
+    apiDelete(`/startup/delete-gig/${gigId}`, {
       showSuccessToast: true,
       successMessage: 'Gig deleted successfully',
     }),
 
   applyToMachine: (
     machineId: string,
-    startupId: string,
     applicationData: any
   ): Promise<MachineApplication> =>
-    apiPost(
-      `/machines/${machineId}/apply`,
-      {
-        applicantId: startupId,
-        applicantType: 'startup',
-        ...applicationData,
-      },
-      {
-        showSuccessToast: true,
-        successMessage: 'Successfully applied to use the machine!',
-      }
-    ),
+    apiPost(`/startup/apply-machine/${machineId}`, applicationData, {
+      showSuccessToast: true,
+      successMessage: 'Successfully applied to use the machine!',
+    }),
 };
 
 // Manufacturer endpoints
 export const manufacturerAPI = {
-  getProfile: (manufacturerId: string): Promise<ManufacturerProfile> =>
-    apiGet(`/manufacturers/${manufacturerId}/profile`),
+  getProfile: (): Promise<ManufacturerProfile> =>
+    apiGet('/manufacturer/profile'),
 
   updateProfile: (
-    manufacturerId: string,
     profileData: Partial<ManufacturerProfile>
   ): Promise<ManufacturerProfile> =>
-    apiPut(`/manufacturers/${manufacturerId}/profile`, profileData, {
+    apiPut('/manufacturer/profile', profileData, {
       showSuccessToast: true,
       successMessage: 'Profile updated successfully!',
     }),
 
   addMachine: (machineData: any): Promise<Machine> =>
-    apiPost('/machines', machineData, {
+    apiPost('/manufacturer/add-machine', machineData, {
       showSuccessToast: true,
       successMessage: 'Machine added successfully!',
     }),
 
-  getMachines: (manufacturerId: string): Promise<Machine[]> =>
-    apiGet(`/manufacturers/${manufacturerId}/machines`),
+  getMachines: (): Promise<Machine[]> => apiGet('/manufacturer/your-machines'),
 
   deleteMachine: (machineId: string): Promise<void> =>
-    apiDelete(`/machines/${machineId}`, {
+    apiDelete(`/manufacturer/delete-machine/${machineId}`, {
       showSuccessToast: true,
       successMessage: 'Machine deleted successfully',
     }),
 
   toggleMachineAvailability: (
     machineId: string,
-    availability: boolean
+    available: boolean
   ): Promise<Machine> =>
     apiPatch(
-      `/machines/${machineId}/availability`,
-      { availability },
+      `/manufacturer/delete-machine/${machineId}`,
+      { available },
       {
         showSuccessToast: true,
-        successMessage: `Machine ${availability ? 'enabled' : 'disabled'} successfully`,
+        successMessage: `Machine ${available ? 'enabled' : 'disabled'} successfully`,
       }
     ),
 
-  getMachineApplications: (
-    manufacturerId: string,
-    machineId: string
-  ): Promise<MachineApplication[]> =>
-    apiGet(
-      `/manufacturers/${manufacturerId}/machines/${machineId}/applications`
-    ),
+  getMachineApplications: (): Promise<MachineApplication[]> =>
+    apiGet('/manufacturer/applications'),
 
   updateApplicationStatus: (
     applicationId: string,
     status: 'approved' | 'rejected'
   ): Promise<MachineApplication> =>
     apiPatch(
-      `/applications/${applicationId}/status`,
+      `/manufacturer/approve-reject-application/${applicationId}`,
       { status },
       {
         showSuccessToast: true,
@@ -546,80 +488,56 @@ export const manufacturerAPI = {
 
 // General/Public endpoints
 export const publicAPI = {
-  getAllGigs: (params?: any): Promise<Gig[]> => apiGet('/gigs', { ...params }),
-
-  getGigDetails: (gigId: string): Promise<Gig> => apiGet(`/gigs/${gigId}`),
+  getAllGigs: (params?: any): Promise<Gig[]> =>
+    apiGet('/public/gigs', { ...params }),
 
   getAllMachines: (params?: any): Promise<Machine[]> =>
-    apiGet('/machines', { ...params }),
-
-  getMachineDetails: (machineId: string): Promise<Machine> =>
-    apiGet(`/machines/${machineId}`),
+    apiGet('/public/machines', { ...params }),
 };
 
 // ==================================================
 // LEGACY API FUNCTIONS (for backward compatibility)
 // ==================================================
 
-// Auth
-export const signupUser = (userData: any) => authAPI.signup(userData);
-export const signinUser = (credentials: any) => authAPI.signin(credentials);
-export const getCurrentUser = () => authAPI.getCurrentUser();
-
 // Worker specific
-export const getWorkerProfile = (workerId: string) =>
-  workerAPI.getProfile(workerId);
-export const updateWorkerProfile = (workerId: string, profileData: any) =>
-  workerAPI.updateProfile(workerId, profileData);
-export const applyToGig = (
-  gigId: string,
-  workerId: string,
-  applicationData: any
-) => workerAPI.applyToGig(gigId, workerId, applicationData);
-export const getAppliedGigsForWorker = (workerId: string) =>
-  workerAPI.getAppliedGigs(workerId);
+export const getWorkerProfile = () => workerAPI.getProfile();
+export const updateWorkerProfile = (profileData: any) =>
+  workerAPI.updateProfile(profileData);
+export const applyToGig = (gigId: string, applicationData: any) =>
+  workerAPI.applyToGig(gigId, applicationData);
+export const getAppliedGigsForWorker = () => workerAPI.getAppliedGigs();
 export const applyToMachineByWorker = (
   machineId: string,
-  workerId: string,
   applicationData: any
-) => workerAPI.applyToMachine(machineId, workerId, applicationData);
+) => workerAPI.applyToMachine(machineId, applicationData);
 
 // Startup specific
-export const getStartupProfile = (startupId: string) =>
-  startupAPI.getProfile(startupId);
-export const updateStartupProfile = (startupId: string, profileData: any) =>
-  startupAPI.updateProfile(startupId, profileData);
+export const getStartupProfile = () => startupAPI.getProfile();
+export const updateStartupProfile = (profileData: any) =>
+  startupAPI.updateProfile(profileData);
 export const createGig = (gigData: any) => startupAPI.createGig(gigData);
-export const getGigsByStartup = (startupId: string) =>
-  startupAPI.getGigs(startupId);
+export const getGigsByStartup = () => startupAPI.getGigs();
 export const deleteGig = (gigId: string) => startupAPI.deleteGig(gigId);
 export const applyToMachineByStartup = (
   machineId: string,
-  startupId: string,
   applicationData: any
-) => startupAPI.applyToMachine(machineId, startupId, applicationData);
+) => startupAPI.applyToMachine(machineId, applicationData);
 
 // Manufacturer specific
-export const getManufacturerProfile = (manufacturerId: string) =>
-  manufacturerAPI.getProfile(manufacturerId);
-export const updateManufacturerProfile = (
-  manufacturerId: string,
-  profileData: any
-) => manufacturerAPI.updateProfile(manufacturerId, profileData);
+export const getManufacturerProfile = () => manufacturerAPI.getProfile();
+export const updateManufacturerProfile = (profileData: any) =>
+  manufacturerAPI.updateProfile(profileData);
 export const addMachine = (machineData: any) =>
   manufacturerAPI.addMachine(machineData);
-export const getMachinesByManufacturer = (manufacturerId: string) =>
-  manufacturerAPI.getMachines(manufacturerId);
+export const getMachinesByManufacturer = () => manufacturerAPI.getMachines();
 export const deleteMachine = (machineId: string) =>
   manufacturerAPI.deleteMachine(machineId);
 export const toggleMachineAvailability = (
   machineId: string,
-  availability: boolean
-) => manufacturerAPI.toggleMachineAvailability(machineId, availability);
-export const getMachineApplications = (
-  manufacturerId: string,
-  machineId: string
-) => manufacturerAPI.getMachineApplications(manufacturerId, machineId);
+  available: boolean
+) => manufacturerAPI.toggleMachineAvailability(machineId, available);
+export const getMachineApplications = () =>
+  manufacturerAPI.getMachineApplications();
 export const approveOrRejectApplication = (
   applicationId: string,
   status: 'approved' | 'rejected'
@@ -627,8 +545,5 @@ export const approveOrRejectApplication = (
 
 // General/Public
 export const getAllGigs = (params?: any) => publicAPI.getAllGigs(params);
-export const getGigDetails = (gigId: string) => publicAPI.getGigDetails(gigId);
 export const getAllMachines = (params?: any) =>
   publicAPI.getAllMachines(params);
-export const getMachineDetails = (machineId: string) =>
-  publicAPI.getMachineDetails(machineId);

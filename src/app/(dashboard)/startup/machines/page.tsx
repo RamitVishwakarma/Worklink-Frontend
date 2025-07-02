@@ -129,11 +129,8 @@ const StartupMachinesPage = () => {
   ];
   const uniqueTypes = [...new Set(machines.map((machine) => machine.type))];
   // Handle apply to machine
-  const handleApplyToMachine = async (
-    machineId: string,
-    userType: 'worker' | 'startup'
-  ) => {
-    if (!user?.id) {
+  const handleApplyToMachine = async (machineId: string) => {
+    if (!user) {
       toast({
         title: 'Error',
         description: 'You must be logged in to apply to machines.',
@@ -143,7 +140,7 @@ const StartupMachinesPage = () => {
     }
 
     try {
-      await applyToMachine(machineId, user.id, userType);
+      await applyToMachine(machineId); // No user ID or type needed
       toast({
         title: 'Success',
         description: 'Successfully applied to machine!',
@@ -437,9 +434,7 @@ const StartupMachinesPage = () => {
                           <Button
                             className="w-full"
                             variant="industrial-primary"
-                            onClick={() =>
-                              handleApplyToMachine(machine._id, 'startup')
-                            }
+                            onClick={() => handleApplyToMachine(machine._id)}
                             disabled={!machine.isAvailable || isApplying}
                           >
                             {isApplying ? (

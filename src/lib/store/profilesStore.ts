@@ -55,13 +55,13 @@ export const useProfilesStore = create<ProfilesState>()(
 
           switch (userType) {
             case UserType.WORKER:
-              profile = await workerAPI.getProfile(userId);
+              profile = await workerAPI.getProfile();
               break;
             case UserType.STARTUP:
-              profile = await startupAPI.getProfile(userId);
+              profile = await startupAPI.getProfile();
               break;
             case UserType.MANUFACTURER:
-              profile = await manufacturerAPI.getProfile(userId);
+              profile = await manufacturerAPI.getProfile();
               break;
             default:
               throw new Error(`Unknown user type: ${userType}`);
@@ -86,19 +86,16 @@ export const useProfilesStore = create<ProfilesState>()(
           switch (userType) {
             case UserType.WORKER:
               updatedProfile = await workerAPI.updateProfile(
-                userId,
                 profileData as Partial<WorkerProfile>
               );
               break;
             case UserType.STARTUP:
               updatedProfile = await startupAPI.updateProfile(
-                userId,
                 profileData as Partial<StartupProfile>
               );
               break;
             case UserType.MANUFACTURER:
               updatedProfile = await manufacturerAPI.updateProfile(
-                userId,
                 profileData as Partial<ManufacturerProfile>
               );
               break;
@@ -122,13 +119,13 @@ export const useProfilesStore = create<ProfilesState>()(
 
           switch (userType) {
             case UserType.WORKER:
-              profile = await authAPI.getWorkerProfile();
+              profile = await workerAPI.getProfile();
               break;
             case UserType.STARTUP:
-              profile = await authAPI.getStartupProfile();
+              profile = await startupAPI.getProfile();
               break;
             case UserType.MANUFACTURER:
-              profile = await authAPI.getManufacturerProfile();
+              profile = await manufacturerAPI.getProfile();
               break;
             default:
               throw new Error(`Unknown user type: ${userType}`);
@@ -152,17 +149,17 @@ export const useProfilesStore = create<ProfilesState>()(
 
           switch (userType) {
             case UserType.WORKER:
-              updatedProfile = await authAPI.updateWorkerProfile(
+              updatedProfile = await workerAPI.updateProfile(
                 profileData as Partial<WorkerProfile>
               );
               break;
             case UserType.STARTUP:
-              updatedProfile = await authAPI.updateStartupProfile(
+              updatedProfile = await startupAPI.updateProfile(
                 profileData as Partial<StartupProfile>
               );
               break;
             case UserType.MANUFACTURER:
-              updatedProfile = await authAPI.updateManufacturerProfile(
+              updatedProfile = await manufacturerAPI.updateProfile(
                 profileData as Partial<ManufacturerProfile>
               );
               break;

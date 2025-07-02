@@ -13,7 +13,10 @@ const withAuth = <P extends object>(
 ) => {
   const ComponentWithAuth = (props: P) => {
     const router = useRouter();
-    const { user, token, isLoading } = useAuthStore();
+    // Use selective subscriptions to avoid unnecessary re-renders
+    const user = useAuthStore((state) => state.user);
+    const token = useAuthStore((state) => state.token);
+    const isLoading = useAuthStore((state) => state.isLoading);
 
     useEffect(() => {
       if (!isLoading && !token) {
@@ -26,7 +29,7 @@ const withAuth = <P extends object>(
           router.replace('/');
         }
       }
-    }, [user, token, isLoading, router, options?.allowedUserTypes]);
+    }, [user, token, isLoading, router]);
 
     if (isLoading || !token) {
       // You can render a loading spinner here

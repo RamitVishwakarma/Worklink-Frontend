@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import { signinUser } from '@/lib/api';
+import { authAPI } from '@/lib/api';
+import { UserType } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { useToast } from '@/hooks/use-toast';
 
@@ -55,14 +56,14 @@ type SigninFormValues = z.infer<typeof formSchema>;
 
 export function SigninForm() {
   const router = useRouter();
-  const { login } = useAuthStore();
+  const login = useAuthStore((state) => state.login);
   const { toast } = useToast();
   const form = useForm<SigninFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
       password: '',
-      userType: undefined,
+      userType: 'worker', // Set a default value instead of undefined
     },
   });
 
@@ -115,13 +116,58 @@ export function SigninForm() {
   };
   async function onSubmit(data: SigninFormValues) {
     try {
-      const response = await signinUser(data);
-      await login(response.token, response.user);
-      toast({
-        title: 'Signed In Successfully',
-        description: `Welcome back, ${response.user.email}! Redirecting...`,
-      });
-      router.push(`/${response.user.userType}/dashboard`);
+      let response;
+
+      // Call the appropriate signin API based on user type
+      if (data.userType === 'worker') {
+        response = await authAPI.workerSignin({
+          email: data.email,
+          password: data.password,
+        });
+      } else if (data.userType === 'startup') {
+        response = await authAPI.startupSignin({
+          companyEmail: data.email,
+          password: data.password,
+        });
+      } else if (data.userType === 'manufacturer') {
+        response = await authAPI.manufacturerSignin({
+          companyEmail: data.email,
+          password: data.password,
+        });
+      }
+
+      if (response) {
+        // Clean token by removing 'Bearer ' prefix if it exists
+        const cleanToken = response.token.replace('Bearer ', '');
+
+        // Extract user data from response (ensure userType is included)
+        const userTypeEnum =
+          data.userType === 'worker'
+            ? UserType.WORKER
+            : data.userType === 'startup'
+              ? UserType.STARTUP
+              : UserType.MANUFACTURER;
+
+        const userData = {
+          ...response.user,
+          userType: userTypeEnum, // Ensure userType is properly typed
+        };
+
+        // Store the token and user data
+        localStorage.setItem('token', cleanToken);
+        localStorage.setItem('userType', data.userType);
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        // Update auth store with the clean token and user data
+        await login(cleanToken, userData);
+
+        toast({
+          title: 'Signed In Successfully',
+          description: `Welcome back! Redirecting...`,
+        });
+
+        router.push(`/${data.userType}/dashboard`);
+      }
     } catch (error: unknown) {
       console.error('Signin failed:', error);
       let errorMessage = 'An unexpected error occurred. Please try again.';
@@ -129,9 +175,9 @@ export function SigninForm() {
         error instanceof AxiosError &&
         error.response &&
         error.response.data &&
-        typeof error.response.data.message === 'string'
+        typeof error.response.data.error === 'string'
       ) {
-        errorMessage = error.response.data.message;
+        errorMessage = error.response.data.error;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
@@ -203,8 +249,8 @@ export function SigninForm() {
                             Account Type
                           </FormLabel>
                           <Select
+                            value={field.value}
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger className="bg-white border-industrial-gunmetal-300 text-industrial-gunmetal-800 focus:ring-industrial-safety-300 focus:border-industrial-safety-300 h-12 transition-all duration-200">
@@ -261,6 +307,7 @@ export function SigninForm() {
                               placeholder="you@company.com"
                               variant="industrial"
                               {...field}
+                              value={field.value || ''}
                               className="h-12"
                             />
                           </FormControl>
@@ -284,6 +331,7 @@ export function SigninForm() {
                               placeholder="••••••••"
                               variant="industrial"
                               {...field}
+                              value={field.value || ''}
                               className="h-12"
                             />
                           </FormControl>
