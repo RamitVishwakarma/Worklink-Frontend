@@ -15,6 +15,8 @@ export function Hero() {
         <Image
           src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
           alt="Industrial workers"
+          width={1920}
+          height={1080}
           className="object-cover w-full h-full"
         />
       </div>
@@ -39,7 +41,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="industrial-hero-text text-white mb-6 leading-tight"
+              className="font-industrial-heading text-4xl md:text-5xl lg:text-[64px] font-bold text-white mb-6 uppercase industrial-hero-text"
             >
               Connecting Skilled Labor with Industrial Opportunity
             </motion.h1>
@@ -65,7 +67,7 @@ export function Hero() {
                 <Button
                   variant="industrial-accent"
                   size="xl"
-                  className="industrial-hero-text text-base sm:text-lg px-8 py-6 shadow-lg shadow-industrial-safety-300/20 hover:shadow-industrial-safety-300/30 transition-all duration-300"
+                  className="font-industrial-heading uppercase industrial-hero-text text-base sm:text-lg px-8 py-6 shadow-lg shadow-industrial-safety-300/20 hover:shadow-industrial-safety-300/30 transition-all duration-300"
                 >
                   Find Work
                 </Button>
@@ -95,7 +97,7 @@ export function Hero() {
             duration: 2,
           }}
         >
-          <div className="w-10 h-16 border-2 border-white/30 rounded-full flex items-start justify-center pt-3">
+          <div className="w-10 h-16 border-2 border-white/30 rounded-full flex items-start justify-center pt-3 max-lg:hidden lg:flex">
             <div className="w-2 h-3 bg-white rounded-full" />
           </div>
         </motion.div>

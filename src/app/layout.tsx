@@ -8,6 +8,7 @@ import {
   JetBrains_Mono,
   Bebas_Neue,
   Source_Sans_3,
+  Roboto,
 } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import { AppProvider } from '@/components/providers/AppProvider';
@@ -26,6 +27,13 @@ const sourceSans = Source_Sans_3({
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-industrial-secondary',
+  display: 'swap',
+});
+
+const RobotoFont = Roboto({
+  subsets: ['latin'],
+  variable: '--font-industrial-roboto',
+  weight: ['300', '400', '500', '700'],
   display: 'swap',
 });
 
@@ -65,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sourceSans.variable} ${inter.variable} ${oswald.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} flex flex-col min-h-screen font-industrial-body antialiased`}
+        className={`${sourceSans.variable} ${inter.variable} ${oswald.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} ${RobotoFont.variable} flex flex-col min-h-screen font-industrial-body antialiased`}
       >
         <AppProvider>
           <Header />

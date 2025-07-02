@@ -185,6 +185,12 @@ export default {
           'Consolas',
           'monospace',
         ],
+        'industrial-roboto': [
+          'var(--font-industrial-roboto)',
+          'Roboto',
+          'system-ui',
+          'sans-serif',
+        ],
 
         // Aliases for easier use
         body: [
@@ -435,9 +441,9 @@ export default {
         'auto-fill-200': 'repeat(auto-fill, minmax(200px, 1fr))',
         'auto-fill-250': 'repeat(auto-fill, minmax(250px, 1fr))',
         'auto-fill-300': 'repeat(auto-fill, minmax(300px, 1fr))',
-        'dashboard': 'repeat(auto-fit, minmax(280px, 1fr))',
-        'cards': 'repeat(auto-fit, minmax(320px, 1fr))',
-        'table': 'repeat(auto-fit, minmax(150px, 1fr))',
+        dashboard: 'repeat(auto-fit, minmax(280px, 1fr))',
+        cards: 'repeat(auto-fit, minmax(320px, 1fr))',
+        table: 'repeat(auto-fit, minmax(150px, 1fr))',
       },
 
       // Industrial Container Queries
@@ -451,11 +457,11 @@ export default {
           '2xl': '4rem',
         },
         screens: {
-          'xs': '475px',
-          'sm': '640px',
-          'md': '768px',
-          'lg': '1024px',
-          'xl': '1280px',
+          xs: '475px',
+          sm: '640px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
           '2xl': '1536px',
           '3xl': '1920px',
         },
@@ -471,14 +477,14 @@ export default {
 
       // Industrial Z-Index Scale
       zIndex: {
-        'dropdown': '1000',
-        'sticky': '1020',
-        'fixed': '1030',
+        dropdown: '1000',
+        sticky: '1020',
+        fixed: '1030',
         'modal-backdrop': '1040',
-        'modal': '1050',
-        'popover': '1060',
-        'tooltip': '1070',
-        'toast': '1080',
+        modal: '1050',
+        popover: '1060',
+        tooltip: '1070',
+        toast: '1080',
         'system-bar': '1090',
       },
 
@@ -494,9 +500,9 @@ export default {
   },
   plugins: [
     require('tailwindcss-animate'),
-    
+
     // Custom Industrial Plugin
-    function({ addUtilities, addComponents }: any) {
+    function ({ addUtilities, addComponents }: any) {
       // Industrial Pattern Utilities
       addUtilities({
         '.metal-grid': {
@@ -533,7 +539,8 @@ export default {
             left: '-100%',
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+            background:
+              'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
             animation: 'shimmer 2s infinite',
           },
         },
@@ -552,11 +559,13 @@ export default {
           backgroundColor: 'white',
           border: '1px solid rgb(206, 212, 218)',
           borderRadius: '0.5rem',
-          boxShadow: '0 4px 6px -1px rgba(44, 62, 80, 0.1), 0 2px 4px -1px rgba(44, 62, 80, 0.06)',
+          boxShadow:
+            '0 4px 6px -1px rgba(44, 62, 80, 0.1), 0 2px 4px -1px rgba(44, 62, 80, 0.06)',
           padding: '1.5rem',
           transition: 'all 0.3s ease',
           '&:hover': {
-            boxShadow: '0 10px 15px -3px rgba(44, 62, 80, 0.1), 0 4px 6px -2px rgba(44, 62, 80, 0.05)',
+            boxShadow:
+              '0 10px 15px -3px rgba(44, 62, 80, 0.1), 0 4px 6px -2px rgba(44, 62, 80, 0.05)',
             transform: 'translateY(-1px)',
           },
         },
