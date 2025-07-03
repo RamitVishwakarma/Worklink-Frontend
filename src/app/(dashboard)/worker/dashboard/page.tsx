@@ -208,12 +208,17 @@ function WorkerDashboardPage() {
             {/* Enhanced Header with industrial accent bar */}
             <motion.div className="relative" variants={itemVariants}>
               {/* Animated metal accent bar */}
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: '100%' }}
-                transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
+              <IndustrialAnimatedElement
+                custom={{
+                  initial: { width: 0 },
+                  animate: { width: '100%' },
+                  transition: { duration: 1.2, delay: 0.5, ease: 'easeOut' },
+                }}
+                variant="custom"
                 className="absolute top-0 left-0 h-1 bg-gradient-to-r from-industrial-accent via-industrial-safety-400 to-industrial-accent rounded-full"
-              />
+              >
+                {' '}
+              </IndustrialAnimatedElement>
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
                 <div className="flex items-center gap-4">

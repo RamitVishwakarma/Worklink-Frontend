@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -134,11 +134,27 @@ export default function WorkerProfilePage() {
     },
   });
 
+  // Use useCallback to memoize the function
+  const handleFetchProfile = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      await fetchCurrentUserProfile(UserType.WORKER);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load profile data',
+        variant: 'destructive',
+      });
+    }
+  }, [user, fetchCurrentUserProfile, toast]);
+
   useEffect(() => {
     if (user?.id) {
       handleFetchProfile();
     }
-  }, [user]);
+  }, [user, handleFetchProfile]);
 
   useEffect(() => {
     if (currentProfile) {
@@ -157,21 +173,6 @@ export default function WorkerProfilePage() {
       });
     }
   }, [currentProfile, form]);
-
-  const handleFetchProfile = async () => {
-    if (!user) return;
-
-    try {
-      await fetchCurrentUserProfile(UserType.WORKER);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load profile data',
-        variant: 'destructive',
-      });
-    }
-  };
 
   const onSubmit = async (data: ProfileData) => {
     if (!user?.id) return;

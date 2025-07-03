@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -197,9 +197,15 @@ function StartupProfilePage() {
     }));
   };
 
+  // Memoize the fetchProfile function to avoid recreating it on each render
+  const memoizedFetchProfile = useCallback(fetchProfile, [
+    fetchCurrentUserProfile,
+    toast,
+  ]);
+
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    memoizedFetchProfile();
+  }, [memoizedFetchProfile]);
 
   useEffect(() => {
     if (profile) {
@@ -229,7 +235,11 @@ function StartupProfilePage() {
                 <motion.div
                   className="absolute inset-2 border-2 border-industrial-safety-400/40 rounded-full"
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
                 />
                 {/* Inner gear with factory icon */}
                 <div className="relative p-4 bg-industrial-gunmetal-100 rounded-full border-2 border-industrial-accent/50 w-20 h-20 flex items-center justify-center">
@@ -324,7 +334,8 @@ function StartupProfilePage() {
                         Company Profile
                       </h1>
                       <p className="text-industrial-muted-foreground text-lg">
-                        Manage your industrial company information and manufacturing capabilities
+                        Manage your industrial company information and
+                        manufacturing capabilities
                       </p>
                     </motion.div>
                   </div>
@@ -869,19 +880,31 @@ function StartupProfilePage() {
                         Your company metrics
                       </IndustrialCardDescription>
                     </IndustrialCardHeader>
-                    
+
                     <IndustrialCardContent className="relative p-6 space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">Profile Complete</span>
-                        <span className="font-semibold text-industrial-accent">85%</span>
+                        <span className="text-industrial-muted-foreground">
+                          Profile Complete
+                        </span>
+                        <span className="font-semibold text-industrial-accent">
+                          85%
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">Active Since</span>
-                        <span className="font-semibold text-industrial-foreground">2024</span>
+                        <span className="text-industrial-muted-foreground">
+                          Active Since
+                        </span>
+                        <span className="font-semibold text-industrial-foreground">
+                          2024
+                        </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">Last Updated</span>
-                        <span className="font-semibold text-industrial-foreground">Today</span>
+                        <span className="text-industrial-muted-foreground">
+                          Last Updated
+                        </span>
+                        <span className="font-semibold text-industrial-foreground">
+                          Today
+                        </span>
                       </div>
                     </IndustrialCardContent>
                   </IndustrialCard>
@@ -908,7 +931,7 @@ function StartupProfilePage() {
                         <span className="text-blue-800">Quick Actions</span>
                       </IndustrialCardTitle>
                     </IndustrialCardHeader>
-                    
+
                     <IndustrialCardContent className="relative p-6">
                       <div className="space-y-3">
                         <Button

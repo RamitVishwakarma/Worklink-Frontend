@@ -4,6 +4,7 @@ import React from 'react';
 import { Button, ButtonProps } from './button';
 import { IndustrialAnimatedElement } from './industrial-animation';
 import { cn } from '@/lib/utils';
+import { useIsClient } from '@/hooks/useClientUtils';
 
 interface IndustrialButtonProps extends ButtonProps {
   animateOnHover?: boolean;
@@ -37,9 +38,13 @@ export const IndustrialButton = React.forwardRef<
       ? variant
       : 'industrial-primary';
 
+    // Check if we're on the client to avoid hydration issues
+    const isClient = useIsClient();
+
     // Select appropriate animation based on type
     const getAnimation = () => {
-      if (!animateOnHover || animationType === 'none') return null;
+      if (!animateOnHover || animationType === 'none' || !isClient)
+        return children;
 
       return (
         <IndustrialAnimatedElement

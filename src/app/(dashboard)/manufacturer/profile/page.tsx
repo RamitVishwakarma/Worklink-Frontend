@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   IndustrialCard,
   IndustrialCardContent,
@@ -66,11 +66,24 @@ function ManufacturerProfilePage() {
     contactEmail: '',
   });
 
+  // Memoize the fetchProfile function
+  const memoizedFetchProfile = useCallback(async () => {
+    try {
+      await fetchCurrentUserProfile(UserType.MANUFACTURER);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.response?.data?.message || 'Failed to fetch profile',
+        variant: 'destructive',
+      });
+    }
+  }, [fetchCurrentUserProfile, toast]);
+
   useEffect(() => {
     if (user) {
-      fetchProfile();
+      memoizedFetchProfile();
     }
-  }, [user]);
+  }, [user, memoizedFetchProfile]);
 
   // Update form data when profile loads
   useEffect(() => {
@@ -92,17 +105,7 @@ function ManufacturerProfilePage() {
     }
   }, [currentProfile]);
 
-  const fetchProfile = async () => {
-    try {
-      await fetchCurrentUserProfile(UserType.MANUFACTURER);
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch profile data',
-        variant: 'destructive',
-      });
-    }
-  };
+  // Removed the incomplete function as it's now handled by memoizedFetchProfile
   const handleSave = async () => {
     try {
       const updatedProfile = await updateCurrentUserProfile(

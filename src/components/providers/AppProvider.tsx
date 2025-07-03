@@ -14,17 +14,20 @@ export function AppProvider({ children }: AppProviderProps) {
 
   // Initialize auth state from localStorage on app start
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    // This useEffect will only run on the client
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
 
-    if (token && userData) {
-      try {
-        const user = JSON.parse(userData);
-        useAuthStore.getState().setUserAndToken(user, token);
-      } catch (error) {
-        console.error('Failed to restore auth state:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      if (token && userData) {
+        try {
+          const user = JSON.parse(userData);
+          useAuthStore.getState().setUserAndToken(user, token);
+        } catch (error) {
+          console.error('Failed to restore auth state:', error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
       }
     }
   }, []);

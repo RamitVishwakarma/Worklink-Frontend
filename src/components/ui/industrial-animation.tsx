@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useIsClient } from '@/hooks/useClientUtils';
 
 /**
  * Animation variants for industrial-themed elements
@@ -93,7 +94,7 @@ export const industrialAnimationVariants = {
 };
 
 interface IndustrialAnimatedElementProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?:
     | 'gear'
     | 'pulse'
@@ -137,6 +138,9 @@ export const IndustrialAnimatedElement = ({
   containerProps,
   custom,
 }: IndustrialAnimatedElementProps) => {
+  // Check if we're on the client to avoid hydration issues
+  const isClient = useIsClient();
+
   // For hover animations
   const [isHovered, setIsHovered] = useState(false);
 
