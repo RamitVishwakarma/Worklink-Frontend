@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -124,7 +124,7 @@ function MachineApplicationsPage() {
     action: null,
   });
 
-  const fetchMachineAndApplications = async () => {
+  const fetchMachineAndApplications = useCallback(async () => {
     if (!user || !machineId) return;
 
     try {
@@ -140,7 +140,7 @@ function MachineApplicationsPage() {
         variant: 'destructive',
       });
     }
-  };
+  }, [user, machineId, fetchApplications, toast]);
 
   const handleApplicationAction = (
     application: MachineApplication,
@@ -184,7 +184,7 @@ function MachineApplicationsPage() {
     if (user?.userType === UserType.MANUFACTURER) {
       fetchMachineAndApplications();
     }
-  }, [user, machineId]);
+  }, [user, machineId, fetchMachineAndApplications]);
 
   useEffect(() => {
     let filtered = applications;
@@ -480,25 +480,60 @@ function MachineApplicationsPage() {
 
               <div className="flex gap-2">
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[140px] bg-industrial-background border-industrial-border">
+                  <SelectTrigger className="w-[140px] bg-white border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="approved">Approved</SelectItem>
-                    <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectContent className="bg-white border-gray-200">
+                    <SelectItem
+                      value="all"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      All Status
+                    </SelectItem>
+                    <SelectItem
+                      value="pending"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Pending
+                    </SelectItem>
+                    <SelectItem
+                      value="approved"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Approved
+                    </SelectItem>
+                    <SelectItem
+                      value="rejected"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Rejected
+                    </SelectItem>
                   </SelectContent>
                 </Select>
 
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-[140px] bg-industrial-background border-industrial-border">
+                  <SelectTrigger className="w-[140px] bg-white border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="worker">Workers</SelectItem>
-                    <SelectItem value="startup">Startups</SelectItem>
+                  <SelectContent className="bg-white border-gray-200">
+                    <SelectItem
+                      value="all"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      All Types
+                    </SelectItem>
+                    <SelectItem
+                      value="worker"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Workers
+                    </SelectItem>
+                    <SelectItem
+                      value="startup"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Startups
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -663,7 +698,7 @@ function MachineApplicationsPage() {
           setConfirmDialog({ open, application: null, action: null })
         }
       >
-        <DialogContent className="bg-industrial-background border-industrial-border">
+        <DialogContent className="bg-white border-gray-200">
           <DialogHeader>
             {' '}
             <DialogTitle className="flex items-center gap-2 text-industrial-foreground">

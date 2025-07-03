@@ -32,7 +32,7 @@ export function Hero() {
             >
               <div className="inline-block bg-industrial-safety-300 px-4 py-1 rounded-md mb-4">
                 <span className="industrial-caption text-industrial-gunmetal-800">
-                  INDUSTRIAL REVOLUTION 4.0
+                  CONNECTING THE INDUSTRIAL ECOSYSTEM
                 </span>
               </div>
             </motion.div>
@@ -43,7 +43,7 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="font-industrial-heading text-4xl md:text-5xl lg:text-[64px] font-bold text-white mb-6 uppercase industrial-hero-text"
             >
-              Connecting Skilled Labor with Industrial Opportunity
+              Turn Idle Resources Into Active Opportunities
             </motion.h1>
 
             <motion.p
@@ -52,9 +52,9 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="industrial-body-text text-lg md:text-xl text-gray-200 mb-8 max-w-2xl"
             >
-              The First Digital Marketplace for Blue-Collar Jobs and Machine
-              Sharing. Connect, collaborate, and contribute to the future of
-              industrial work.
+              WorkLink bridges blue-collar workers, innovative startups, and
+              manufacturers. Find skilled gigs, access idle machinery during
+              off-seasons, and maximize industrial capacity.
             </motion.p>
 
             <motion.div
@@ -69,16 +69,16 @@ export function Hero() {
                   size="xl"
                   className="font-industrial-heading uppercase industrial-hero-text text-base sm:text-lg px-8 py-6 shadow-lg shadow-industrial-safety-300/20 hover:shadow-industrial-safety-300/30 transition-all duration-300"
                 >
-                  Find Work
+                  Browse Gigs
                 </Button>
               </Link>
-              <Link href="/signup">
+              <Link href="/machines">
                 <Button
                   variant="industrial-outline"
                   size="xl"
                   className="border-2 border-white/70 text-white hover:bg-white/20 hover:border-white hover:text-white font-bold text-base sm:text-lg px-8 py-6 transition-all duration-300"
                 >
-                  Post Requirements
+                  Find Machines
                 </Button>
               </Link>
             </motion.div>

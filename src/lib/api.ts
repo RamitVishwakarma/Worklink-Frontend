@@ -19,9 +19,22 @@ api.interceptors.request.use(
   (config) => {
     // Check if window is defined (client side)
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      // Get token from auth storage (Zustand persist storage)
+      const authStorage = localStorage.getItem('auth-storage');
+      if (authStorage) {
+        try {
+          const authData = JSON.parse(authStorage);
+          const token = authData?.state?.token;
+          if (token) {
+            // Remove 'Bearer ' prefix if it exists to avoid double prefix
+            const cleanToken = token.replace('Bearer ', '');
+            config.headers.Authorization = `Bearer ${cleanToken}`;
+          }
+        } catch (error) {
+          console.error('Error parsing auth storage:', error);
+          // Clear corrupted auth data
+          localStorage.removeItem('auth-storage');
+        }
       }
     }
 
@@ -81,17 +94,17 @@ api.interceptors.response.use(
           break;
 
         case 401:
-          // Unauthorized - redirect to login
+          // Unauthorized - clear auth and redirect to login
           toast({
-            title: 'Authentication Required',
-            description: 'Please log in to continue.',
+            title: 'Session Expired',
+            description: 'Your session has expired. Please log in again.',
             variant: 'destructive',
           });
 
           // Clear auth data and redirect to login
           if (typeof window !== 'undefined') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            localStorage.removeItem('auth-storage');
+            // Force a page reload to clear all state
             window.location.href = '/signin';
           }
           break;

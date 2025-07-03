@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { MenuIcon, X, User, LogOut } from 'lucide-react';
+import Image from 'next/image';
+import { MenuIcon, X, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -15,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -69,14 +70,13 @@ export function Header() {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="relative w-8 h-8">
-            <div className="absolute inset-0 bg-industrial-safety-300 rounded-md -rotate-45"></div>
-            <div className="absolute inset-[2px] bg-industrial-gunmetal-800 rounded-md -rotate-45 flex items-center justify-center">
-              <span className="text-industrial-safety-300 font-oswald text-sm font-bold tracking-wider -not-rotate-45">
-                WL
-              </span>
-            </div>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="WorkLink Logo"
+            width={40}
+            height={40}
+            className="object-contain"
+          />
           <span
             className={`industrial-section-heading text-2xl tracking-wider ${
               isScrolled ? 'text-white' : 'text-industrial-gunmetal-400'
@@ -149,7 +149,13 @@ export function Header() {
 
           {isAuthenticated ? (
             <div className="flex items-center space-x-4">
-              <NotificationBell />
+              <NotificationBell
+                iconClassName={`transition-colors ${
+                  isScrolled
+                    ? 'text-gray-200 hover:text-industrial-safety-300'
+                    : 'text-industrial-gunmetal-400 hover:text-industrial-safety-300'
+                }`}
+              />
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -165,28 +171,28 @@ export function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-56 bg-industrial-background border-industrial-muted/20"
+                  className="w-56 bg-white border-gray-200 shadow-lg"
                   align="end"
                   forceMount
                 >
-                  <DropdownMenuLabel className="font-normal text-industrial-foreground">
+                  <DropdownMenuLabel className="font-normal text-gray-900">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">
                         {user?.name || 'User'}
                       </p>
-                      <p className="text-xs leading-none text-industrial-muted">
+                      <p className="text-xs leading-none text-gray-600">
                         {user?.email}
                       </p>
-                      <p className="text-xs leading-none text-industrial-accent capitalize">
+                      <p className="text-xs leading-none text-blue-600 capitalize">
                         {user?.userType}
                       </p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-industrial-muted/20" />
+                  <DropdownMenuSeparator className="bg-gray-200" />
                   <DropdownMenuItem asChild>
                     <Link
                       href="/profile"
-                      className="flex items-center text-industrial-foreground hover:bg-industrial-muted/10"
+                      className="flex items-center text-gray-900 hover:bg-gray-50"
                     >
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
@@ -195,12 +201,13 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link
                       href={getDashboardLink()}
-                      className="flex items-center text-industrial-foreground hover:bg-industrial-muted/10"
+                      className="flex items-center text-gray-900 hover:bg-gray-50"
                     >
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-industrial-muted/20" />
+                  <DropdownMenuSeparator className="bg-gray-200" />
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="flex items-center text-red-600 hover:bg-red-50 cursor-pointer"

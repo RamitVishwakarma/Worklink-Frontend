@@ -151,10 +151,10 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen bg-industrial-gunmetal-50 flex flex-col">
       {/* Top navigation bar */}
-      <div className="bg-white border-b border-industrial-border shadow-sm py-3">
-        <div className="container mx-auto px-4">
+      <div className="bg-white border-b border-industrial-border shadow-sm py-5 h-[80px]">
+        {/* <div className="container mx-auto px-4">
           <Breadcrumb items={getBreadcrumbItems()} className="text-sm" />
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-1">
@@ -215,11 +215,11 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
             </h2>
 
             <details className="dropdown dropdown-end relative">
-              <summary className="p-2 bg-industrial-gunmetal-100 rounded-industrial hover:bg-industrial-gunmetal-200 cursor-pointer">
+              <summary className="p-2 bg-industrial-navy-800/10 rounded-industrial hover:bg-industrial-navy-800/20 cursor-pointer transition-all duration-200 border border-industrial-navy-800/20">
                 <IndustrialIcon
                   icon="gear"
                   size="sm"
-                  className="text-industrial-gunmetal-700"
+                  className="text-industrial-navy-800"
                 />
               </summary>
               <div className="dropdown-menu absolute right-0 mt-2 w-64 bg-white rounded-industrial border border-industrial-border shadow-industrial z-50">
@@ -265,7 +265,9 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 p-6">{children}</div>
+        <div className="flex-1 p-6 bg-white rounded-md shadow-sm m-4">
+          {children}
+        </div>
       </div>
     </div>
   );

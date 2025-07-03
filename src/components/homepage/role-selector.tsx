@@ -28,42 +28,42 @@ const roleOptions: RoleOption[] = [
   {
     id: 'worker',
     title: 'Blue-Collar Worker',
-    description: 'Find gig work and request access to industrial machinery',
+    description: 'Find skilled gigs and access machinery for your projects',
     icon: 'hardhat',
     path: '/worker/dashboard',
     features: [
-      'Apply to skilled jobs in your area',
-      'Track your job applications',
-      'Access industrial machinery',
-      'Build your professional profile',
+      'Browse and apply to industrial gigs',
+      'Access idle machinery from manufacturers',
+      'Build your skills and reputation',
+      'Earn consistent income in your trade',
     ],
     color: 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100',
   },
   {
     id: 'startup',
     title: 'Startup',
-    description: 'Post job requirements and find industrial machinery',
+    description: 'Scale with idle machinery and skilled workers',
     icon: 'bolt',
     path: '/startup/dashboard',
     features: [
-      'Post jobs for skilled workers',
-      'Manage your worker applications',
-      'Access industrial machinery',
-      'Scale your production quickly',
+      'Post project requirements and gigs',
+      'Rent idle manufacturing equipment',
+      'Find verified skilled workers',
+      'Scale production without capital investment',
     ],
     color: 'border-purple-500 bg-gradient-to-br from-purple-50 to-purple-100',
   },
   {
     id: 'manufacturer',
     title: 'Manufacturer',
-    description: 'List your industrial machinery for rental',
+    description: 'Monetize idle equipment during off-seasons',
     icon: 'factory',
     path: '/manufacturer/dashboard',
     features: [
-      'List your machinery for rental',
-      'Manage machine applications',
-      'Track machine utilization',
-      'Generate additional revenue',
+      'List idle machinery for rental',
+      'Generate revenue from unused assets',
+      'Connect with verified operators',
+      'Maximize equipment utilization year-round',
     ],
     color:
       'border-industrial-safety-500 bg-gradient-to-br from-industrial-safety-50 to-industrial-safety-100',
@@ -82,11 +82,12 @@ export function RoleSelector() {
           className="text-center mb-16"
         >
           <h2 className="font-oswald font-bold text-3xl md:text-4xl text-industrial-gunmetal-800 mb-4">
-            Choose Your Role
+            Join the Industrial Ecosystem
           </h2>
-          <p className="text-industrial-gunmetal-600 max-w-2xl mx-auto">
-            WorkLink caters to different types of users. Select the option that
-            best describes you.
+          <p className="text-industrial-gunmetal-600 max-w-3xl mx-auto">
+            Whether you're a skilled worker seeking opportunities, a startup
+            needing resources, or a manufacturer with idle equipment, WorkLink
+            connects your needs with solutions.
           </p>
         </motion.div>
 

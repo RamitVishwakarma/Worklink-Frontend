@@ -11,6 +11,7 @@ import {
   Phone,
   MapPin,
 } from 'lucide-react';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -23,14 +24,13 @@ export function Footer() {
           {/* About */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <div className="relative w-8 h-8">
-                <div className="absolute inset-0 bg-industrial-safety-300 rounded-md -rotate-45"></div>
-                <div className="absolute inset-[2px] bg-industrial-gunmetal-800 rounded-md -rotate-45 flex items-center justify-center">
-                  <span className="text-industrial-safety-300 font-oswald text-base font-bold tracking-wider -not-rotate-45">
-                    WL
-                  </span>
-                </div>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="WorkLink Logo"
+                width={36}
+                height={36}
+                className="object-contain"
+              />
               <span className="font-oswald font-bold text-2xl tracking-wider text-white">
                 WorkLink
               </span>

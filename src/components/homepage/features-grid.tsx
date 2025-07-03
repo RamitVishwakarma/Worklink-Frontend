@@ -5,46 +5,46 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
-  CalendarClock,
+  Wrench,
+  Factory,
+  Users,
+  Calendar,
   MapPin,
   Shield,
   BadgeCheck,
-  BarChart,
-  MessageSquare,
-  Smartphone,
-  CreditCard,
+  DollarSign,
 } from 'lucide-react';
 
 const features = [
   {
-    icon: CalendarClock,
-    title: 'On-Demand Scheduling',
+    icon: Users,
+    title: 'For Blue-Collar Workers',
     description:
-      'Book workers or machines with real-time availability. No waiting, no hassle.',
+      'Find skilled gigs that match your expertise. Apply to jobs at startups and manufacturers in your area.',
     cta: 'Browse Gigs',
     link: '/gigs',
   },
   {
-    icon: MapPin,
-    title: 'Proximity Matching',
+    icon: Wrench,
+    title: 'For Startups',
     description:
-      'Find opportunities within your area. Reduce travel time and costs.',
-    cta: 'View Machines',
+      'Access idle manufacturing equipment during off-seasons. Post project requirements and find skilled workers.',
+    cta: 'Find Machines',
     link: '/machines',
   },
   {
-    icon: Shield,
-    title: 'Verified Credentials',
+    icon: Factory,
+    title: 'For Manufacturers',
     description:
-      'Every worker and machine is verified for safety and quality standards.',
-    cta: 'Worker Portal',
-    link: '/worker/dashboard',
+      'Monetize idle machinery and equipment. Connect with startups and workers to maximize your asset utilization.',
+    cta: 'List Equipment',
+    link: '/manufacturer/dashboard',
   },
   {
-    icon: CreditCard,
-    title: 'Secure Payments',
+    icon: DollarSign,
+    title: 'Maximize Revenue',
     description:
-      'Transparent pricing with secure payment processing and escrow options.',
+      "Transform downtime into profit. Whether you're renting equipment or finding work, WorkLink ensures fair compensation.",
     cta: 'Start Earning',
     link: '/signup',
   },
@@ -62,11 +62,12 @@ export function FeaturesGrid() {
           className="text-center mb-16"
         >
           <h2 className="font-oswald font-bold text-3xl md:text-4xl text-industrial-gunmetal-800 mb-4">
-            Powerful Platform Features
+            Three-Sided Industrial Marketplace
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Our platform is built with industrial-grade features to power your
-            business and career.
+          <p className="text-gray-600 max-w-3xl mx-auto">
+            WorkLink connects the entire industrial ecosystem. Workers find
+            opportunities, startups access equipment, and manufacturers maximize
+            their assets during off-seasons.
           </p>
         </motion.div>
 

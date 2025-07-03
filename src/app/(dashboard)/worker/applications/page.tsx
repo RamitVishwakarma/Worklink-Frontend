@@ -137,48 +137,48 @@ function ApplicationsPage() {
             {/* Header Skeleton */}
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-8 w-48 mb-2 bg-industrial-muted" />
-                <Skeleton className="h-4 w-64 bg-industrial-muted" />
+                <Skeleton className="h-8 w-48 mb-2 bg-gray-200" />
+                <Skeleton className="h-4 w-64 bg-gray-200" />
               </div>
             </div>
 
             {/* Stats Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
-                <IndustrialCard key={i}>
+                <IndustrialCard key={i} className="border-gray-200">
                   <IndustrialCardContent className="p-6">
-                    <Skeleton className="h-12 w-12 rounded-full mb-4 bg-industrial-muted" />
-                    <Skeleton className="h-4 w-20 mb-2 bg-industrial-muted" />
-                    <Skeleton className="h-8 w-16 bg-industrial-muted" />
+                    <Skeleton className="h-12 w-12 rounded-full mb-4 bg-gray-200" />
+                    <Skeleton className="h-4 w-20 mb-2 bg-gray-200" />
+                    <Skeleton className="h-8 w-16 bg-gray-200" />
                   </IndustrialCardContent>
                 </IndustrialCard>
               ))}
             </div>
 
             {/* Applications Table Skeleton */}
-            <IndustrialCard>
+            <IndustrialCard className="border-gray-200">
               <IndustrialCardHeader>
-                <Skeleton className="h-6 w-32 bg-industrial-muted" />
-                <Skeleton className="h-4 w-48 bg-industrial-muted" />
+                <Skeleton className="h-6 w-32 bg-gray-200" />
+                <Skeleton className="h-4 w-48 bg-gray-200" />
               </IndustrialCardHeader>
               <IndustrialCardContent>
                 <div className="space-y-4">
                   {[...Array(5)].map((_, i) => (
-                    <IndustrialCard key={i}>
+                    <IndustrialCard key={i} className="border-gray-200">
                       <IndustrialCardHeader>
                         <div className="flex items-center justify-between">
                           <div className="space-y-2">
-                            <Skeleton className="h-5 w-32 bg-industrial-muted" />
-                            <Skeleton className="h-4 w-48 bg-industrial-muted" />
+                            <Skeleton className="h-5 w-32 bg-gray-200" />
+                            <Skeleton className="h-4 w-48 bg-gray-200" />
                           </div>
-                          <Skeleton className="h-6 w-20 bg-industrial-muted" />
+                          <Skeleton className="h-6 w-20 bg-gray-200" />
                         </div>
                       </IndustrialCardHeader>
                       <IndustrialCardContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <Skeleton className="h-4 w-24 bg-industrial-muted" />
-                          <Skeleton className="h-4 w-32 bg-industrial-muted" />
-                          <Skeleton className="h-4 w-28 bg-industrial-muted" />
+                          <Skeleton className="h-4 w-24 bg-gray-200" />
+                          <Skeleton className="h-4 w-32 bg-gray-200" />
+                          <Skeleton className="h-4 w-28 bg-gray-200" />
                         </div>
                       </IndustrialCardContent>
                     </IndustrialCard>

@@ -13,3 +13,7 @@ export * from './toaster';
 
 export * from './industrial-icon';
 export * from './industrial-layout';
+export * from './industrial-text';
+export * from './industrial-animation';
+export * from './industrial-page-header';
+export * from './industrial-button';

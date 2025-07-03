@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Industrial Text Gradient Styles */
+  .industrial-text-gradient {
+    @apply bg-gradient-to-r from-industrial-gunmetal-800 to-industrial-navy-700 bg-clip-text text-transparent;
+  }
+
+  .industrial-text-gradient-accent {
+    @apply bg-gradient-to-r from-industrial-gunmetal-800 via-industrial-safety-500 to-industrial-navy-700 bg-clip-text text-transparent;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -168,6 +179,11 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* Prevent layout shift when dropdowns/modals hide scrollbar */
+    scrollbar-gutter: stable;
+    /* Fallback for browsers that don't support scrollbar-gutter */
+    overflow-y: scroll;
   }
 
   /* Industrial Typography Defaults */

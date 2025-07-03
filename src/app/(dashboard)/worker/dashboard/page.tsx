@@ -9,6 +9,11 @@ import {
   IndustrialCardHeader,
   IndustrialCardTitle,
 } from '@/components/ui/card';
+import {
+  IndustrialText,
+  IndustrialAnimatedElement,
+  IndustrialButton,
+} from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -142,17 +147,17 @@ function WorkerDashboardPage() {
           <div className="space-y-6">
             {/* Header Skeleton */}
             <div className="space-y-2">
-              <Skeleton className="h-8 w-64 bg-industrial-muted" />
-              <Skeleton className="h-4 w-96 bg-industrial-muted" />
+              <Skeleton className="h-8 w-64 bg-gray-200" />
+              <Skeleton className="h-4 w-96 bg-gray-200" />
             </div>
 
             {/* Stats Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <IndustrialCard key={i}>
+                <IndustrialCard key={i} className="border-gray-200">
                   <IndustrialCardContent className="p-6">
-                    <Skeleton className="h-4 w-16 mb-2 bg-industrial-muted" />
-                    <Skeleton className="h-8 w-12 bg-industrial-muted" />
+                    <Skeleton className="h-4 w-16 mb-2 bg-gray-200" />
+                    <Skeleton className="h-8 w-12 bg-gray-200" />
                   </IndustrialCardContent>
                 </IndustrialCard>
               ))}
@@ -160,29 +165,23 @@ function WorkerDashboardPage() {
 
             {/* Content Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <IndustrialCard>
+              <IndustrialCard className="border-gray-200">
                 <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-32 bg-industrial-muted" />
+                  <Skeleton className="h-6 w-32 bg-gray-200" />
                 </IndustrialCardHeader>
                 <IndustrialCardContent className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton
-                      key={i}
-                      className="h-16 w-full bg-industrial-muted"
-                    />
+                    <Skeleton key={i} className="h-16 w-full bg-gray-200" />
                   ))}
                 </IndustrialCardContent>
               </IndustrialCard>
-              <IndustrialCard>
+              <IndustrialCard className="border-gray-200">
                 <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-32 bg-industrial-muted" />
+                  <Skeleton className="h-6 w-32 bg-gray-200" />
                 </IndustrialCardHeader>
                 <IndustrialCardContent className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton
-                      key={i}
-                      className="h-16 w-full bg-industrial-muted"
-                    />
+                    <Skeleton key={i} className="h-16 w-full bg-gray-200" />
                   ))}
                 </IndustrialCardContent>
               </IndustrialCard>
@@ -196,11 +195,14 @@ function WorkerDashboardPage() {
     <IndustrialAccessibilityProvider>
       <IndustrialLayout>
         <IndustrialContainer>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8"
+          <IndustrialAnimatedElement
+            variant="staggerContainer"
+            custom={{
+              initial: 'hidden',
+              animate: 'visible',
+              variants: containerVariants,
+            }}
+            className="space-y-8 mt-16"
           >
             {' '}
             {/* Enhanced Header with industrial accent bar */}
@@ -232,13 +234,13 @@ function WorkerDashboardPage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <IndustrialHeader
-                        level={1}
-                        className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-800 bg-clip-text text-transparent"
-                      >
-                        Welcome back,{' '}
-                        {(currentProfile as WorkerProfile)?.name || user?.email}
-                        !
+                      <IndustrialHeader level={1}>
+                        <IndustrialText as="span" variant="default">
+                          Welcome back,{' '}
+                          {(currentProfile as WorkerProfile)?.name ||
+                            user?.email}
+                          !
+                        </IndustrialText>
                       </IndustrialHeader>
                     </motion.div>
                     <motion.p
@@ -501,19 +503,9 @@ function WorkerDashboardPage() {
                             {gigStats.active}
                           </motion.p>
                         </div>
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          animate={{
-                            rotateY: [0, 180, 360],
-                          }}
-                          transition={{
-                            rotateY: {
-                              duration: 6,
-                              repeat: Infinity,
-                              ease: 'linear',
-                            },
-                            scale: { duration: 0.3 },
-                          }}
+                        <IndustrialAnimatedElement
+                          variant="icon"
+                          animationType="hover"
                           className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30"
                         >
                           <IndustrialIcon
@@ -521,7 +513,7 @@ function WorkerDashboardPage() {
                             size="lg"
                             className="text-blue-600"
                           />
-                        </motion.div>
+                        </IndustrialAnimatedElement>
                       </div>
                       <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -557,13 +549,9 @@ function WorkerDashboardPage() {
 
                   <IndustrialCardHeader className="relative flex flex-row items-center justify-between border-b border-industrial-accent/20 pb-4">
                     <IndustrialCardTitle className="text-lg font-semibold flex items-center gap-3">
-                      <motion.div
-                        animate={{ rotate: [0, 360] }}
-                        transition={{
-                          duration: 10,
-                          repeat: Infinity,
-                          ease: 'linear',
-                        }}
+                      <IndustrialAnimatedElement
+                        variant="gear"
+                        animationType="ambient"
                         className="p-2 bg-industrial-accent/10 rounded-lg border border-industrial-accent/20"
                       >
                         <IndustrialIcon
@@ -571,26 +559,26 @@ function WorkerDashboardPage() {
                           size="sm"
                           className="text-industrial-accent"
                         />
-                      </motion.div>
-                      <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                      </IndustrialAnimatedElement>
+                      <IndustrialText as="span" variant="default">
                         Recent Available Gigs
-                      </span>
+                      </IndustrialText>
                     </IndustrialCardTitle>
                     <Link href="/gigs">
-                      <Button
+                      <IndustrialButton
                         variant="industrial-secondary"
                         size="sm"
-                        className="hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="shadow-md"
                       >
                         View All
-                        <motion.div
-                          animate={{ x: [0, 4, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
+                        <IndustrialAnimatedElement
+                          variant="indicator"
+                          animationType="ambient"
                           className="ml-1"
                         >
                           →
-                        </motion.div>
-                      </Button>
+                        </IndustrialAnimatedElement>
+                      </IndustrialButton>
                     </Link>
                   </IndustrialCardHeader>
                   <IndustrialCardContent className="relative">
@@ -1082,7 +1070,7 @@ function WorkerDashboardPage() {
                 </IndustrialCardContent>
               </IndustrialCard>
             </motion.div>{' '}
-          </motion.div>
+          </IndustrialAnimatedElement>
         </IndustrialContainer>
       </IndustrialLayout>
     </IndustrialAccessibilityProvider>

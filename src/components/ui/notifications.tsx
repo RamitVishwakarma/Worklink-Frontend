@@ -43,7 +43,15 @@ const colorMap = {
   info: 'text-blue-500',
 };
 
-export function NotificationBell() {
+interface NotificationBellProps {
+  className?: string;
+  iconClassName?: string;
+}
+
+export function NotificationBell({
+  className,
+  iconClassName,
+}: NotificationBellProps) {
   const { unreadCount } = useNotificationsStore();
   const recentNotifications = useRecentNotifications(10);
   const { markAsRead, markAllAsRead, removeNotification } =
@@ -65,9 +73,14 @@ export function NotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative hover:bg-industrial-muted/10 transition-colors"
+          className={cn(
+            'relative hover:bg-industrial-muted/10 transition-colors',
+            className
+          )}
         >
-          <Bell className="h-5 w-5 text-industrial-muted" />
+          <Bell
+            className={cn('h-5 w-5', iconClassName || 'text-industrial-muted')}
+          />
           {unreadCount > 0 && (
             <Badge
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-industrial-accent text-industrial-background text-xs font-bold"
@@ -81,27 +94,27 @@ export function NotificationBell() {
 
       <DropdownMenuContent
         align="end"
-        className="w-80 bg-industrial-background border-industrial-muted/20"
+        className="w-80 bg-white border-gray-200 shadow-lg"
       >
-        <DropdownMenuLabel className="flex items-center justify-between text-industrial-foreground">
+        <DropdownMenuLabel className="flex items-center justify-between text-gray-900">
           <span>Notifications</span>
           {unreadCount > 0 && (
             <Button
               variant="ghost"
               size="sm"
               onClick={markAllAsRead}
-              className="text-xs text-industrial-muted hover:text-industrial-foreground"
+              className="text-xs text-gray-600 hover:text-gray-900"
             >
               Mark all read
             </Button>
           )}
         </DropdownMenuLabel>
 
-        <DropdownMenuSeparator className="bg-industrial-muted/20" />
+        <DropdownMenuSeparator className="bg-gray-200" />
 
         <ScrollArea className="h-96">
           {recentNotifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-8 text-industrial-muted">
+            <div className="flex flex-col items-center justify-center py-8 text-gray-600">
               <Bell className="h-8 w-8 mb-2 opacity-50" />
               <p className="text-sm">No notifications yet</p>
             </div>
@@ -113,8 +126,8 @@ export function NotificationBell() {
                   <DropdownMenuItem
                     key={notification.id}
                     className={cn(
-                      'flex items-start space-x-3 p-3 cursor-pointer hover:bg-industrial-muted/5 transition-colors',
-                      !notification.read && 'bg-industrial-muted/5'
+                      'flex items-start space-x-3 p-3 cursor-pointer hover:bg-gray-50 transition-colors',
+                      !notification.read && 'bg-gray-50'
                     )}
                     onClick={() =>
                       handleNotificationClick(
@@ -134,7 +147,7 @@ export function NotificationBell() {
                       <div className="flex items-start justify-between">
                         <p
                           className={cn(
-                            'text-sm font-medium text-industrial-foreground',
+                            'text-sm font-medium text-gray-900',
                             !notification.read && 'font-semibold'
                           )}
                         >
@@ -143,7 +156,7 @@ export function NotificationBell() {
 
                         <div className="flex items-center space-x-1">
                           {notification.actionUrl && (
-                            <ExternalLink className="h-3 w-3 text-industrial-muted" />
+                            <ExternalLink className="h-3 w-3 text-gray-500" />
                           )}
                           <Button
                             variant="ghost"
@@ -152,26 +165,26 @@ export function NotificationBell() {
                               e.stopPropagation();
                               removeNotification(notification.id);
                             }}
-                            className="h-auto w-auto p-0.5 text-industrial-muted hover:text-industrial-foreground"
+                            className="h-auto w-auto p-0.5 text-gray-500 hover:text-gray-900"
                           >
                             <X className="h-3 w-3" />
                           </Button>
                         </div>
                       </div>
 
-                      <p className="text-xs text-industrial-muted mt-1 line-clamp-2">
+                      <p className="text-xs text-gray-600 mt-1 line-clamp-2">
                         {notification.message}
                       </p>
 
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-industrial-muted/70">
+                        <p className="text-xs text-gray-500">
                           {new Date(notification.timestamp).toLocaleString()}
                         </p>
 
                         {notification.category && (
                           <Badge
                             variant="outline"
-                            className="text-xs px-2 py-0 border-industrial-muted/30 text-industrial-muted"
+                            className="text-xs px-2 py-0 border-gray-300 text-gray-600"
                           >
                             {notification.category}
                           </Badge>

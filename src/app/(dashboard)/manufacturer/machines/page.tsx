@@ -383,25 +383,49 @@ function YourMachinesPage() {
 
               <div className="flex gap-2">
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[140px] bg-industrial-background border-industrial-border">
+                  <SelectTrigger className="w-[140px] bg-white border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="available">Available</SelectItem>
-                    <SelectItem value="unavailable">Unavailable</SelectItem>
+                  <SelectContent className="bg-white border-gray-200">
+                    <SelectItem
+                      value="all"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      All Status
+                    </SelectItem>
+                    <SelectItem
+                      value="available"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Available
+                    </SelectItem>
+                    <SelectItem
+                      value="unavailable"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      Unavailable
+                    </SelectItem>
                   </SelectContent>
                 </Select>
 
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-[140px] bg-industrial-background border-industrial-border">
+                  <SelectTrigger className="w-[140px] bg-white border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
+                  <SelectContent className="bg-white border-gray-200">
+                    <SelectItem
+                      value="all"
+                      className="text-gray-900 hover:bg-gray-50"
+                    >
+                      All Types
+                    </SelectItem>
                     {Array.isArray(machineTypes) &&
                       machineTypes.map((type) => (
-                        <SelectItem key={type} value={type.toLowerCase()}>
+                        <SelectItem
+                          key={type}
+                          value={type.toLowerCase()}
+                          className="text-gray-900 hover:bg-gray-50"
+                        >
                           {type}
                         </SelectItem>
                       ))}
@@ -656,7 +680,7 @@ function YourMachinesPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="bg-industrial-background border-industrial-border">
+        <DialogContent className="bg-white border-gray-200">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-industrial-foreground">
               <IndustrialIcon icon="gear" className="text-red-500" />

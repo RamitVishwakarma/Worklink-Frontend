@@ -13,10 +13,11 @@ export function NewsletterSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="font-oswald text-2xl font-bold mb-2 text-white">
-                Stay Connected
+                Join the Industrial Revolution
               </h3>
               <p className="text-industrial-navy-100 mb-2">
-                Get updates on new opportunities and platform features.
+                Get notified about new gigs, machinery availability, and
+                platform updates that matter to your industry.
               </p>
             </div>
             <div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   IndustrialCard,
@@ -53,14 +53,19 @@ export default function GigsPage() {
   const router = useRouter();
 
   // Store data
-  const { gigs, isLoading: loading } = useGigsStore();
+  const { gigs, isLoading: loading, fetchGigs } = useGigsStore();
   const { handleApplyToGig } = useGigOperations();
 
   // Local state for filters and UI
   const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [jobTypeFilter, setJobTypeFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('all');
+  const [jobTypeFilter, setJobTypeFilter] = useState('all');
   const [applyingTo, setApplyingTo] = useState<string | null>(null);
+
+  // Fetch gigs on component mount
+  useEffect(() => {
+    fetchGigs();
+  }, [fetchGigs]);
 
   const handleGigApplication = async (gigId: string) => {
     if (!user) {
@@ -107,9 +112,10 @@ export default function GigsPage() {
       gig.company.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesLocation =
-      !locationFilter ||
+      locationFilter === 'all' ||
       gig.location.toLowerCase().includes(locationFilter.toLowerCase());
-    const matchesJobType = !jobTypeFilter || gig.jobType === jobTypeFilter;
+    const matchesJobType =
+      jobTypeFilter === 'all' || gig.jobType === jobTypeFilter;
 
     return matchesSearch && matchesLocation && matchesJobType;
   });
@@ -133,29 +139,73 @@ export default function GigsPage() {
     return (
       <IndustrialLayout>
         <IndustrialContainer>
-          <div className="space-y-6">
+          <div className="space-y-6 mt-20">
             {/* Header Skeleton */}
-            <div className="space-y-2">
-              <Skeleton className="h-8 w-64 bg-industrial-muted" />
-              <Skeleton className="h-4 w-96 bg-industrial-muted" />
+            <div className="space-y-2 mb-8">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-8 w-8 bg-gray-200 rounded" />
+                <Skeleton className="h-8 w-64 bg-gray-200" />
+              </div>
+              <Skeleton className="h-4 w-96 bg-gray-200" />
             </div>
 
             {/* Filters Skeleton */}
             <div className="flex flex-col md:flex-row gap-4">
-              <Skeleton className="h-10 flex-1 bg-industrial-muted" />
-              <Skeleton className="h-10 w-48 bg-industrial-muted" />
-              <Skeleton className="h-10 w-48 bg-industrial-muted" />
+              <Skeleton className="h-10 flex-1 bg-gray-200" />
+              <Skeleton className="h-10 w-48 bg-gray-200" />
+              <Skeleton className="h-10 w-48 bg-gray-200" />
             </div>
+
+            {/* Results Count Skeleton */}
+            <Skeleton className="h-4 w-32 bg-gray-200" />
 
             {/* Gigs Grid Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <IndustrialCard key={i}>
-                  <IndustrialCardContent className="p-6">
-                    <Skeleton className="h-6 w-3/4 mb-2 bg-industrial-muted" />
-                    <Skeleton className="h-4 w-full mb-2 bg-industrial-muted" />
-                    <Skeleton className="h-4 w-2/3 mb-4 bg-industrial-muted" />
-                    <Skeleton className="h-9 w-full bg-industrial-muted" />
+                <IndustrialCard
+                  key={i}
+                  className="h-full flex flex-col border-gray-200"
+                >
+                  <IndustrialCardHeader>
+                    <div className="flex justify-between items-start gap-2">
+                      <Skeleton className="h-6 w-3/4 bg-gray-200" />
+                      <Skeleton className="h-6 w-16 bg-gray-200 rounded-full" />
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <Skeleton className="h-4 w-4 bg-gray-200 rounded" />
+                      <Skeleton className="h-4 w-1/2 bg-gray-200" />
+                    </div>
+                  </IndustrialCardHeader>
+                  <IndustrialCardContent className="space-y-4 flex-1 flex flex-col">
+                    <Skeleton className="h-12 w-full bg-gray-200" />
+
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 bg-gray-200 rounded" />
+                        <Skeleton className="h-4 w-2/3 bg-gray-200" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 bg-gray-200 rounded" />
+                        <Skeleton className="h-4 w-1/2 bg-gray-200" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-4 w-4 bg-gray-200 rounded" />
+                        <Skeleton className="h-4 w-3/4 bg-gray-200" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-24 bg-gray-200" />
+                      <div className="flex flex-wrap gap-1">
+                        <Skeleton className="h-5 w-16 bg-gray-200 rounded-full" />
+                        <Skeleton className="h-5 w-20 bg-gray-200 rounded-full" />
+                        <Skeleton className="h-5 w-14 bg-gray-200 rounded-full" />
+                      </div>
+                    </div>
+
+                    <div className="mt-auto">
+                      <Skeleton className="h-10 w-full bg-gray-200" />
+                    </div>
                   </IndustrialCardContent>
                 </IndustrialCard>
               ))}
@@ -169,7 +219,7 @@ export default function GigsPage() {
   return (
     <IndustrialLayout>
       <IndustrialContainer>
-        <div className="space-y-6">
+        <div className="space-y-6 mt-16">
           {/* Header */}
           <IndustrialHeader>
             <motion.div
@@ -180,11 +230,11 @@ export default function GigsPage() {
             >
               <div className="flex items-center gap-3">
                 <IndustrialIcon icon="wrench" size="lg" />
-                <h1 className="text-3xl font-bold text-industrial-foreground">
+                <h1 className="text-3xl font-bold text-industrial-gunmetal-800">
                   Available Gigs
                 </h1>
               </div>
-              <p className="text-industrial-muted-foreground">
+              <p className="text-industrial-gunmetal-600">
                 Discover and apply for exciting job opportunities that match
                 your industrial skills and expertise.
               </p>
@@ -209,34 +259,84 @@ export default function GigsPage() {
             </div>
 
             <Select value={locationFilter} onValueChange={setLocationFilter}>
-              <SelectTrigger className="w-full md:w-48 border-industrial-border bg-industrial-background text-industrial-foreground">
+              <SelectTrigger className="w-full md:w-48 border-industrial-border bg-white text-industrial-gunmetal-800">
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-industrial-muted-foreground" />
+                  <MapPin className="h-4 w-4 text-industrial-gunmetal-500" />
                   <SelectValue placeholder="Location" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="bg-industrial-background border-industrial-border">
-                <SelectItem value="">All Locations</SelectItem>
-                <SelectItem value="remote">Remote</SelectItem>
-                <SelectItem value="new york">New York</SelectItem>
-                <SelectItem value="san francisco">San Francisco</SelectItem>
-                <SelectItem value="london">London</SelectItem>
-                <SelectItem value="berlin">Berlin</SelectItem>
+              <SelectContent className="bg-white border-industrial-border shadow-lg">
+                <SelectItem
+                  value="all"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  All Locations
+                </SelectItem>
+                <SelectItem
+                  value="remote"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  Remote
+                </SelectItem>
+                <SelectItem
+                  value="new york"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  New York
+                </SelectItem>
+                <SelectItem
+                  value="san francisco"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  San Francisco
+                </SelectItem>
+                <SelectItem
+                  value="london"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  London
+                </SelectItem>
+                <SelectItem
+                  value="berlin"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  Berlin
+                </SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={jobTypeFilter} onValueChange={setJobTypeFilter}>
-              <SelectTrigger className="w-full md:w-48 border-industrial-border bg-industrial-background text-industrial-foreground">
+              <SelectTrigger className="w-full md:w-48 border-industrial-border bg-white text-industrial-gunmetal-800">
                 <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-industrial-muted-foreground" />
+                  <Filter className="h-4 w-4 text-industrial-gunmetal-500" />
                   <SelectValue placeholder="Job Type" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="bg-industrial-background border-industrial-border">
-                <SelectItem value="">All Types</SelectItem>
-                <SelectItem value="full-time">Full Time</SelectItem>
-                <SelectItem value="part-time">Part Time</SelectItem>
-                <SelectItem value="contract">Contract</SelectItem>
+              <SelectContent className="bg-white border-industrial-border shadow-lg">
+                <SelectItem
+                  value="all"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  All Types
+                </SelectItem>
+                <SelectItem
+                  value="full-time"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  Full Time
+                </SelectItem>
+                <SelectItem
+                  value="part-time"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  Part Time
+                </SelectItem>
+                <SelectItem
+                  value="contract"
+                  className="text-industrial-gunmetal-800 hover:bg-industrial-gunmetal-50 focus:bg-industrial-gunmetal-50"
+                >
+                  Contract
+                </SelectItem>
               </SelectContent>
             </Select>
           </motion.div>
@@ -264,12 +364,12 @@ export default function GigsPage() {
                 <IndustrialIcon
                   icon="factory"
                   size="xl"
-                  className="mx-auto mb-4 text-industrial-muted-foreground"
+                  className="mx-auto mb-4 text-industrial-gunmetal-400"
                 />
-                <h3 className="text-lg font-semibold text-industrial-foreground mb-2">
+                <h3 className="text-lg font-semibold text-industrial-gunmetal-800 mb-2">
                   No gigs found
                 </h3>
-                <p className="text-industrial-muted-foreground">
+                <p className="text-industrial-gunmetal-600">
                   Try adjusting your search criteria or check back later for new
                   opportunities.
                 </p>

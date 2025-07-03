@@ -293,10 +293,19 @@ const WorkerMachinesPage = () => {
                         <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
                           <SelectValue placeholder="Filter by location" />
                         </SelectTrigger>
-                        <SelectContent className="border-industrial-gunmetal-300">
-                          <SelectItem value="">All Locations</SelectItem>
+                        <SelectContent className="bg-white border-gray-200 shadow-lg">
+                          <SelectItem
+                            value=""
+                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                          >
+                            All Locations
+                          </SelectItem>
                           {uniqueLocations.map((location) => (
-                            <SelectItem key={location} value={location}>
+                            <SelectItem
+                              key={location}
+                              value={location}
+                              className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                            >
                               {location}
                             </SelectItem>
                           ))}
@@ -312,10 +321,19 @@ const WorkerMachinesPage = () => {
                         <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
                           <SelectValue placeholder="Filter by type" />
                         </SelectTrigger>
-                        <SelectContent className="border-industrial-gunmetal-300">
-                          <SelectItem value="">All Types</SelectItem>
+                        <SelectContent className="bg-white border-gray-200 shadow-lg">
+                          <SelectItem
+                            value=""
+                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                          >
+                            All Types
+                          </SelectItem>
                           {uniqueTypes.map((type) => (
-                            <SelectItem key={type} value={type}>
+                            <SelectItem
+                              key={type}
+                              value={type}
+                              className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                            >
                               {type}
                             </SelectItem>
                           ))}
@@ -334,10 +352,23 @@ const WorkerMachinesPage = () => {
                         <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
                           <SelectValue placeholder="Filter by availability" />
                         </SelectTrigger>
-                        <SelectContent className="border-industrial-gunmetal-300">
-                          <SelectItem value="">All Machines</SelectItem>
-                          <SelectItem value="available">Available</SelectItem>
-                          <SelectItem value="unavailable">
+                        <SelectContent className="bg-white border-gray-200 shadow-lg">
+                          <SelectItem
+                            value=""
+                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                          >
+                            All Machines
+                          </SelectItem>
+                          <SelectItem
+                            value="available"
+                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                          >
+                            Available
+                          </SelectItem>
+                          <SelectItem
+                            value="unavailable"
+                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                          >
                             Unavailable
                           </SelectItem>
                         </SelectContent>

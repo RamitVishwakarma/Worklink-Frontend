@@ -423,12 +423,12 @@ function CreateGigPage() {
                           <SelectTrigger className="border-industrial-border bg-white/80 focus:bg-white transition-colors">
                             <SelectValue placeholder="Select job type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-industrial-background border-industrial-border">
+                          <SelectContent className="bg-white border-gray-200">
                             {jobTypes.map((type) => (
                               <SelectItem
                                 key={type}
                                 value={type}
-                                className="hover:bg-industrial-muted/50"
+                                className="text-gray-900 hover:bg-gray-50"
                               >
                                 {type}
                               </SelectItem>

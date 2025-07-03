@@ -13,26 +13,26 @@ import {
 
 const stats = [
   {
-    value: '12,500+',
-    label: 'Skilled Workers',
+    value: '15,000+',
+    label: 'Blue-Collar Workers',
     icon: Users,
     color: 'bg-industrial-navy-100 text-industrial-navy-600',
   },
   {
-    value: '4,300+',
-    label: 'Machines Listed',
+    value: '5,500+',
+    label: 'Idle Machines Available',
     icon: BarChart2,
     color: 'bg-industrial-safety-100 text-industrial-safety-600',
   },
   {
-    value: '98.7%',
-    label: 'Satisfaction Rate',
+    value: '850+',
+    label: 'Active Gigs Posted',
     icon: CheckCircle2,
     color: 'bg-industrial-gunmetal-100 text-industrial-gunmetal-600',
   },
   {
-    value: '30 min',
-    label: 'Avg. Response Time',
+    value: '2.5 hrs',
+    label: 'Avg. Match Time',
     icon: Clock,
     color: 'bg-industrial-safety-200 text-industrial-safety-700',
   },
@@ -41,7 +41,6 @@ const stats = [
 const certifications = [
   'ISO 9001',
   'OSHA Compliant',
-  'EN ISO 13849-1',
   'CE Certification',
   'UL Listed',
 ];
@@ -58,11 +57,12 @@ export function TrustIndicators() {
           className="text-center mb-16"
         >
           <h2 className="font-oswald font-bold text-3xl md:text-4xl text-industrial-gunmetal-800 mb-4">
-            Industrial-Grade Trust
+            Bridging the Industrial Gap
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Our platform maintains the highest standards of safety, quality, and
-            reliability.
+          <p className="text-gray-600 max-w-3xl mx-auto">
+            Connecting skilled blue-collar workers with startups and unlocking
+            idle manufacturing capacity. WorkLink transforms downtime into
+            opportunity for everyone in the industrial ecosystem.
           </p>
         </motion.div>
 
@@ -107,12 +107,13 @@ export function TrustIndicators() {
               <div className="flex items-center justify-center md:justify-start mb-3">
                 <ShieldCheck className="w-6 h-6 text-industrial-safety-300 mr-2" />
                 <h3 className="font-oswald font-bold text-xl text-industrial-gunmetal-800">
-                  Safety Compliant
+                  Industrial Safety First
                 </h3>
               </div>
               <p className="text-gray-600 max-w-md">
-                Our platform adheres to the highest industry standards and
-                safety certifications.
+                Every worker, startup, and manufacturer on our platform meets
+                rigorous safety and quality standards to ensure reliable
+                industrial partnerships.
               </p>
             </div>
 

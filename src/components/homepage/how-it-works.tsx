@@ -9,9 +9,9 @@ import Image from 'next/image';
 const steps = [
   {
     number: '01',
-    title: 'Register & Profile',
+    title: 'Join Your Industrial Community',
     description:
-      'Create your account and build your profile as a worker, startup, or manufacturer.',
+      'Register as a worker, startup, or manufacturer. Complete your profile with skills, equipment, or project needs.',
     image:
       'https://images.pexels.com/photos/3760529/pexels-photo-3760529.jpeg?auto=compress&cs=tinysrgb&w=600',
     actionText: 'Sign Up Now',
@@ -19,22 +19,22 @@ const steps = [
   },
   {
     number: '02',
-    title: 'Connect & Collaborate',
+    title: 'Discover Opportunities',
     description:
-      'Post jobs, list machines, or search for opportunities that match your needs.',
+      'Workers find gigs, startups locate idle machines, manufacturers list equipment. Smart matching connects the right parties.',
     image:
       'https://images.pexels.com/photos/3912992/pexels-photo-3912992.jpeg?auto=compress&cs=tinysrgb&w=600',
-    actionText: 'Browse Gigs',
+    actionText: 'Browse Marketplace',
     actionLink: '/gigs',
   },
   {
     number: '03',
-    title: 'Work & Earn',
+    title: 'Collaborate & Earn',
     description:
-      'Complete projects, utilize equipment, and build your industrial network.',
+      'Execute projects with rented equipment and skilled workers. Build lasting partnerships in the industrial ecosystem.',
     image:
       'https://images.pexels.com/photos/3855962/pexels-photo-3855962.jpeg?auto=compress&cs=tinysrgb&w=600',
-    actionText: 'View Machines',
+    actionText: 'Start Earning',
     actionLink: '/machines',
   },
 ];
@@ -66,11 +66,12 @@ export function HowItWorks() {
           className="text-center mb-16"
         >
           <h2 className="industrial-section-heading text-white mb-4">
-            How It Works
+            How WorkLink Transforms Industry
           </h2>
-          <p className="industrial-body-text text-industrial-navy-100 max-w-2xl mx-auto">
-            Our streamlined process makes industrial connections simple and
-            efficient.
+          <p className="industrial-body-text text-industrial-navy-100 max-w-3xl mx-auto">
+            From idle machinery to skilled workforce connections, we're
+            revolutionizing how the industrial ecosystem collaborates and
+            thrives together.
           </p>
         </motion.div>
 

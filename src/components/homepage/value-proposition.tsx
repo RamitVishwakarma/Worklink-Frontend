@@ -46,31 +46,32 @@ export function ValueProposition() {
           className="text-center mb-16"
         >
           <h2 className="font-oswald font-bold text-3xl md:text-4xl text-industrial-gunmetal-800 mb-4">
-            One Platform, Three Solutions
+            Three Ecosystems, One Platform
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            We're revolutionizing how blue-collar workers find jobs and how
-            businesses access industrial equipment and talent.
+          <p className="text-gray-600 max-w-3xl mx-auto">
+            WorkLink breaks down silos between blue-collar workers, innovative
+            startups, and established manufacturers. We transform idle resources
+            into active opportunities for everyone.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <ValueCard
             icon={Wrench}
-            title="Instant Job Access"
-            description="Click and start working. No lengthy applications. First come, first served. Take control of your work schedule."
+            title="Skilled Workers Thrive"
+            description="Apply for gigs at startups and manufacturers. Showcase your skills, build your reputation, and earn consistent income in the industrial sector."
             delay={0.1}
           />
           <ValueCard
             icon={Cog}
-            title="Access Industrial Equipment"
-            description="Connect with manufacturers. Use their idle machinery. Scale efficiently without major capital investments."
+            title="Startups Scale Smart"
+            description="Access idle manufacturing equipment during off-seasons. Execute projects without massive capital investments while finding skilled operators."
             delay={0.3}
           />
           <ValueCard
             icon={Factory}
-            title="Monetize Idle Machines"
-            description="List your seasonal equipment. Earn extra revenue. Find skilled operators when you need them most."
+            title="Manufacturers Maximize Assets"
+            description="Turn idle machinery into revenue streams. List equipment, find reliable workers, and optimize capacity utilization year-round."
             delay={0.5}
           />
         </div>

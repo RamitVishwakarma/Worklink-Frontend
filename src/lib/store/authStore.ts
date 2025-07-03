@@ -14,6 +14,7 @@ export interface AuthState {
   checkAuth: () => Promise<void>;
   setUserAndToken: (user: User | null, token: string | null) => void;
   updateUser: (userData: Partial<User>) => void;
+  handleAuthError: () => void;
 }
 
 // Helper to get router instance - this is a common pattern, or pass router as an argument to actions
@@ -63,20 +64,42 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         const state = get();
         const token = state.token;
-        if (token) {
-          // If we have a token, assume the user is authenticated
-          // The user data should already be in the store from login/signup
-          const currentUser = state.user;
-          if (currentUser) {
+
+        if (token && state.user) {
+          try {
+            // Try to make a simple authenticated request to validate the token
             const cleanToken = token.replace('Bearer ', '');
             api.defaults.headers.common['Authorization'] =
               `Bearer ${cleanToken}`;
-            state.setUserAndToken(currentUser, token);
-          } else {
-            // If no user data but we have a token, clear everything
+
+            // Test the token with a simple API call based on user type
+            let endpoint = '';
+            switch (state.user.userType) {
+              case 'worker':
+                endpoint = '/api/worker/profile';
+                break;
+              case 'startup':
+                endpoint = '/api/startup/profile';
+                break;
+              case 'manufacturer':
+                endpoint = '/api/manufacturer/profile';
+                break;
+              default:
+                throw new Error('Invalid user type');
+            }
+
+            // Make a HEAD request to check if token is valid without fetching data
+            await api.head(endpoint);
+
+            // Token is valid, keep the user authenticated
+            state.setUserAndToken(state.user, token);
+          } catch (error) {
+            console.log('Token validation failed, logging out user');
+            // Token is invalid or expired, clear everything
             state.setUserAndToken(null, null);
           }
         } else {
+          // No token or user data, clear everything
           state.setUserAndToken(null, null);
         }
       },
@@ -88,6 +111,12 @@ export const useAuthStore = create<AuthState>()(
           const updatedUser = { ...currentUser, ...userData };
           set({ user: updatedUser });
         }
+      },
+
+      handleAuthError: () => {
+        // Clear authentication state when auth errors occur
+        get().setUserAndToken(null, null);
+        console.log('Authentication error handled, user logged out');
       },
     }),
     {
