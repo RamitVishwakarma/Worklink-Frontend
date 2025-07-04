@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Breadcrumb } from '@/components/ui/navigation';
 import { IndustrialIcon } from '@/components/ui/industrial-icon';
+import { LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface DashboardNavLinkProps {
@@ -196,11 +197,8 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
                 href="/signin"
                 className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
               >
-                <IndustrialIcon
-                  icon="hardhat"
-                  size="sm"
-                  className="text-industrial-gunmetal-400"
-                />
+                {/* Using imported Lucide icon for logout */}
+                <LogOut className="size-4" />
                 <span className="font-medium">Sign Out</span>
               </Link>
             </div>
@@ -250,11 +248,7 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
                       href="/signin"
                       className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
                     >
-                      <IndustrialIcon
-                        icon="hardhat"
-                        size="sm"
-                        className="text-industrial-gunmetal-400"
-                      />
+                      <LogOut className="h-4 w-4 text-industrial-gunmetal-400" />
                       <span className="font-medium">Sign Out</span>
                     </Link>
                   </div>

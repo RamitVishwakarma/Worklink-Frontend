@@ -74,11 +74,13 @@ export const useMachinesStore = create<MachinesState>()(
       fetchMachines: async (params) => {
         set({ isLoading: true });
         try {
-          const machines = await publicAPI.getAllMachines(params);
+          const response = await publicAPI.getAllMachines(params);
+          // Ensure machines is always an array, even if API returns null/undefined
+          const machines = Array.isArray(response) ? response : [];
           set({ machines, isLoading: false });
         } catch (error) {
           console.error('Failed to fetch machines:', error);
-          set({ isLoading: false });
+          set({ isLoading: false, machines: [] }); // Reset to empty array on error
         }
       },
 

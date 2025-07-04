@@ -247,7 +247,7 @@ export default function WorkerProfilePage() {
               initial={{ width: 0 }}
               animate={{ width: '100%' }}
               transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
-              className="absolute top-0 left-0 h-1 bg-gradient-to-r from-industrial-accent via-industrial-safety-400 to-industrial-accent rounded-full"
+              className="absolute top-0 left-0 h-1 bg-industrial-accent rounded-full"
             />
 
             <div className="flex items-center gap-6 pt-4">
@@ -270,7 +270,7 @@ export default function WorkerProfilePage() {
                 >
                   <IndustrialHeader
                     level={1}
-                    className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-800 bg-clip-text text-transparent"
+                    className="text-industrial-gunmetal-800 font-bold"
                   >
                     Worker Profile
                   </IndustrialHeader>
@@ -279,7 +279,7 @@ export default function WorkerProfilePage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg text-industrial-muted-foreground mt-2"
+                  className="text-lg text-industrial-gunmetal-600 mt-2"
                 >
                   Manage your personal information and professional details
                 </motion.p>
@@ -292,7 +292,7 @@ export default function WorkerProfilePage() {
               <motion.div variants={cardVariants} whileHover="hover">
                 <IndustrialCard
                   variant="industrial"
-                  className="relative overflow-hidden bg-gradient-to-br from-industrial-gunmetal-50 to-white border-l-4 border-l-industrial-accent"
+                  className="relative overflow-hidden bg-industrial-gunmetal-50 border-l-4 border-l-industrial-accent"
                 >
                   {/* Industrial pattern overlay */}
                   <div className="absolute inset-0 opacity-5">
@@ -311,7 +311,7 @@ export default function WorkerProfilePage() {
                           className="text-industrial-accent"
                         />
                       </motion.div>
-                      <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                      <span className="text-industrial-gunmetal-800 font-semibold">
                         Profile Overview
                       </span>
                     </IndustrialCardTitle>
@@ -358,10 +358,10 @@ export default function WorkerProfilePage() {
                               <MapPin className="h-4 w-4 text-blue-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                              <p className="text-xs text-industrial-gunmetal-600 uppercase tracking-wide">
                                 Location
                               </p>
-                              <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                              <p className="text-sm font-medium text-industrial-gunmetal-800 group-hover:text-industrial-accent transition-colors">
                                 {(currentProfile as any).location ||
                                   'Not specified'}
                               </p>
@@ -377,10 +377,10 @@ export default function WorkerProfilePage() {
                               <Briefcase className="h-4 w-4 text-emerald-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                              <p className="text-xs text-industrial-gunmetal-600 uppercase tracking-wide">
                                 Experience
                               </p>
-                              <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                              <p className="text-sm font-medium text-industrial-gunmetal-800 group-hover:text-industrial-accent transition-colors">
                                 {(currentProfile as any).experience ||
                                   'Not specified'}
                               </p>
@@ -396,10 +396,10 @@ export default function WorkerProfilePage() {
                               <Calendar className="h-4 w-4 text-amber-600" />
                             </div>
                             <div>
-                              <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                              <p className="text-xs text-industrial-gunmetal-600 uppercase tracking-wide">
                                 Member Since
                               </p>
-                              <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                              <p className="text-sm font-medium text-industrial-gunmetal-800 group-hover:text-industrial-accent transition-colors">
                                 {new Date(
                                   (currentProfile as any).createdAt ||
                                     Date.now()
@@ -425,10 +425,10 @@ export default function WorkerProfilePage() {
                               />
                             </div>
                             <div>
-                              <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                              <p className="text-xs text-industrial-gunmetal-600 uppercase tracking-wide">
                                 Skills
                               </p>
-                              <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                              <p className="text-sm font-medium text-industrial-gunmetal-800 group-hover:text-industrial-accent transition-colors">
                                 {Array.isArray((currentProfile as any).skills)
                                   ? (currentProfile as any).skills.length
                                   : (currentProfile as any).skills?.split(',')
@@ -450,7 +450,7 @@ export default function WorkerProfilePage() {
             <motion.div variants={cardVariants} whileHover="hover">
               <IndustrialCard
                 variant="industrial"
-                className="relative overflow-hidden bg-gradient-to-br from-industrial-gunmetal-50 to-white"
+                className="relative overflow-hidden bg-industrial-gunmetal-50"
               >
                 {/* Metal grid pattern */}
                 <div className="absolute inset-0 opacity-5">
@@ -474,7 +474,7 @@ export default function WorkerProfilePage() {
                         className="text-industrial-accent"
                       />
                     </motion.div>
-                    <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                    <span className="text-industrial-gunmetal-800 font-semibold">
                       Profile Information
                     </span>
                   </IndustrialCardTitle>

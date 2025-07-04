@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   IndustrialCard,
@@ -14,11 +14,13 @@ import { Button } from '@/components/ui/button';
 import { IndustrialInput } from '@/components/ui/input';
 import {
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
+  SelectGroup,
   SelectValue,
-} from '@/components/ui/select';
+  IndustrialSelectTrigger,
+  IndustrialSelectContent,
+  IndustrialSelectItem,
+  IndustrialSelectLabel,
+} from '@/components/ui/industrial-select';
 import {
   IndustrialLayout,
   IndustrialContainer,
@@ -75,22 +77,30 @@ const cardVariants = {
 const WorkerMachinesPage = () => {
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [availabilityFilter, setAvailabilityFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('all-locations');
+  const [typeFilter, setTypeFilter] = useState('all-types');
+  const [availabilityFilter, setAvailabilityFilter] = useState('all-machines');
 
   const { toast } = useToast();
   const { user } = useAuthStore();
 
   // Store data with safe destructuring
   const machinesStore = useMachinesStore();
-  const machines = machinesStore?.machines || [];
   const isLoading = machinesStore?.isLoading || false;
-  const applyToMachine =
-    machinesStore?.applyToMachine || (() => Promise.resolve());
   const isApplying = machinesStore?.isApplying || false;
-  const fetchMachines =
-    machinesStore?.fetchMachines || (() => Promise.resolve());
+
+  // Use useMemo to prevent recreation on each render
+  const machines = useMemo(() => {
+    return machinesStore?.machines || [];
+  }, [machinesStore?.machines]);
+
+  const applyToMachine = useMemo(() => {
+    return machinesStore?.applyToMachine || (() => Promise.resolve());
+  }, [machinesStore?.applyToMachine]);
+
+  const fetchMachines = useMemo(() => {
+    return machinesStore?.fetchMachines || (() => Promise.resolve());
+  }, [machinesStore?.fetchMachines]);
 
   // Fetch machines on component mount
   useEffect(() => {
@@ -100,9 +110,9 @@ const WorkerMachinesPage = () => {
   }, [fetchMachines]);
   // Filter machines based on search and filter criteria
   useEffect(() => {
-    // Ensure machines is always an array
-    const safeMachines =
-      Array.isArray(machines) && machines !== null ? machines : [];
+    // Since machines is now memoized, we don't need the additional check
+    // but we'll keep a defensive approach
+    const safeMachines = Array.isArray(machines) ? machines : [];
     let filtered = [...safeMachines]; // Create a copy to avoid mutation
 
     if (searchTerm) {
@@ -116,19 +126,22 @@ const WorkerMachinesPage = () => {
       );
     }
 
-    if (locationFilter) {
+    // Only apply location filter if it's not the "all-locations" option
+    if (locationFilter && locationFilter !== 'all-locations') {
       filtered = filtered.filter((machine) =>
         machine.location.toLowerCase().includes(locationFilter.toLowerCase())
       );
     }
 
-    if (typeFilter) {
+    // Only apply type filter if it's not the "all-types" option
+    if (typeFilter && typeFilter !== 'all-types') {
       filtered = filtered.filter(
         (machine) => machine.type.toLowerCase() === typeFilter.toLowerCase()
       );
     }
 
-    if (availabilityFilter) {
+    // Only apply availability filter if it's not the "all-machines" option
+    if (availabilityFilter && availabilityFilter !== 'all-machines') {
       if (availabilityFilter === 'available') {
         filtered = filtered.filter((machine) => machine.isAvailable);
       } else if (availabilityFilter === 'unavailable') {
@@ -138,20 +151,22 @@ const WorkerMachinesPage = () => {
 
     setFilteredMachines(filtered);
   }, [machines, searchTerm, locationFilter, typeFilter, availabilityFilter]);
+  // Create unique location and type lists with memoization
+  const uniqueLocations = useMemo(() => {
+    // Ensure machines is an array before using map
+    const safeArray = Array.isArray(machines) ? machines : [];
+    return [
+      ...new Set(safeArray.map((machine) => machine?.location).filter(Boolean)),
+    ];
+  }, [machines]);
 
-  // Ensure machines is always an array before creating unique lists
-  const safeMachinesForFilters =
-    Array.isArray(machines) && machines !== null ? machines : [];
-  const uniqueLocations = [
-    ...new Set(
-      safeMachinesForFilters.map((machine) => machine?.location).filter(Boolean)
-    ),
-  ];
-  const uniqueTypes = [
-    ...new Set(
-      safeMachinesForFilters.map((machine) => machine?.type).filter(Boolean)
-    ),
-  ];
+  const uniqueTypes = useMemo(() => {
+    // Ensure machines is an array before using map
+    const safeArray = Array.isArray(machines) ? machines : [];
+    return [
+      ...new Set(safeArray.map((machine) => machine?.type).filter(Boolean)),
+    ];
+  }, [machines]);
   // Handle apply to machine
   const handleApplyToMachine = async (
     machineId: string,
@@ -290,26 +305,26 @@ const WorkerMachinesPage = () => {
                         value={locationFilter}
                         onValueChange={setLocationFilter}
                       >
-                        <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
+                        <IndustrialSelectTrigger variant="industrial">
                           <SelectValue placeholder="Filter by location" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border-gray-200 shadow-lg">
-                          <SelectItem
-                            value=""
-                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                        </IndustrialSelectTrigger>
+                        <IndustrialSelectContent variant="industrial">
+                          <IndustrialSelectItem
+                            value="all-locations"
+                            variant="industrial"
                           >
                             All Locations
-                          </SelectItem>
+                          </IndustrialSelectItem>
                           {uniqueLocations.map((location) => (
-                            <SelectItem
+                            <IndustrialSelectItem
                               key={location}
                               value={location}
-                              className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                              variant="industrial"
                             >
                               {location}
-                            </SelectItem>
+                            </IndustrialSelectItem>
                           ))}
-                        </SelectContent>
+                        </IndustrialSelectContent>
                       </Select>
                     </div>
                   </div>
@@ -318,26 +333,26 @@ const WorkerMachinesPage = () => {
                     <label className="text-sm font-medium">Machine Type</label>
                     <div className="relative">
                       <Select value={typeFilter} onValueChange={setTypeFilter}>
-                        <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
+                        <IndustrialSelectTrigger variant="industrial">
                           <SelectValue placeholder="Filter by type" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border-gray-200 shadow-lg">
-                          <SelectItem
-                            value=""
-                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                        </IndustrialSelectTrigger>
+                        <IndustrialSelectContent variant="industrial">
+                          <IndustrialSelectItem
+                            value="all-types"
+                            variant="industrial"
                           >
                             All Types
-                          </SelectItem>
+                          </IndustrialSelectItem>
                           {uniqueTypes.map((type) => (
-                            <SelectItem
+                            <IndustrialSelectItem
                               key={type}
                               value={type}
-                              className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                              variant="industrial"
                             >
                               {type}
-                            </SelectItem>
+                            </IndustrialSelectItem>
                           ))}
-                        </SelectContent>
+                        </IndustrialSelectContent>
                       </Select>
                     </div>
                   </div>
@@ -349,29 +364,29 @@ const WorkerMachinesPage = () => {
                         value={availabilityFilter}
                         onValueChange={setAvailabilityFilter}
                       >
-                        <SelectTrigger className="border-2 border-industrial-gunmetal-300 bg-white px-4 py-3 h-[50px] font-industrial-body shadow-industrial-sm hover:border-industrial-gunmetal-400">
+                        <IndustrialSelectTrigger variant="industrial">
                           <SelectValue placeholder="Filter by availability" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white border-gray-200 shadow-lg">
-                          <SelectItem
-                            value=""
-                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                        </IndustrialSelectTrigger>
+                        <IndustrialSelectContent variant="industrial">
+                          <IndustrialSelectItem
+                            value="all-machines"
+                            variant="industrial"
                           >
                             All Machines
-                          </SelectItem>
-                          <SelectItem
+                          </IndustrialSelectItem>
+                          <IndustrialSelectItem
                             value="available"
-                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                            variant="industrial"
                           >
                             Available
-                          </SelectItem>
-                          <SelectItem
+                          </IndustrialSelectItem>
+                          <IndustrialSelectItem
                             value="unavailable"
-                            className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50"
+                            variant="industrial"
                           >
                             Unavailable
-                          </SelectItem>
-                        </SelectContent>
+                          </IndustrialSelectItem>
+                        </IndustrialSelectContent>
                       </Select>
                     </div>
                   </div>
@@ -383,8 +398,8 @@ const WorkerMachinesPage = () => {
           {/* Results Count */}
           <motion.div variants={itemVariants}>
             <p className="text-sm text-industrial-secondary font-industrial-body my-4">
-              Showing {filteredMachines?.length || 0} of{' '}
-              {safeMachinesForFilters?.length || 0} machines
+              Showing {filteredMachines?.length || 0} of {machines?.length || 0}{' '}
+              machines
             </p>
           </motion.div>
 

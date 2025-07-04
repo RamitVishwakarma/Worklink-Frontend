@@ -152,36 +152,42 @@ function WorkerDashboardPage() {
             </div>
 
             {/* Stats Cards Skeleton */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
               {[1, 2, 3, 4].map((i) => (
                 <IndustrialCard key={i} className="border-gray-200">
-                  <IndustrialCardContent className="p-6">
+                  <IndustrialCardContent className="p-3 sm:p-4 md:p-6">
                     <Skeleton className="h-4 w-16 mb-2 bg-gray-200" />
-                    <Skeleton className="h-8 w-12 bg-gray-200" />
+                    <Skeleton className="h-6 sm:h-8 w-12 bg-gray-200" />
                   </IndustrialCardContent>
                 </IndustrialCard>
               ))}
             </div>
 
             {/* Content Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               <IndustrialCard className="border-gray-200">
-                <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-32 bg-gray-200" />
+                <IndustrialCardHeader className="p-3 sm:p-4 md:p-6 pb-2 sm:pb-3 md:pb-4">
+                  <Skeleton className="h-5 sm:h-6 w-24 sm:w-32 bg-gray-200" />
                 </IndustrialCardHeader>
-                <IndustrialCardContent className="space-y-4">
+                <IndustrialCardContent className="p-3 sm:p-4 md:p-6 space-y-2 sm:space-y-3 md:space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-16 w-full bg-gray-200" />
+                    <Skeleton
+                      key={i}
+                      className="h-12 sm:h-14 md:h-16 w-full bg-gray-200"
+                    />
                   ))}
                 </IndustrialCardContent>
               </IndustrialCard>
               <IndustrialCard className="border-gray-200">
-                <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-32 bg-gray-200" />
+                <IndustrialCardHeader className="p-3 sm:p-4 md:p-6 pb-2 sm:pb-3 md:pb-4">
+                  <Skeleton className="h-5 sm:h-6 w-24 sm:w-32 bg-gray-200" />
                 </IndustrialCardHeader>
-                <IndustrialCardContent className="space-y-4">
+                <IndustrialCardContent className="p-3 sm:p-4 md:p-6 space-y-2 sm:space-y-3 md:space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <Skeleton key={i} className="h-16 w-full bg-gray-200" />
+                    <Skeleton
+                      key={i}
+                      className="h-12 sm:h-14 md:h-16 w-full bg-gray-200"
+                    />
                   ))}
                 </IndustrialCardContent>
               </IndustrialCard>
@@ -202,7 +208,7 @@ function WorkerDashboardPage() {
               animate: 'visible',
               variants: containerVariants,
             }}
-            className="space-y-8 mt-16"
+            className="space-y-4 sm:space-y-6 md:space-y-8 mt-2 sm:mt-4 md:mt-6 px-3 sm:px-4 md:px-6 lg:px-0"
           >
             {' '}
             {/* Enhanced Header with industrial accent bar */}
@@ -220,17 +226,17 @@ function WorkerDashboardPage() {
                 {' '}
               </IndustrialAnimatedElement>
 
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 md:gap-4 pt-2 sm:pt-4">
+                <div className="flex items-start sm:items-center gap-2 sm:gap-3 md:gap-4 flex-wrap sm:flex-nowrap">
                   <motion.div
                     whileHover={{ rotate: 360, scale: 1.1 }}
                     transition={{ duration: 0.8, ease: 'easeInOut' }}
-                    className="p-3 bg-gradient-to-br from-industrial-accent/20 to-industrial-accent/10 rounded-xl border border-industrial-accent/30"
+                    className="p-2 sm:p-3 aspect-square bg-gradient-to-br from-industrial-accent/20 to-industrial-accent/10 rounded-md border border-industrial-accent/30 flex items-center justify-center"
                   >
                     <IndustrialIcon
                       icon="hardhat"
-                      size="xl"
-                      className="text-industrial-accent"
+                      size="sm"
+                      className="text-industrial-accent h-5 w-5 sm:h-6 sm:w-6"
                     />
                   </motion.div>
                   <div>
@@ -239,7 +245,10 @@ function WorkerDashboardPage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <IndustrialHeader level={1}>
+                      <IndustrialHeader
+                        level={1}
+                        className="text-xl sm:text-2xl md:text-3xl"
+                      >
                         <IndustrialText as="span" variant="default">
                           Welcome back,{' '}
                           {(currentProfile as WorkerProfile)?.name ||
@@ -252,7 +261,7 @@ function WorkerDashboardPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 }}
-                      className="text-industrial-muted-foreground mt-1"
+                      className="text-xs sm:text-sm text-industrial-muted-foreground mt-1"
                     >
                       Track your applications, explore new opportunities, and
                       manage your profile
@@ -264,7 +273,7 @@ function WorkerDashboardPage() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="flex gap-3"
+                  className="flex flex-wrap gap-2 mt-2 sm:mt-0 w-full sm:w-auto justify-start sm:justify-end"
                 >
                   <Link href="/worker/profile">
                     <Button
@@ -272,7 +281,7 @@ function WorkerDashboardPage() {
                       size="sm"
                       className="hover:scale-105 transition-transform"
                     >
-                      <Settings className="h-4 w-4 mr-2" />
+                      <Settings className="h-5 w-5 mr-2" />
                       Profile
                     </Button>
                   </Link>
@@ -282,7 +291,7 @@ function WorkerDashboardPage() {
                       size="sm"
                       className="hover:scale-105 transition-transform shadow-lg hover:shadow-xl"
                     >
-                      <Briefcase className="h-4 w-4 mr-2" />
+                      <Briefcase className="h-5 w-5 mr-2" />
                       Browse Gigs
                     </Button>
                   </Link>
@@ -293,16 +302,15 @@ function WorkerDashboardPage() {
             <motion.div variants={itemVariants}>
               <IndustrialDashboardGrid
                 layout="default"
-                gap={designTokens.spacing['6']}
-                className="w-full"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full"
               >
                 {/* Applied Gigs Card */}
                 <motion.div variants={metalCardVariants} whileHover="hover">
                   <IndustrialCard
                     variant="industrial"
-                    className="relative overflow-hidden border-l-4 border-l-industrial-accent bg-gradient-to-br from-industrial-gunmetal-50 to-industrial-gunmetal-100"
+                    className="relative overflow-hidden border-l-4 border-l-industrial-gunmetal-700 bg-gradient-to-br from-industrial-gunmetal-50 to-industrial-gunmetal-100"
                   >
-                    <IndustrialCardContent className="p-6">
+                    <IndustrialCardContent className="p-3 sm:p-4 md:p-6">
                       {/* Metal texture overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-industrial-accent/5 to-transparent opacity-50" />
 
@@ -312,7 +320,7 @@ function WorkerDashboardPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="text-sm font-medium text-industrial-secondary uppercase tracking-wide"
+                            className="text-sm font-medium text-industrial-gunmetal-700 uppercase tracking-wide"
                           >
                             Applied Gigs
                           </motion.p>
@@ -324,7 +332,7 @@ function WorkerDashboardPage() {
                               type: 'spring',
                               stiffness: 100,
                             }}
-                            className="text-3xl font-bold text-industrial-primary mt-1"
+                            className="text-3xl font-bold text-industrial-gunmetal-800 mt-1"
                           >
                             {applicationStats.total}
                           </motion.p>
@@ -332,12 +340,12 @@ function WorkerDashboardPage() {
                         <motion.div
                           whileHover={{ rotate: 15, scale: 1.1 }}
                           transition={{ duration: 0.3 }}
-                          className="p-3 bg-industrial-accent/20 rounded-xl border border-industrial-accent/30"
+                          className="p-2 sm:p-3 aspect-square bg-industrial-gunmetal-300/20 rounded-md border border-industrial-gunmetal-300/30 flex items-center justify-center"
                         >
                           <IndustrialIcon
                             icon="wrench"
-                            size="lg"
-                            className="text-industrial-accent"
+                            size="sm"
+                            className="text-industrial-gunmetal-800 h-5 w-5 sm:h-6 sm:w-6"
                           />
                         </motion.div>
                       </div>
@@ -345,7 +353,7 @@ function WorkerDashboardPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
-                        className="text-xs text-industrial-muted mt-3 font-medium"
+                        className="text-xs text-industrial-gunmetal-600 mt-3 font-medium"
                       >
                         Total applications submitted
                       </motion.p>
@@ -359,7 +367,7 @@ function WorkerDashboardPage() {
                     variant="industrial"
                     className="relative overflow-hidden border-l-4 border-l-industrial-safety-500 bg-gradient-to-br from-amber-50 to-amber-100"
                   >
-                    <IndustrialCardContent className="p-6">
+                    <IndustrialCardContent className="p-3 sm:p-4 md:p-6">
                       {/* Metal texture overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-industrial-safety-500/5 to-transparent opacity-50" />
 
@@ -386,21 +394,17 @@ function WorkerDashboardPage() {
                             {applicationStats.pending}
                           </motion.p>
                         </div>
-                        <motion.div
-                          animate={{ rotate: [0, 360] }}
-                          transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }}
-                          className="p-3 bg-industrial-safety-500/20 rounded-xl border border-industrial-safety-500/30"
+                        <IndustrialAnimatedElement
+                          variant="gear"
+                          animationType="hover"
+                          className="p-2 sm:p-3 aspect-square bg-industrial-safety-500/20 rounded-md border border-industrial-safety-500/30 flex items-center justify-center"
                         >
                           <IndustrialIcon
                             icon="cog"
-                            size="lg"
-                            className="text-industrial-safety-600"
+                            size="sm"
+                            className="text-industrial-safety-600 h-5 w-5 sm:h-6 sm:w-6"
                           />
-                        </motion.div>
+                        </IndustrialAnimatedElement>
                       </div>
                       <motion.p
                         initial={{ opacity: 0, y: 10 }}
@@ -420,7 +424,7 @@ function WorkerDashboardPage() {
                     variant="industrial"
                     className="relative overflow-hidden border-l-4 border-l-emerald-500 bg-gradient-to-br from-emerald-50 to-emerald-100"
                   >
-                    <IndustrialCardContent className="p-6">
+                    <IndustrialCardContent className="p-3 sm:p-4 md:p-6">
                       {/* Metal texture overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-50" />
 
@@ -455,12 +459,12 @@ function WorkerDashboardPage() {
                             type: 'spring',
                             stiffness: 200,
                           }}
-                          className="p-3 bg-emerald-500/20 rounded-xl border border-emerald-500/30"
+                          className="p-2 sm:p-3 aspect-square bg-emerald-500/20 rounded-md border border-emerald-500/30 flex items-center justify-center"
                         >
                           <IndustrialIcon
                             icon="bolt"
-                            size="lg"
-                            className="text-emerald-600"
+                            size="sm"
+                            className="text-emerald-600 h-5 w-5 sm:h-6 sm:w-6"
                           />
                         </motion.div>
                       </div>
@@ -482,7 +486,7 @@ function WorkerDashboardPage() {
                     variant="industrial"
                     className="relative overflow-hidden border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-50 to-blue-100"
                   >
-                    <IndustrialCardContent className="p-6">
+                    <IndustrialCardContent className="p-3 sm:p-4 md:p-6">
                       {/* Metal texture overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-50" />
                       <div className="relative flex items-center justify-between">
@@ -511,12 +515,12 @@ function WorkerDashboardPage() {
                         <IndustrialAnimatedElement
                           variant="icon"
                           animationType="hover"
-                          className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30"
+                          className="p-2 sm:p-3 aspect-square bg-blue-500/20 rounded-md border border-blue-500/30 flex items-center justify-center"
                         >
                           <IndustrialIcon
                             icon="factory"
-                            size="lg"
-                            className="text-blue-600"
+                            size="sm"
+                            className="text-blue-600 h-5 w-5 sm:h-6 sm:w-6"
                           />
                         </IndustrialAnimatedElement>
                       </div>
@@ -535,11 +539,9 @@ function WorkerDashboardPage() {
             </motion.div>{' '}
             {/* Enhanced Main Content with Industrial Grid */}
             <IndustrialGrid
-              columns={{ default: 1, lg: 2 }}
-              gap={designTokens.spacing['6']}
               variant="industrial"
               pattern="grid"
-              equalHeight
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-0"
             >
               {/* Recent Available Gigs */}
               <motion.div variants={itemVariants}>
@@ -552,17 +554,18 @@ function WorkerDashboardPage() {
                     <div className="h-full w-full bg-[radial-gradient(circle_at_1px_1px,_#2C3E50_1px,_transparent_0)] bg-[length:24px_24px]" />
                   </div>
 
-                  <IndustrialCardHeader className="relative flex flex-row items-center justify-between border-b border-industrial-accent/20 pb-4">
-                    <IndustrialCardTitle className="text-lg font-semibold flex items-center gap-3">
+                  <IndustrialCardHeader className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-industrial-accent/20 p-3 sm:p-4 md:p-6 pb-2 sm:pb-3 md:pb-4 gap-2 sm:gap-3">
+                    <IndustrialCardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2 sm:gap-3">
                       <IndustrialAnimatedElement
                         variant="gear"
-                        animationType="ambient"
-                        className="p-2 bg-industrial-accent/10 rounded-lg border border-industrial-accent/20"
+                        animationType="hover"
+                        className="p-2 sm:p-3 aspect-square bg-industrial-accent/20 rounded-md border border-industrial-accent/30 flex items-center justify-center"
                       >
+                        {' '}
                         <IndustrialIcon
                           icon="wrench"
                           size="sm"
-                          className="text-industrial-accent"
+                          className="text-industrial-accent h-5 w-5 sm:h-6 sm:w-6"
                         />
                       </IndustrialAnimatedElement>
                       <IndustrialText as="span" variant="default">
@@ -570,47 +573,41 @@ function WorkerDashboardPage() {
                       </IndustrialText>
                     </IndustrialCardTitle>
                     <Link href="/gigs">
-                      <IndustrialButton
-                        variant="industrial-secondary"
+                      <Button
+                        variant="industrial-ghost"
                         size="sm"
-                        className="shadow-md"
+                        className="hover:scale-105 transition-transform flex items-center gap-1 min-w-[90px]"
                       >
                         View All
-                        <IndustrialAnimatedElement
-                          variant="indicator"
-                          animationType="ambient"
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{
+                            repeat: Infinity,
+                            repeatType: 'loop',
+                            duration: 2,
+                            repeatDelay: 1,
+                          }}
                           className="ml-1"
                         >
                           →
-                        </IndustrialAnimatedElement>
-                      </IndustrialButton>
+                        </motion.div>
+                      </Button>
                     </Link>
                   </IndustrialCardHeader>
-                  <IndustrialCardContent className="relative">
+                  <IndustrialCardContent className="relative p-3 sm:p-4 md:p-6">
                     {recentGigs.length === 0 ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-center py-12"
                       >
-                        <motion.div
-                          animate={{
-                            rotateY: [0, 180, 360],
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                          }}
-                          className="mb-6"
-                        >
+                        <div className="mb-6">
                           <IndustrialIcon
                             icon="factory"
                             size="xl"
-                            className="mx-auto text-industrial-muted"
+                            className="mx-auto text-industrial-muted hover:scale-110 transition-transform"
                           />
-                        </motion.div>
+                        </div>
                         <p className="text-industrial-secondary font-medium">
                           No gigs available at the moment.
                         </p>
@@ -619,7 +616,7 @@ function WorkerDashboardPage() {
                         </p>
                       </motion.div>
                     ) : (
-                      <div className="space-y-4">
+                      <div className="space-y-2 sm:space-y-3 md:space-y-4">
                         {recentGigs.slice(0, 3).map((gig, index) => (
                           <motion.div
                             key={gig.id}
@@ -635,7 +632,7 @@ function WorkerDashboardPage() {
                               x: 8,
                               transition: { duration: 0.2 },
                             }}
-                            className="relative border border-industrial-border rounded-lg p-5 hover:bg-gradient-to-r hover:from-industrial-accent/5 hover:to-industrial-gunmetal-50/50 transition-all duration-300 group cursor-pointer"
+                            className="relative border border-industrial-border rounded-lg p-3 sm:p-4 md:p-5 hover:bg-gradient-to-r hover:from-industrial-accent/5 hover:to-industrial-gunmetal-50/50 transition-all duration-300 group cursor-pointer"
                           >
                             {/* Metal accent line */}
                             <motion.div
@@ -667,14 +664,14 @@ function WorkerDashboardPage() {
                                 className="flex items-center gap-1 hover:text-industrial-accent transition-colors"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <MapPin className="h-3 w-3" />
+                                <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                 {gig.location}
                               </motion.div>
                               <motion.div
                                 className="flex items-center gap-1 hover:text-industrial-accent transition-colors"
                                 whileHover={{ scale: 1.05 }}
                               >
-                                <Building className="h-3 w-3" />
+                                <Building className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                 {gig.company}
                               </motion.div>
                             </div>
@@ -696,40 +693,38 @@ function WorkerDashboardPage() {
                     <div className="h-full w-full bg-[radial-gradient(circle_at_1px_1px,_#34495E_1px,_transparent_0)] bg-[length:24px_24px]" />
                   </div>
 
-                  <IndustrialCardHeader className="relative flex flex-row items-center justify-between border-b border-industrial-accent/20 pb-4">
-                    <IndustrialCardTitle className="text-lg font-semibold flex items-center gap-3">
-                      <motion.div
-                        animate={{
-                          rotateY: [0, 180, 360],
-                          scale: [1, 1.05, 1],
-                        }}
-                        transition={{
-                          duration: 8,
-                          repeat: Infinity,
-                          ease: 'easeInOut',
-                        }}
-                        className="p-2 bg-industrial-accent/10 rounded-lg border border-industrial-accent/20"
+                  <IndustrialCardHeader className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-industrial-accent/20 p-3 sm:p-4 md:p-6 pb-2 sm:pb-3 md:pb-4 gap-2 sm:gap-3">
+                    <IndustrialCardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2 sm:gap-3">
+                      <IndustrialAnimatedElement
+                        variant="gear"
+                        animationType="hover"
+                        className="p-2 sm:p-3 aspect-square bg-industrial-accent/20 rounded-md border border-industrial-accent/30 flex items-center justify-center"
                       >
                         <IndustrialIcon
                           icon="hardhat"
                           size="sm"
-                          className="text-industrial-accent"
+                          className="text-industrial-accent h-5 w-5 sm:h-6 sm:w-6"
                         />
-                      </motion.div>
-                      <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                      </IndustrialAnimatedElement>
+                      <IndustrialText as="span" variant="default">
                         Your Applications
-                      </span>
+                      </IndustrialText>
                     </IndustrialCardTitle>
                     <Link href="/worker/applied-gigs">
                       <Button
-                        variant="industrial-secondary"
+                        variant="industrial-ghost"
                         size="sm"
-                        className="hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="hover:scale-105 transition-transform flex items-center gap-1 min-w-[90px]"
                       >
                         View All
                         <motion.div
-                          animate={{ x: [0, 4, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{
+                            repeat: Infinity,
+                            repeatType: 'loop',
+                            duration: 2,
+                            repeatDelay: 1,
+                          }}
                           className="ml-1"
                         >
                           →
@@ -737,31 +732,21 @@ function WorkerDashboardPage() {
                       </Button>
                     </Link>
                   </IndustrialCardHeader>
-                  <IndustrialCardContent className="relative">
+                  <IndustrialCardContent className="relative p-3 sm:p-4 md:p-6">
                     {recentApplications.length === 0 ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="text-center py-12"
                       >
-                        <motion.div
-                          animate={{
-                            rotate: [0, 10, -10, 0],
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                          }}
-                          className="mb-6"
-                        >
+                        {' '}
+                        <div className="mb-6">
                           <IndustrialIcon
                             icon="hardhat"
                             size="xl"
-                            className="mx-auto text-industrial-muted"
+                            className="mx-auto text-industrial-muted hover:scale-110 transition-all duration-300"
                           />
-                        </motion.div>
+                        </div>
                         <p className="text-industrial-secondary font-medium">
                           You haven't applied to any gigs yet.
                         </p>
@@ -777,14 +762,14 @@ function WorkerDashboardPage() {
                             <IndustrialIcon
                               icon="wrench"
                               size="sm"
-                              className="mr-2"
+                              className="h-5 w-5 sm:h-6 sm:w-6 mr-2"
                             />
                             Browse Gigs
                           </Button>
                         </Link>
                       </motion.div>
                     ) : (
-                      <div className="space-y-4">
+                      <div className="space-y-2 sm:space-y-3 md:space-y-4">
                         {recentApplications.map(
                           (application: GigApplication, index: number) => (
                             <motion.div
@@ -801,7 +786,7 @@ function WorkerDashboardPage() {
                                 x: -8,
                                 transition: { duration: 0.2 },
                               }}
-                              className="relative border border-industrial-border rounded-lg p-5 hover:bg-gradient-to-l hover:from-industrial-accent/5 hover:to-industrial-gunmetal-50/50 transition-all duration-300 group cursor-pointer"
+                              className="relative border border-industrial-border rounded-lg p-3 sm:p-4 md:p-5 hover:bg-gradient-to-l hover:from-industrial-accent/5 hover:to-industrial-gunmetal-50/50 transition-all duration-300 group cursor-pointer"
                             >
                               {/* Status indicator line */}
                               <motion.div
@@ -812,8 +797,8 @@ function WorkerDashboardPage() {
                                   application.status === 'approved'
                                     ? 'bg-gradient-to-l from-emerald-500 to-emerald-400'
                                     : application.status === 'rejected'
-                                      ? 'bg-gradient-to-l from-red-500 to-red-400'
-                                      : 'bg-gradient-to-l from-industrial-safety-500 to-industrial-accent'
+                                      ? 'bg-gradient-to-l from-red-600 to-red-500'
+                                      : 'bg-gradient-to-l from-industrial-safety-500 to-amber-400'
                                 }`}
                               />
 
@@ -834,7 +819,7 @@ function WorkerDashboardPage() {
                                         ? 'industrial-success'
                                         : application.status === 'rejected'
                                           ? 'industrial-danger'
-                                          : 'industrial-accent'
+                                          : 'industrial-warning'
                                     }
                                     className="shadow-sm"
                                   >
@@ -848,7 +833,7 @@ function WorkerDashboardPage() {
                                   className="flex items-center gap-1 hover:text-industrial-accent transition-colors"
                                   whileHover={{ scale: 1.05 }}
                                 >
-                                  <Calendar className="h-3 w-3" />
+                                  <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   Applied{' '}
                                   {new Date(
                                     application.appliedAt
@@ -859,7 +844,7 @@ function WorkerDashboardPage() {
                                     className="flex items-center gap-1 hover:text-industrial-accent transition-colors"
                                     whileHover={{ scale: 1.05 }}
                                   >
-                                    <MapPin className="h-3 w-3" />
+                                    <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                     {application.gig.location}
                                   </motion.div>
                                 )}
@@ -879,36 +864,38 @@ function WorkerDashboardPage() {
                 variant="industrial-accent"
                 className="relative overflow-hidden bg-gradient-to-br from-industrial-accent/10 to-industrial-gunmetal-50"
               >
-                {/* Metal texture pattern */}
+                {/* Blueprint grid pattern with metal texture overlay */}
                 <div className="absolute inset-0 opacity-10">
-                  <div className="h-full w-full bg-[linear-gradient(45deg,_#2C3E50_25%,_transparent_25%,_transparent_75%,_#2C3E50_75%,_#2C3E50),_linear-gradient(45deg,_#2C3E50_25%,_transparent_25%,_transparent_75%,_#2C3E50_75%,_#2C3E50)] bg-[length:8px_8px] bg-[position:0_0,_4px_4px]" />
+                  <div className="h-full w-full bg-[radial-gradient(circle_at_1px_1px,_#2C3E50_1px,_transparent_0)] bg-[length:20px_20px]" />
+                </div>
+                {/* Metal texture overlay */}
+                <div className="absolute inset-0 opacity-5">
+                  <div className="h-full w-full bg-[url('/textures/metal-subtle.png')] bg-repeat"></div>
                 </div>
 
-                <IndustrialCardHeader className="relative border-b border-industrial-accent/30">
-                  <IndustrialCardTitle className="text-lg font-semibold flex items-center gap-3">
-                    <motion.div
-                      animate={{ rotate: [0, 360] }}
-                      transition={{
-                        duration: 12,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                      className="p-2 bg-industrial-accent/20 rounded-lg border border-industrial-accent/40"
+                <IndustrialCardHeader className="relative border-b border-industrial-accent/30 p-3 sm:p-4 md:p-6 pb-2 sm:pb-3 md:pb-4">
+                  <IndustrialCardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2 sm:gap-3">
+                    <IndustrialAnimatedElement
+                      variant="gear"
+                      animationType="hover"
+                      className="p-2 sm:p-3 aspect-square bg-industrial-accent/20 rounded-md border border-industrial-accent/30 flex items-center justify-center"
                     >
                       <IndustrialIcon
                         icon="gear"
                         size="sm"
-                        animated
-                        className="text-industrial-accent"
+                        className="text-industrial-accent h-5 w-5 sm:h-6 sm:w-6"
                       />
-                    </motion.div>
-                    <span className="bg-gradient-to-r from-industrial-accent to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                    </IndustrialAnimatedElement>
+                    <IndustrialText as="span" variant="default">
                       Quick Actions
-                    </span>
+                    </IndustrialText>
                   </IndustrialCardTitle>
                 </IndustrialCardHeader>
-                <IndustrialCardContent className="relative">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-2">
+                <IndustrialCardContent className="relative p-3 sm:p-4 md:p-6">
+                  <IndustrialGrid
+                    variant="industrial"
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-1 sm:pt-2"
+                  >
                     {/* Browse Gigs Action */}
                     <motion.div
                       whileHover={{ scale: 1.05, y: -5 }}
@@ -918,7 +905,7 @@ function WorkerDashboardPage() {
                       <Link href="/gigs" className="block">
                         <Button
                           variant="industrial-outline"
-                          className="w-full h-28 flex-col gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
+                          className="w-full h-20 sm:h-24 md:h-28 flex flex-col items-center justify-center gap-2 sm:gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
                         >
                           {/* Shimmer effect */}
                           <motion.div
@@ -928,22 +915,10 @@ function WorkerDashboardPage() {
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                           />
 
-                          <motion.div
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                            }}
-                            className="relative"
-                          >
-                            <IndustrialIcon
-                              icon="wrench"
-                              size="md"
-                              className="group-hover:text-industrial-accent transition-colors"
-                            />
-                          </motion.div>
-                          <span className="text-sm font-medium group-hover:text-industrial-accent transition-colors">
+                          <div className="relative aspect-square p-1.5 sm:p-2 flex items-center justify-center">
+                            <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 group-hover:text-industrial-accent transition-colors" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-medium group-hover:text-industrial-accent transition-colors">
                             Browse Gigs
                           </span>
                         </Button>
@@ -956,10 +931,10 @@ function WorkerDashboardPage() {
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Link href="/worker/machines" className="block">
+                      <Link href="/machines" className="block">
                         <Button
                           variant="industrial-outline"
-                          className="w-full h-28 flex-col gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
+                          className="w-full h-20 sm:h-24 md:h-28 flex flex-col items-center justify-center gap-2 sm:gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
                         >
                           {/* Shimmer effect */}
                           <motion.div
@@ -969,25 +944,10 @@ function WorkerDashboardPage() {
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                           />
 
-                          <motion.div
-                            animate={{
-                              rotateY: [0, 180, 360],
-                              scale: [1, 1.1, 1],
-                            }}
-                            transition={{
-                              duration: 4,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                            }}
-                            className="relative"
-                          >
-                            <IndustrialIcon
-                              icon="factory"
-                              size="md"
-                              className="group-hover:text-industrial-accent transition-colors"
-                            />
-                          </motion.div>
-                          <span className="text-sm font-medium group-hover:text-industrial-accent transition-colors">
+                          <div className="relative aspect-square p-1.5 sm:p-2 flex items-center justify-center">
+                            <Factory className="h-5 w-5 sm:h-6 sm:w-6 group-hover:text-industrial-accent transition-colors" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-medium group-hover:text-industrial-accent transition-colors">
                             View Machines
                           </span>
                         </Button>
@@ -1003,7 +963,7 @@ function WorkerDashboardPage() {
                       <Link href="/worker/profile" className="block">
                         <Button
                           variant="industrial-outline"
-                          className="w-full h-28 flex-col gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
+                          className="w-full h-20 sm:h-24 md:h-28 flex flex-col items-center justify-center gap-2 sm:gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
                         >
                           {/* Shimmer effect */}
                           <motion.div
@@ -1013,18 +973,10 @@ function WorkerDashboardPage() {
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                           />
 
-                          <motion.div
-                            whileHover={{ rotate: 360 }}
-                            transition={{ duration: 0.8, ease: 'easeInOut' }}
-                            className="relative"
-                          >
-                            <IndustrialIcon
-                              icon="hardhat"
-                              size="md"
-                              className="group-hover:text-industrial-accent transition-colors"
-                            />
-                          </motion.div>
-                          <span className="text-sm font-medium group-hover:text-industrial-accent transition-colors">
+                          <div className="relative aspect-square p-1.5 sm:p-2 flex items-center justify-center">
+                            <HardHat className="h-5 w-5 sm:h-6 sm:w-6 group-hover:text-industrial-accent transition-colors" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-medium group-hover:text-industrial-accent transition-colors">
                             Edit Profile
                           </span>
                         </Button>
@@ -1040,7 +992,7 @@ function WorkerDashboardPage() {
                       <Link href="/worker/applied-gigs" className="block">
                         <Button
                           variant="industrial-outline"
-                          className="w-full h-28 flex-col gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
+                          className="w-full h-20 sm:h-24 md:h-28 flex flex-col items-center justify-center gap-2 sm:gap-3 hover:bg-gradient-to-t hover:from-industrial-accent/10 hover:to-industrial-gunmetal-50 border-2 hover:border-industrial-accent/50 transition-all duration-300 group relative overflow-hidden"
                         >
                           {/* Shimmer effect */}
                           <motion.div
@@ -1050,28 +1002,16 @@ function WorkerDashboardPage() {
                             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                           />
 
-                          <motion.div
-                            animate={{ rotate: [0, 360] }}
-                            transition={{
-                              duration: 8,
-                              repeat: Infinity,
-                              ease: 'linear',
-                            }}
-                            className="relative"
-                          >
-                            <IndustrialIcon
-                              icon="gear"
-                              size="md"
-                              className="group-hover:text-industrial-accent transition-colors"
-                            />
-                          </motion.div>
-                          <span className="text-sm font-medium group-hover:text-industrial-accent transition-colors">
+                          <div className="relative aspect-square p-1.5 sm:p-2 flex items-center justify-center">
+                            <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 group-hover:text-industrial-accent transition-colors" />
+                          </div>
+                          <span className="text-xs sm:text-sm font-medium group-hover:text-industrial-accent transition-colors">
                             My Applications
                           </span>
                         </Button>
                       </Link>
                     </motion.div>
-                  </div>
+                  </IndustrialGrid>
                 </IndustrialCardContent>
               </IndustrialCard>
             </motion.div>{' '}

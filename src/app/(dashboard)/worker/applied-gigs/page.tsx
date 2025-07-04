@@ -199,12 +199,16 @@ export default function AppliedGigsPage() {
             >
               <div>
                 <div className="flex items-center gap-3">
-                  <IndustrialIcon icon="wrench" size="lg" />
-                  <h1 className="text-3xl font-bold tracking-tight text-industrial-foreground">
+                  <IndustrialIcon
+                    icon="wrench"
+                    size="lg"
+                    className="text-industrial-accent"
+                  />
+                  <h1 className="text-3xl font-bold tracking-tight text-industrial-gunmetal-800">
                     Applied Gigs
                   </h1>
                 </div>
-                <p className="text-industrial-muted-foreground">
+                <p className="text-industrial-gunmetal-600">
                   Track your gig applications and their status
                 </p>
               </div>
@@ -236,10 +240,10 @@ export default function AppliedGigsPage() {
                     className="text-industrial-muted-foreground"
                   />
                   <div>
-                    <p className="text-sm font-medium text-industrial-muted-foreground">
+                    <p className="text-sm font-medium text-industrial-gunmetal-600">
                       Total Applied
                     </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-2xl font-bold text-industrial-accent">
                       {stats.total}
                     </p>
                   </div>
@@ -252,10 +256,10 @@ export default function AppliedGigsPage() {
                 <div className="flex items-center space-x-2">
                   <Clock className="h-5 w-5 text-industrial-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium text-industrial-muted-foreground">
+                    <p className="text-sm font-medium text-industrial-gunmetal-600">
                       Pending
                     </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-2xl font-bold text-industrial-safety-500">
                       {stats.pending}
                     </p>
                   </div>
@@ -268,10 +272,10 @@ export default function AppliedGigsPage() {
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-industrial-safety-500" />
                   <div>
-                    <p className="text-sm font-medium text-industrial-muted-foreground">
+                    <p className="text-sm font-medium text-industrial-gunmetal-600">
                       Approved
                     </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-2xl font-bold text-industrial-safety-500">
                       {stats.approved}
                     </p>
                   </div>
@@ -284,10 +288,10 @@ export default function AppliedGigsPage() {
                 <div className="flex items-center space-x-2">
                   <XCircle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="text-sm font-medium text-industrial-muted-foreground">
+                    <p className="text-sm font-medium text-industrial-gunmetal-600">
                       Rejected
                     </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-2xl font-bold text-red-600">
                       {stats.rejected}
                     </p>
                   </div>
@@ -304,12 +308,12 @@ export default function AppliedGigsPage() {
                   <IndustrialIcon
                     icon="factory"
                     size="xl"
-                    className="mb-4 text-industrial-muted-foreground"
+                    className="mb-4 text-industrial-accent"
                   />
-                  <h3 className="text-lg font-semibold mb-2 text-industrial-foreground">
+                  <h3 className="text-lg font-semibold mb-2 text-industrial-gunmetal-800">
                     No Applications Found
                   </h3>
-                  <p className="text-industrial-muted-foreground text-center">
+                  <p className="text-industrial-gunmetal-600 text-center">
                     You haven't applied to any gigs yet. Start browsing
                     available gigs to apply.
                   </p>
@@ -326,11 +330,15 @@ export default function AppliedGigsPage() {
             ) : (
               <IndustrialCard>
                 <IndustrialCardHeader>
-                  <IndustrialCardTitle className="flex items-center gap-2">
-                    <IndustrialIcon icon="cog" size="sm" />
+                  <IndustrialCardTitle className="flex items-center gap-2 text-industrial-gunmetal-800">
+                    <IndustrialIcon
+                      icon="cog"
+                      size="sm"
+                      className="text-industrial-accent"
+                    />
                     Your Applications
                   </IndustrialCardTitle>
-                  <IndustrialCardDescription>
+                  <IndustrialCardDescription className="text-industrial-gunmetal-600">
                     A detailed view of all your gig applications
                   </IndustrialCardDescription>
                 </IndustrialCardHeader>
@@ -340,22 +348,22 @@ export default function AppliedGigsPage() {
                     <Table>
                       <TableHeader>
                         <TableRow className="border-industrial-border">
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Gig Title
                           </TableHead>
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Company
                           </TableHead>
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Location
                           </TableHead>
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Salary
                           </TableHead>
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Applied On
                           </TableHead>
-                          <TableHead className="text-industrial-foreground">
+                          <TableHead className="text-industrial-gunmetal-800 font-semibold">
                             Status
                           </TableHead>
                         </TableRow>
@@ -366,29 +374,29 @@ export default function AppliedGigsPage() {
                             key={application.id}
                             className="border-industrial-border hover:bg-industrial-muted/50"
                           >
-                            <TableCell className="font-medium text-industrial-foreground">
+                            <TableCell className="font-medium text-industrial-gunmetal-800">
                               {application.gig?.title || 'Unknown'}
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center space-x-2">
-                                <Building2 className="h-4 w-4 text-industrial-muted-foreground" />
-                                <span className="text-industrial-foreground">
+                                <Building2 className="h-4 w-4 text-industrial-gunmetal-600" />
+                                <span className="text-industrial-gunmetal-700">
                                   {application.gig?.company || 'Unknown'}
                                 </span>
                               </div>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center space-x-2">
-                                <MapPin className="h-4 w-4 text-industrial-muted-foreground" />
-                                <span className="text-industrial-foreground">
+                                <MapPin className="h-4 w-4 text-industrial-gunmetal-600" />
+                                <span className="text-industrial-gunmetal-700">
                                   {application.gig?.location || 'Unknown'}
                                 </span>
                               </div>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center space-x-2">
-                                <DollarSign className="h-4 w-4 text-industrial-muted-foreground" />
-                                <span className="text-industrial-foreground">
+                                <DollarSign className="h-4 w-4 text-industrial-gunmetal-600" />
+                                <span className="text-industrial-gunmetal-700">
                                   $
                                   {application.gig?.salary?.toLocaleString() ||
                                     'N/A'}
@@ -397,8 +405,8 @@ export default function AppliedGigsPage() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center space-x-2">
-                                <Calendar className="h-4 w-4 text-industrial-muted-foreground" />
-                                <span className="text-industrial-foreground">
+                                <Calendar className="h-4 w-4 text-industrial-gunmetal-600" />
+                                <span className="text-industrial-gunmetal-700">
                                   {new Date(
                                     application.appliedAt
                                   ).toLocaleDateString()}
@@ -426,10 +434,10 @@ export default function AppliedGigsPage() {
                       >
                         <div className="flex items-start justify-between">
                           <div>
-                            <h3 className="font-semibold text-industrial-foreground">
+                            <h3 className="font-semibold text-industrial-gunmetal-800">
                               {application.gig?.title || 'Unknown'}
                             </h3>
-                            <p className="text-sm text-industrial-muted-foreground flex items-center gap-1">
+                            <p className="text-sm text-industrial-gunmetal-600 flex items-center gap-1">
                               <Building2 className="h-3 w-3" />
                               {application.gig?.company || 'Unknown'}
                             </p>
@@ -439,17 +447,18 @@ export default function AppliedGigsPage() {
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="flex items-center gap-1 text-industrial-muted-foreground">
-                            <MapPin className="h-3 w-3" />
+                          <div className="flex items-center gap-1 text-industrial-gunmetal-700">
+                            <MapPin className="h-3 w-3 text-industrial-accent" />
                             {application.gig?.location || 'Unknown'}
                           </div>
-                          <div className="flex items-center gap-1 text-industrial-muted-foreground">
-                            <DollarSign className="h-3 w-3" />$
+                          <div className="flex items-center gap-1 text-industrial-gunmetal-700">
+                            <DollarSign className="h-3 w-3 text-industrial-accent" />
+                            $
                             {application.gig?.salary?.toLocaleString() || 'N/A'}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 text-sm text-industrial-muted-foreground">
-                          <Calendar className="h-3 w-3" />
+                        <div className="flex items-center gap-1 text-sm text-industrial-gunmetal-700">
+                          <Calendar className="h-3 w-3 text-industrial-accent" />
                           Applied:{' '}
                           {new Date(application.appliedAt).toLocaleDateString()}
                         </div>
