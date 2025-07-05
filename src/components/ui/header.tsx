@@ -51,6 +51,20 @@ export function Header() {
     }
   };
 
+  const getProfileLink = () => {
+    if (!user) return '/';
+    switch (user.userType) {
+      case 'worker':
+        return '/worker/profile';
+      case 'startup':
+        return '/startup/profile';
+      case 'manufacturer':
+        return '/manufacturer/profile';
+      default:
+        return '/';
+    }
+  };
+
   const getUserInitials = () => {
     if (!user) return 'U';
     const name = user.name || user.email || 'User';
@@ -68,7 +82,7 @@ export function Header() {
         isScrolled ? 'bg-industrial-gunmetal-800/95 shadow-md py-3' : 'py-5'
       }`}
     >
-      <div className="container mx-auto px-4 flex items-center justify-between">
+      <div className="mx-auto px-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/logo.png"
@@ -191,7 +205,7 @@ export function Header() {
                   <DropdownMenuSeparator className="bg-gray-200" />
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/profile"
+                      href={getProfileLink()}
                       className="flex items-center text-gray-900 hover:bg-gray-50"
                     >
                       <User className="mr-2 h-4 w-4" />
@@ -258,7 +272,7 @@ export function Header() {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-industrial-gunmetal-800/95 border-t border-gray-700">
-          <div className="container mx-auto px-4 py-4">
+          <div className="mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-4">
               <Link
                 href="/gigs"
@@ -285,7 +299,7 @@ export function Header() {
                     Dashboard
                   </Link>
                   <Link
-                    href="/profile"
+                    href={getProfileLink()}
                     className="text-gray-200 py-2 hover:text-industrial-safety-300 font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >

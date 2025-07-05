@@ -114,7 +114,7 @@ function AddMachinePage() {
         description: 'Machine added successfully!',
       });
 
-      router.push('/manufacturer/machines');
+      router.push('/dashboard/manufacturer/machines');
     } catch (error: any) {
       toast({
         title: 'Error',

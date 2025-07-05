@@ -200,7 +200,7 @@ function CreateGigPage() {
         description: 'Gig created successfully!',
       });
 
-      router.push('/startup/gigs');
+      router.push('/dashboard/startup/gigs');
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -614,7 +614,7 @@ function CreateGigPage() {
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={() => router.push('/startup/gigs')}
+                          onClick={() => router.push('/dashboard/startup/gigs')}
                           className="border-gray-300 text-gray-700 hover:bg-gray-50"
                         >
                           Cancel

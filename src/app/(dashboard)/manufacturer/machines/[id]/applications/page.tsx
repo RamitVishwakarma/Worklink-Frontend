@@ -51,6 +51,7 @@ import {
   useAuthStore,
 } from '@/lib/store';
 import { Machine, MachineApplication, UserType } from '@/lib/types';
+import { manufacturerAPI } from '@/lib/api';
 import withAuth from '@/components/auth/withAuth';
 import {
   Search,
@@ -158,7 +159,7 @@ function MachineApplicationsPage() {
 
     setProcessingApplication(application._id);
     try {
-      await updateApplicationStatus(
+      await manufacturerAPI.updateApplicationStatus(
         application._id,
         action === 'approve' ? 'approved' : 'rejected'
       );
@@ -330,7 +331,7 @@ function MachineApplicationsPage() {
                 <IndustrialHeader level={1}>
                   Applications for {machine?.name}
                 </IndustrialHeader>
-                <p className="text-industrial-muted-foreground mt-2">
+                <p className="text-gray-600 mt-2">
                   Manage applications for your {machine?.type}
                 </p>
               </div>
@@ -392,10 +393,8 @@ function MachineApplicationsPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Total Applications
-                    </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-sm text-gray-600">Total Applications</p>
+                    <p className="text-2xl font-bold text-gray-800">
                       {applications.length}
                     </p>{' '}
                   </div>
@@ -408,17 +407,15 @@ function MachineApplicationsPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Pending
-                    </p>
-                    <p className="text-2xl font-bold text-industrial-secondary">
+                    <p className="text-sm text-gray-600">Pending</p>
+                    <p className="text-2xl font-bold text-gray-800">
                       {
                         applications.filter((app) => app.status === 'pending')
                           .length
                       }
                     </p>{' '}
                   </div>
-                  <Clock className="h-8 w-8 text-industrial-secondary" />
+                  <Clock className="h-8 w-8 text-gray-600" />
                 </div>
               </IndustrialCardContent>
             </IndustrialCard>
@@ -427,9 +424,7 @@ function MachineApplicationsPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Approved
-                    </p>
+                    <p className="text-sm text-gray-600">Approved</p>
                     <p className="text-2xl font-bold text-industrial-accent">
                       {
                         applications.filter((app) => app.status === 'approved')
@@ -446,9 +441,7 @@ function MachineApplicationsPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Rejected
-                    </p>
+                    <p className="text-sm text-gray-600">Rejected</p>
                     <p className="text-2xl font-bold text-red-500">
                       {
                         applications.filter((app) => app.status === 'rejected')
@@ -469,7 +462,7 @@ function MachineApplicationsPage() {
           >
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-industrial-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <IndustrialInput
                   placeholder="Search applications..."
                   value={searchTerm}

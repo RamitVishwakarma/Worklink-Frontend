@@ -191,7 +191,6 @@ const StartupMachinesPage = () => {
             <IndustrialIcon
               icon="factory"
               size="lg"
-              animated
               className="text-industrial-accent"
             />
             <div>

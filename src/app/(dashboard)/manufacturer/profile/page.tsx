@@ -267,10 +267,10 @@ function ManufacturerProfilePage() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                   >
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-industrial-foreground via-industrial-accent to-industrial-foreground bg-clip-text text-transparent mb-2">
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-industrial-accent to-gray-800 bg-clip-text text-transparent mb-2">
                       Company Profile
                     </h1>
-                    <p className="text-industrial-muted-foreground text-lg">
+                    <p className="text-gray-600 text-lg">
                       Manage your manufacturing company information and
                       industrial operations
                     </p>
@@ -377,7 +377,7 @@ function ManufacturerProfilePage() {
                           className="text-industrial-accent"
                         />
                       </motion.div>
-                      <span className="text-industrial-foreground font-bold">
+                      <span className="text-gray-800 font-bold">
                         Manufacturing Statistics
                       </span>
                     </IndustrialCardTitle>
@@ -402,7 +402,7 @@ function ManufacturerProfilePage() {
                               <Factory className="h-8 w-8 text-industrial-navy-500" />
                             </motion.div>
                             <div>
-                              <p className="text-sm text-industrial-muted-foreground">
+                              <p className="text-sm text-gray-600">
                                 Total Machines
                               </p>
                               <p className="text-2xl font-bold text-industrial-navy-600">
@@ -416,18 +416,11 @@ function ManufacturerProfilePage() {
                         {/* Active Machines */}
                         <div className="flex items-center justify-between p-4 bg-industrial-safety-50 border border-industrial-safety-200 rounded-lg">
                           <div className="flex items-center space-x-3">
-                            <motion.div
-                              animate={{ rotate: [0, 360] }}
-                              transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: 'linear',
-                              }}
-                            >
+                            <motion.div>
                               <TrendingUp className="h-8 w-8 text-industrial-safety-500" />
                             </motion.div>
                             <div>
-                              <p className="text-sm text-industrial-muted-foreground">
+                              <p className="text-sm text-gray-600">
                                 Active Machines
                               </p>
                               <p className="text-2xl font-bold text-industrial-safety-600">
@@ -451,7 +444,7 @@ function ManufacturerProfilePage() {
                               <Calendar className="h-8 w-8 text-industrial-accent" />
                             </motion.div>
                             <div>
-                              <p className="text-sm text-industrial-muted-foreground">
+                              <p className="text-sm text-gray-600">
                                 Member Since
                               </p>{' '}
                               <p className="text-2xl font-bold text-industrial-accent">
@@ -499,7 +492,7 @@ function ManufacturerProfilePage() {
                       >
                         <Building className="h-6 w-6 text-industrial-navy-400" />
                       </motion.div>
-                      <span className="text-industrial-foreground font-bold">
+                      <span className="text-gray-800 font-bold">
                         Company Information
                       </span>
                     </IndustrialCardTitle>
@@ -521,7 +514,7 @@ function ManufacturerProfilePage() {
                         <div className="md:col-span-2">
                           <Label
                             htmlFor="companyName"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Company Name
                           </Label>
@@ -541,8 +534,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <Building className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <Building className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.companyName || 'Not specified'}
                               </span>
@@ -553,7 +546,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="contactPerson"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Contact Person
                           </Label>
@@ -573,8 +566,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <User className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <User className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.contactPerson || 'Not specified'}
                               </span>
@@ -585,7 +578,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="contactEmail"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Contact Email
                           </Label>
@@ -605,8 +598,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <Mail className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <Mail className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.contactEmail || 'Not specified'}
                               </span>
@@ -617,7 +610,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="industry"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Industry
                           </Label>
@@ -637,8 +630,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <Factory className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <Factory className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.industry || 'Not specified'}
                               </span>
@@ -649,7 +642,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="phone"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Phone Number
                           </Label>
@@ -669,8 +662,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <Phone className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <Phone className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.phone || 'Not specified'}
                               </span>
@@ -681,7 +674,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="website"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Website
                           </Label>
@@ -701,8 +694,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <Globe className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <Globe className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.website || 'Not specified'}
                               </span>
@@ -713,7 +706,7 @@ function ManufacturerProfilePage() {
                         <div className="md:col-span-2">
                           <Label
                             htmlFor="address"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Street Address
                           </Label>
@@ -733,8 +726,8 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2 flex items-center space-x-2">
-                              <MapPin className="h-4 w-4 text-industrial-muted-foreground" />
-                              <span className="text-industrial-foreground">
+                              <MapPin className="h-4 w-4 text-gray-500" />
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.address || 'Not specified'}
                               </span>
@@ -745,7 +738,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="city"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             City
                           </Label>
@@ -764,7 +757,7 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2">
-                              <span className="text-industrial-foreground">
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.city || 'Not specified'}
                               </span>
@@ -775,7 +768,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="state"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             State
                           </Label>
@@ -794,7 +787,7 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2">
-                              <span className="text-industrial-foreground">
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.state || 'Not specified'}
                               </span>
@@ -805,7 +798,7 @@ function ManufacturerProfilePage() {
                         <div>
                           <Label
                             htmlFor="zipCode"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Zip Code
                           </Label>
@@ -824,7 +817,7 @@ function ManufacturerProfilePage() {
                             />
                           ) : (
                             <div className="mt-2">
-                              <span className="text-industrial-foreground">
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.zipCode || 'Not specified'}
                               </span>
@@ -835,7 +828,7 @@ function ManufacturerProfilePage() {
                         <div className="md:col-span-2">
                           <Label
                             htmlFor="description"
-                            className="text-industrial-foreground font-medium"
+                            className="text-gray-700 font-medium"
                           >
                             Company Description
                           </Label>
@@ -850,11 +843,11 @@ function ManufacturerProfilePage() {
                                   description: e.target.value,
                                 })
                               }
-                              className="mt-2 min-h-[100px] bg-industrial-background border-industrial-border text-industrial-foreground placeholder:text-industrial-muted-foreground focus:border-industrial-accent focus:ring-industrial-accent"
+                              className="mt-2 min-h-[100px] bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-500 focus:border-industrial-accent focus:ring-industrial-accent"
                             />
                           ) : (
                             <div className="mt-2">
-                              <span className="text-industrial-foreground">
+                              <span className="text-gray-800">
                                 {(currentProfile as ManufacturerProfile)
                                   ?.description || 'No description provided'}
                               </span>

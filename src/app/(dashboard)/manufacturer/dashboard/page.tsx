@@ -112,13 +112,13 @@ function ManufacturerDashboardPage() {
                 </p>
               </div>
               <div className="flex gap-3">
-                <Link href="/manufacturer/profile">
+                <Link href="/dashboard/manufacturer/profile">
                   <Button variant="industrial-secondary" size="sm">
                     <Settings className="h-4 w-4 mr-2" />
                     Profile
                   </Button>
                 </Link>
-                <Link href="/manufacturer/add-machine">
+                <Link href="/dashboard/manufacturer/add-machine">
                   <Button variant="industrial-primary" size="sm">
                     <Plus className="h-4 w-4 mr-2" />
                     Add Machine
@@ -150,10 +150,10 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Total Machines
                           </p>
-                          <p className="text-3xl font-bold text-industrial-primary">
+                          <p className="text-3xl font-bold text-gray-800">
                             {machineStats.total}
                           </p>
                         </div>
@@ -163,7 +163,7 @@ function ManufacturerDashboardPage() {
                           className="text-industrial-accent"
                         />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         {machineStats.active} currently active
                       </p>
                     </IndustrialCardContent>
@@ -176,16 +176,16 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Total Applications
                           </p>
-                          <p className="text-3xl font-bold text-industrial-primary">
+                          <p className="text-3xl font-bold text-emerald-500">
                             {applicationStats.total}
                           </p>
                         </div>
                         <Users className="h-8 w-8 text-emerald-500" />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         {applicationStats.pending} pending review
                       </p>
                     </IndustrialCardContent>
@@ -198,7 +198,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Approved Applications
                           </p>
                           <p className="text-3xl font-bold text-emerald-600">
@@ -207,7 +207,7 @@ function ManufacturerDashboardPage() {
                         </div>
                         <CheckCircle className="h-8 w-8 text-emerald-500" />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         Successfully processed
                       </p>
                     </IndustrialCardContent>
@@ -220,7 +220,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Pending Applications
                           </p>
                           <p className="text-3xl font-bold text-industrial-accent">
@@ -229,7 +229,7 @@ function ManufacturerDashboardPage() {
                         </div>
                         <Clock className="h-8 w-8 text-industrial-accent" />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         Awaiting your review
                       </p>
                     </IndustrialCardContent>
@@ -242,7 +242,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Active Machines
                           </p>
                           <p className="text-3xl font-bold text-blue-600">
@@ -251,7 +251,7 @@ function ManufacturerDashboardPage() {
                         </div>
                         <TrendingUp className="h-8 w-8 text-blue-500" />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         Available for applications
                       </p>
                     </IndustrialCardContent>
@@ -264,7 +264,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialCardContent className="p-6">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-medium text-industrial-secondary">
+                          <p className="text-sm font-medium text-gray-600">
                             Rejected Applications
                           </p>
                           <p className="text-3xl font-bold text-red-600">
@@ -273,7 +273,7 @@ function ManufacturerDashboardPage() {
                         </div>
                         <XCircle className="h-8 w-8 text-red-500" />
                       </div>
-                      <p className="text-xs text-industrial-muted mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         Declined requests
                       </p>
                     </IndustrialCardContent>
@@ -289,7 +289,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialIcon icon="gear" size="sm" />
                     Your Machines
                   </IndustrialCardTitle>
-                  <Link href="/manufacturer/machines">
+                  <Link href="/dashboard/manufacturer/machines">
                     <Button variant="industrial-secondary" size="sm">
                       <Eye className="h-4 w-4 mr-2" />
                       View All
@@ -320,7 +320,7 @@ function ManufacturerDashboardPage() {
                       <p className="text-industrial-secondary mb-4">
                         No machines listed yet
                       </p>
-                      <Link href="/manufacturer/add-machine">
+                      <Link href="/dashboard/manufacturer/add-machine">
                         <Button variant="industrial-primary">
                           <Plus className="h-4 w-4 mr-2" />
                           Add Your First Machine
@@ -364,7 +364,7 @@ function ManufacturerDashboardPage() {
                                 : 'Unavailable'}
                             </Badge>
                             <Link
-                              href={`/manufacturer/machines/${machine.id}/edit`}
+                              href={`/dashboard/manufacturer/machines/${machine.id}/edit`}
                             >
                               <Button variant="ghost" size="sm">
                                 <Edit className="h-4 w-4" />
@@ -386,7 +386,7 @@ function ManufacturerDashboardPage() {
                     <IndustrialIcon icon="hardhat" size="sm" />
                     Recent Applications
                   </IndustrialCardTitle>
-                  <Link href="/manufacturer/applications">
+                  <Link href="/dashboard/manufacturer/applications">
                     <Button variant="industrial-secondary" size="sm">
                       <Eye className="h-4 w-4 mr-2" />
                       View All
@@ -493,7 +493,10 @@ function ManufacturerDashboardPage() {
                 </IndustrialCardHeader>
                 <IndustrialCardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Link href="/manufacturer/add-machine" className="block">
+                    <Link
+                      href="/dashboard/manufacturer/add-machine"
+                      className="block"
+                    >
                       <Button
                         variant="industrial-outline"
                         className="w-full justify-start h-auto p-4 border-2 hover:bg-industrial-gunmetal-50"
@@ -502,12 +505,12 @@ function ManufacturerDashboardPage() {
                           <div className="h-10 w-10 bg-gradient-to-br from-industrial-safety-300 to-industrial-safety-400 rounded-lg flex items-center justify-center mr-3 shadow-industrial-sm">
                             <Plus className="h-5 w-5 text-industrial-gunmetal-800" />
                           </div>
-                          <div className="text-left">
+                          <div className="text-left flex flex-col">
                             <div className="font-medium text-industrial-gunmetal-800">
                               Add New Machine
                             </div>
                             <div className="text-xs text-industrial-secondary">
-                              List a new machine for applications
+                              List a new machine
                             </div>
                           </div>
                         </div>

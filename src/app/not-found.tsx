@@ -18,12 +18,12 @@ export default function NotFound() {
             <IndustrialIcon
               icon="wrench"
               size="xl"
-              className="text-industrial-muted-foreground mb-4"
+              className="text-gray-500 mb-4"
             />
-            <IndustrialHeader level={1} className="mb-4">
+            <IndustrialHeader level={1} className="mb-4 text-gray-800">
               404 - Page Not Found
             </IndustrialHeader>
-            <p className="text-industrial-muted-foreground text-lg mb-8">
+            <p className="text-gray-600 text-lg mb-8">
               The page you're looking for doesn't exist or has been moved.
             </p>
           </div>
@@ -31,14 +31,14 @@ export default function NotFound() {
           <div className="flex gap-4">
             <Button
               asChild
-              className="bg-industrial-primary hover:bg-industrial-primary/90"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Link href="/">Go Home</Link>
             </Button>
             <Button
               asChild
               variant="outline"
-              className="border-industrial-border"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
             >
               <Link href="/signin">Sign In</Link>
             </Button>

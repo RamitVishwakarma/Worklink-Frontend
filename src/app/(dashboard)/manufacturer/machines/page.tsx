@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   IndustrialCard,
@@ -114,8 +114,10 @@ function YourMachinesPage() {
     toggleMachineAvailability,
   } = useMachinesStore();
 
-  // Defensive array check
-  const machines = Array.isArray(rawMachines) ? rawMachines : [];
+  // Defensive array check with useMemo to prevent infinite re-renders
+  const machines = useMemo(() => {
+    return Array.isArray(rawMachines) ? rawMachines : [];
+  }, [rawMachines]);
 
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -182,7 +184,7 @@ function YourMachinesPage() {
   };
   useEffect(() => {
     fetchUserMachines();
-  }, [fetchUserMachines]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let filtered = Array.isArray(machines) ? [...machines] : [];
@@ -231,7 +233,7 @@ function YourMachinesPage() {
             <IndustrialIcon icon="wrench" size="lg" />
             <div>
               <IndustrialHeader level={1}>Your Machines</IndustrialHeader>
-              <p className="text-industrial-gunmetal-600 mt-2">
+              <p className="text-gray-600 mt-2">
                 Manage and monitor your industrial equipment
               </p>
             </div>
@@ -240,14 +242,14 @@ function YourMachinesPage() {
             {[...Array(6)].map((_, index) => (
               <IndustrialCard key={index}>
                 <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-3/4 bg-industrial-muted" />
-                  <Skeleton className="h-4 w-1/2 bg-industrial-muted" />
+                  <Skeleton className="h-6 w-3/4 bg-gray-200" />
+                  <Skeleton className="h-4 w-1/2 bg-gray-200" />
                 </IndustrialCardHeader>
                 <IndustrialCardContent>
-                  <Skeleton className="h-20 w-full bg-industrial-muted" />
+                  <Skeleton className="h-20 w-full bg-gray-200" />
                   <div className="flex gap-2 mt-4">
-                    <Skeleton className="h-8 w-20 bg-industrial-muted" />
-                    <Skeleton className="h-8 w-20 bg-industrial-muted" />
+                    <Skeleton className="h-8 w-20 bg-gray-200" />
+                    <Skeleton className="h-8 w-20 bg-gray-200" />
                   </div>
                 </IndustrialCardContent>
               </IndustrialCard>
@@ -273,7 +275,7 @@ function YourMachinesPage() {
               <IndustrialIcon icon="wrench" size="lg" />
               <div>
                 <IndustrialHeader level={1}>Your Machines</IndustrialHeader>
-                <p className="text-industrial-gunmetal-600 mt-2">
+                <p className="text-gray-600 mt-2">
                   Manage and monitor your industrial equipment
                 </p>
               </div>
@@ -288,10 +290,8 @@ function YourMachinesPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Total Machines
-                    </p>
-                    <p className="text-2xl font-bold text-industrial-foreground">
+                    <p className="text-sm text-gray-600">Total Machines</p>
+                    <p className="text-2xl font-bold text-gray-800">
                       {machines.length}
                     </p>
                   </div>{' '}
@@ -307,9 +307,7 @@ function YourMachinesPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Available
-                    </p>
+                    <p className="text-sm text-gray-600">Available</p>
                     <p className="text-2xl font-bold text-industrial-accent">
                       {Array.isArray(machines)
                         ? machines.filter(
@@ -330,9 +328,7 @@ function YourMachinesPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Unavailable
-                    </p>
+                    <p className="text-sm text-gray-600">Unavailable</p>
                     <p className="text-2xl font-bold text-red-500">
                       {Array.isArray(machines)
                         ? machines.filter(
@@ -350,17 +346,12 @@ function YourMachinesPage() {
               <IndustrialCardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-industrial-muted-foreground">
-                      Machine Types
-                    </p>
-                    <p className="text-2xl font-bold text-industrial-secondary">
+                    <p className="text-sm text-gray-600">Machine Types</p>
+                    <p className="text-2xl font-bold text-gray-800">
                       {machineTypes.length}
                     </p>
                   </div>{' '}
-                  <IndustrialIcon
-                    icon="gear"
-                    className="text-industrial-secondary"
-                  />
+                  <IndustrialIcon icon="gear" className="text-gray-600" />
                 </div>
               </IndustrialCardContent>
             </IndustrialCard>
@@ -435,7 +426,7 @@ function YourMachinesPage() {
             </div>
 
             <Button
-              onClick={() => router.push('/manufacturer/add-machine')}
+              onClick={() => router.push('/dashboard/manufacturer/add-machine')}
               className="bg-industrial-accent hover:bg-industrial-accent/90 text-industrial-background"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -452,15 +443,15 @@ function YourMachinesPage() {
                     <IndustrialIcon
                       icon="wrench"
                       size="lg"
-                      className="text-industrial-muted-foreground"
+                      className="text-gray-400"
                     />
                     <div>
-                      <h3 className="text-lg font-semibold text-industrial-foreground mb-2">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
                         {machines.length === 0
                           ? 'No machines yet'
                           : 'No matches found'}
                       </h3>
-                      <p className="text-industrial-muted-foreground mb-4">
+                      <p className="text-gray-600 mb-4">
                         {machines.length === 0
                           ? 'Start by adding your first industrial machine'
                           : 'Try adjusting your search or filter criteria'}
@@ -468,7 +459,7 @@ function YourMachinesPage() {
                       {machines.length === 0 && (
                         <Button
                           onClick={() =>
-                            router.push('/manufacturer/add-machine')
+                            router.push('/dashboard/manufacturer/add-machine')
                           }
                           className="bg-industrial-accent hover:bg-industrial-accent/90 text-industrial-background"
                         >
@@ -528,7 +519,7 @@ function YourMachinesPage() {
                                     <DropdownMenuItem
                                       onClick={() =>
                                         router.push(
-                                          `/manufacturer/machines/${machine._id || machine.id}`
+                                          `/dashboard/manufacturer/machines/${machine._id || machine.id}`
                                         )
                                       }
                                     >
@@ -538,7 +529,7 @@ function YourMachinesPage() {
                                     <DropdownMenuItem
                                       onClick={() =>
                                         router.push(
-                                          `/manufacturer/machines/${machine._id || machine.id}/applications`
+                                          `/dashboard/manufacturer/machines/${machine._id || machine.id}/applications`
                                         )
                                       }
                                     >
