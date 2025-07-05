@@ -203,34 +203,34 @@ const WorkerMachinesPage = () => {
   if (isLoading) {
     return (
       <IndustrialLayout>
-        <IndustrialContainer className="py-8">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Skeleton className="h-12 w-12 rounded-md" />
+        <IndustrialContainer className="py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Skeleton className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-md" />
               <div>
-                <Skeleton className="h-8 w-48 mb-2" />
-                <Skeleton className="h-4 w-64" />
+                <Skeleton className="h-6 sm:h-7 md:h-8 w-32 sm:w-40 md:w-48 mb-1 sm:mb-2" />
+                <Skeleton className="h-3 sm:h-3.5 md:h-4 w-40 sm:w-56 md:w-64" />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-10" />
+                <Skeleton key={i} className="h-8 sm:h-9 md:h-10" />
               ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
               {[...Array(6)].map((_, i) => (
                 <IndustrialCard key={i} variant="industrial">
-                  <IndustrialCardHeader>
-                    <Skeleton className="h-5 w-32" />
-                    <Skeleton className="h-4 w-48" />
+                  <IndustrialCardHeader className="p-3 sm:p-4">
+                    <Skeleton className="h-4 sm:h-5 w-24 sm:w-32" />
+                    <Skeleton className="h-3 sm:h-4 w-32 sm:w-48" />
                   </IndustrialCardHeader>
-                  <IndustrialCardContent>
-                    <div className="space-y-4">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-10 w-full" />
+                  <IndustrialCardContent className="p-3 sm:p-4">
+                    <div className="space-y-2 sm:space-y-4">
+                      <Skeleton className="h-3 sm:h-4 w-full" />
+                      <Skeleton className="h-3 sm:h-4 w-3/4" />
+                      <Skeleton className="h-8 sm:h-10 w-full" />
                     </div>
                   </IndustrialCardContent>
                 </IndustrialCard>
@@ -244,20 +244,22 @@ const WorkerMachinesPage = () => {
 
   return (
     <IndustrialLayout>
-      <IndustrialContainer className="py-8">
-        <IndustrialHeader className="mb-8">
-          <div className="flex items-center gap-3">
-            <IndustrialIcon
-              icon="wrench"
-              size="lg"
-              animated
-              className="text-industrial-accent"
-            />
+      <IndustrialContainer className="py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8">
+        <IndustrialHeader className="mb-4 sm:mb-6 md:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-2 sm:p-3 aspect-square bg-gradient-to-br from-industrial-accent/20 to-industrial-accent/10 rounded-md border border-industrial-accent/30 flex items-center justify-center">
+              <IndustrialIcon
+                icon="wrench"
+                size="sm"
+                animated
+                className="text-industrial-accent h-5 w-5 sm:h-6 sm:w-6"
+              />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
                 Available Machines
               </h1>
-              <p className="text-industrial-secondary">
+              <p className="text-xs sm:text-sm text-industrial-secondary">
                 Browse and apply to use machines from manufacturers
               </p>
             </div>
@@ -273,15 +275,21 @@ const WorkerMachinesPage = () => {
           {/* Filters */}
           <motion.div variants={itemVariants}>
             <IndustrialCard variant="industrial">
-              <IndustrialCardHeader>
+              <IndustrialCardHeader className="p-3 sm:p-4 md:p-6 pb-2 sm:pb-3">
                 <IndustrialCardTitle className="flex items-center gap-2">
-                  <IndustrialIcon icon="gear" size="sm" />
-                  Filters
+                  <div className="p-1.5 bg-industrial-gunmetal-200/50 rounded-md flex items-center justify-center">
+                    <IndustrialIcon
+                      icon="gear"
+                      size="sm"
+                      className="h-4 w-4 text-industrial-gunmetal-700"
+                    />
+                  </div>
+                  <span className="text-base sm:text-lg">Filters</span>
                 </IndustrialCardTitle>
               </IndustrialCardHeader>
 
-              <IndustrialCardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <IndustrialCardContent className="p-3 sm:p-4 md:p-6 pt-2 sm:pt-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Search</label>
                     <div className="relative">
@@ -397,7 +405,7 @@ const WorkerMachinesPage = () => {
 
           {/* Results Count */}
           <motion.div variants={itemVariants}>
-            <p className="text-sm text-industrial-secondary font-industrial-body my-4">
+            <p className="text-xs sm:text-sm text-industrial-secondary font-industrial-body my-2 sm:my-3 md:my-4">
               Showing {filteredMachines?.length || 0} of {machines?.length || 0}{' '}
               machines
             </p>
@@ -405,22 +413,22 @@ const WorkerMachinesPage = () => {
 
           {/* Machines Grid */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6"
             variants={containerVariants}
           >
             {!filteredMachines || filteredMachines.length === 0 ? (
               <motion.div className="col-span-full" variants={itemVariants}>
                 <IndustrialCard variant="industrial">
-                  <IndustrialCardContent className="flex flex-col items-center justify-center py-16">
+                  <IndustrialCardContent className="flex flex-col items-center justify-center py-8 sm:py-12 md:py-16">
                     <IndustrialIcon
                       icon="wrench"
-                      size="xl"
-                      className="mb-4 text-industrial-secondary"
+                      size="lg"
+                      className="mb-3 sm:mb-4 text-industrial-secondary h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12"
                     />
-                    <h3 className="text-lg font-semibold font-industrial-body mb-2">
+                    <h3 className="text-base sm:text-lg font-semibold font-industrial-body mb-2">
                       No Machines Found
                     </h3>
-                    <p className="text-industrial-secondary text-center">
+                    <p className="text-xs sm:text-sm text-industrial-secondary text-center max-w-xs">
                       {searchTerm ||
                       locationFilter ||
                       typeFilter ||
@@ -442,22 +450,22 @@ const WorkerMachinesPage = () => {
                     variant="industrial"
                     className="h-full flex flex-col"
                   >
-                    <IndustrialCardHeader>
+                    <IndustrialCardHeader className="p-3 sm:p-4 md:p-6 pb-2 sm:pb-3">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <IndustrialCardTitle className="text-lg">
+                          <IndustrialCardTitle className="text-base sm:text-lg text-industrial-gunmetal-800">
                             {machine.name}
                           </IndustrialCardTitle>
-                          <IndustrialCardDescription className="flex items-center gap-1 mt-1">
+                          <IndustrialCardDescription className="flex items-center gap-1 mt-1 text-xs sm:text-sm">
                             <Building2 className="h-3 w-3" />
                             {machine.manufacturer}
                           </IndustrialCardDescription>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
+                        <div className="flex flex-col items-end gap-1 sm:gap-2">
                           {machine.isAvailable ? (
                             <Badge
                               variant="industrial-success"
-                              className="flex items-center gap-1"
+                              className="flex items-center gap-1 text-xs py-0.5 px-1.5 sm:px-2"
                             >
                               <CheckCircle className="h-3 w-3" />
                               Available
@@ -465,7 +473,7 @@ const WorkerMachinesPage = () => {
                           ) : (
                             <Badge
                               variant="industrial-danger"
-                              className="flex items-center gap-1"
+                              className="flex items-center gap-1 text-xs py-0.5 px-1.5 sm:px-2"
                             >
                               <XCircle className="h-3 w-3" />
                               Unavailable
@@ -475,52 +483,55 @@ const WorkerMachinesPage = () => {
                       </div>
                     </IndustrialCardHeader>
 
-                    <IndustrialCardContent className="flex-1 flex flex-col">
-                      <div className="space-y-3 flex-1">
-                        <p className="text-sm text-industrial-secondary line-clamp-2">
+                    <IndustrialCardContent className="flex-1 flex flex-col p-3 sm:p-4 md:p-6 pt-2 sm:pt-3">
+                      <div className="space-y-2 sm:space-y-3 flex-1">
+                        <p className="text-xs sm:text-sm text-industrial-secondary line-clamp-2 sm:line-clamp-3">
                           {machine.description}
                         </p>
 
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-sm">
+                        <div className="space-y-1.5 sm:space-y-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
                             <IndustrialIcon
                               icon="wrench"
                               size="sm"
-                              className="text-industrial-secondary"
+                              className="text-industrial-secondary h-3.5 w-3.5"
                             />
                             <span className="font-medium">Type:</span>
-                            <Badge variant="industrial-outline">
+                            <Badge
+                              variant="industrial-outline"
+                              className="text-xs py-0.5 px-1.5"
+                            >
                               {machine.type}
                             </Badge>
                           </div>
 
-                          <div className="flex items-center gap-2 text-sm text-industrial-secondary">
-                            <MapPin className="h-4 w-4" />
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-industrial-secondary">
+                            <MapPin className="h-3.5 w-3.5" />
                             {machine.location}
                           </div>
 
                           {machine.pricePerHour && (
-                            <div className="flex items-center gap-2 text-sm text-industrial-secondary">
-                              <DollarSign className="h-4 w-4" />$
+                            <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-industrial-secondary">
+                              <DollarSign className="h-3.5 w-3.5" />$
                               {machine.pricePerHour}/hour
                             </div>
                           )}
 
-                          <div className="flex items-center gap-2 text-sm text-industrial-secondary">
-                            <Calendar className="h-4 w-4" />
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-industrial-secondary">
+                            <Calendar className="h-3.5 w-3.5" />
                             Listed:{' '}
                             {new Date(machine.createdAt).toLocaleDateString()}
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-4 border-t border-industrial-gunmetal-200">
+                      <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-industrial-gunmetal-200">
                         {machine.hasApplied ? (
                           <Button
                             disabled
-                            className="w-full bg-industrial-navy-100 text-industrial-navy-600 border border-industrial-navy-300"
+                            className="w-full bg-industrial-navy-100 text-industrial-navy-600 border border-industrial-navy-300 text-xs sm:text-sm h-8 sm:h-9"
                           >
-                            <Clock className="h-4 w-4 mr-2" />
+                            <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                             Application Pending
                           </Button>
                         ) : (
@@ -530,16 +541,16 @@ const WorkerMachinesPage = () => {
                               handleApplyToMachine(machine.id, 'worker')
                             }
                             disabled={!machine.isAvailable || isApplying}
-                            className="w-full"
+                            className="w-full text-xs sm:text-sm h-8 sm:h-9"
                           >
                             {isApplying ? (
                               <>
-                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2 animate-spin" />
                                 Applying...
                               </>
                             ) : (
                               <>
-                                <Wrench className="h-4 w-4 mr-2" />
+                                <Wrench className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                                 Apply to Use
                               </>
                             )}
