@@ -33,18 +33,16 @@ const DashboardNavLink = ({
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-industrial transition-all duration-200',
+        'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
         active
           ? 'bg-industrial-safety-100 text-industrial-safety-900 border-l-4 border-industrial-safety-400'
-          : 'text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
       )}
     >
       <IndustrialIcon
         icon={icon}
         size="sm"
-        className={
-          active ? 'text-industrial-safety-600' : 'text-industrial-gunmetal-400'
-        }
+        className={active ? 'text-industrial-safety-600' : 'text-gray-400'}
       />
       <span className="font-medium">{label}</span>
     </Link>
@@ -150,9 +148,9 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-industrial-gunmetal-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top navigation bar */}
-      <div className="bg-white border-b border-industrial-border shadow-sm py-5 h-[80px]">
+      <div className="bg-white border-b border-gray-200 shadow-sm py-5 h-[80px]">
         {/* <div className="container mx-auto px-4">
           <Breadcrumb items={getBreadcrumbItems()} className="text-sm" />
         </div> */}
@@ -160,14 +158,12 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <div className="w-64 bg-white border-r border-industrial-border shadow-industrial hidden lg:block">
-          <div className="p-4 border-b border-industrial-border">
-            <h2 className="font-oswald font-bold text-xl text-industrial-gunmetal-800">
+        <div className="w-64 bg-white border-r border-gray-200 shadow-sm hidden lg:block">
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="font-oswald font-bold text-xl text-gray-800">
               {capitalize(userType)} Portal
             </h2>
-            <p className="text-sm text-industrial-gunmetal-500">
-              Manage your industrial work
-            </p>
+            <p className="text-sm text-gray-600">Manage your industrial work</p>
           </div>
 
           <nav className="p-4 space-y-2">
@@ -181,21 +177,21 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
               />
             ))}
 
-            <div className="pt-4 mt-4 border-t border-industrial-border">
+            <div className="pt-4 mt-4 border-t border-gray-200">
               <Link
                 href="/"
-                className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
               >
                 <IndustrialIcon
                   icon="gear"
                   size="sm"
-                  className="text-industrial-gunmetal-400"
+                  className="text-gray-400"
                 />
                 <span className="font-medium">Home</span>
               </Link>
               <Link
                 href="/signin"
-                className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
               >
                 {/* Using imported Lucide icon for logout */}
                 <LogOut className="size-4" />
@@ -206,21 +202,21 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
         </div>
 
         {/* Mobile navigation */}
-        <div className="lg:hidden w-full bg-white p-4 border-b border-industrial-border shadow-sm">
+        <div className="lg:hidden w-full bg-white p-4 border-b border-gray-200 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="font-oswald font-bold text-xl text-industrial-gunmetal-800">
+            <h2 className="font-oswald font-bold text-xl text-gray-800">
               {capitalize(userType)} Portal
             </h2>
 
             <details className="dropdown dropdown-end relative">
-              <summary className="p-2 bg-industrial-navy-800/10 rounded-industrial hover:bg-industrial-navy-800/20 cursor-pointer transition-all duration-200 border border-industrial-navy-800/20">
+              <summary className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 cursor-pointer transition-all duration-200 border border-gray-200">
                 <IndustrialIcon
                   icon="gear"
                   size="sm"
-                  className="text-industrial-navy-800"
+                  className="text-gray-700"
                 />
               </summary>
-              <div className="dropdown-menu absolute right-0 mt-2 w-64 bg-white rounded-industrial border border-industrial-border shadow-industrial z-50">
+              <div className="dropdown-menu absolute right-0 mt-2 w-64 bg-white rounded-lg border border-gray-200 shadow-lg z-50">
                 <nav className="p-2 space-y-1">
                   {getNavLinks().map((link) => (
                     <DashboardNavLink
@@ -232,23 +228,23 @@ export function DashboardLayout({ children, userType }: DashboardLayoutProps) {
                     />
                   ))}
 
-                  <div className="pt-2 mt-2 border-t border-industrial-border">
+                  <div className="pt-2 mt-2 border-t border-gray-200">
                     <Link
                       href="/"
-                      className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
                     >
                       <IndustrialIcon
                         icon="gear"
                         size="sm"
-                        className="text-industrial-gunmetal-400"
+                        className="text-gray-400"
                       />
                       <span className="font-medium">Home</span>
                     </Link>
                     <Link
                       href="/signin"
-                      className="flex items-center gap-3 px-4 py-3 rounded-industrial text-industrial-gunmetal-600 hover:bg-industrial-gunmetal-100 hover:text-industrial-gunmetal-900 transition-all duration-200"
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
                     >
-                      <LogOut className="h-4 w-4 text-industrial-gunmetal-400" />
+                      <LogOut className="h-4 w-4 text-gray-400" />
                       <span className="font-medium">Sign Out</span>
                     </Link>
                   </div>

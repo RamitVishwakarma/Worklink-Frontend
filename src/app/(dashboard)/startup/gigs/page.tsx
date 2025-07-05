@@ -115,7 +115,7 @@ const getStatusBadge = (isActive: boolean, applicationCount: number = 0) => {
     return (
       <Badge
         variant="industrial-secondary"
-        className="bg-industrial-safety-300/20 text-industrial-safety-300 border-industrial-safety-300/30 shadow-sm hover:shadow-md transition-shadow"
+        className="bg-green-100 text-green-700 border-green-200 shadow-sm hover:shadow-md transition-shadow"
       >
         <CheckCircle className="h-3 w-3 mr-1" />
         Active
@@ -125,7 +125,7 @@ const getStatusBadge = (isActive: boolean, applicationCount: number = 0) => {
     return (
       <Badge
         variant="industrial-outline"
-        className="bg-industrial-muted/20 text-industrial-muted-foreground border-industrial-border shadow-sm"
+        className="bg-gray-100 text-gray-600 border-gray-200 shadow-sm"
       >
         <XCircle className="h-3 w-3 mr-1" />
         Inactive
@@ -205,16 +205,16 @@ function StartupGigsPage() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-8 w-48 mb-2 bg-industrial-muted" />
-                <Skeleton className="h-4 w-64 bg-industrial-muted" />
+                <Skeleton className="h-8 w-48 mb-2 bg-gray-200" />
+                <Skeleton className="h-4 w-64 bg-gray-200" />
               </div>
-              <Skeleton className="h-10 w-32 bg-industrial-muted" />
+              <Skeleton className="h-10 w-32 bg-gray-200" />
             </div>
 
             <IndustrialCard>
               <IndustrialCardHeader>
-                <Skeleton className="h-6 w-32 bg-industrial-muted" />
-                <Skeleton className="h-4 w-48 bg-industrial-muted" />
+                <Skeleton className="h-6 w-32 bg-gray-200" />
+                <Skeleton className="h-4 w-48 bg-gray-200" />
               </IndustrialCardHeader>
               <IndustrialCardContent>
                 <div className="space-y-4">
@@ -224,13 +224,13 @@ function StartupGigsPage() {
                       className="flex items-center justify-between p-4 border border-industrial-border rounded"
                     >
                       <div className="space-y-2">
-                        <Skeleton className="h-5 w-32 bg-industrial-muted" />
-                        <Skeleton className="h-4 w-48 bg-industrial-muted" />
+                        <Skeleton className="h-5 w-32 bg-gray-200" />
+                        <Skeleton className="h-4 w-48 bg-gray-200" />
                       </div>
                       <div className="flex gap-2">
-                        <Skeleton className="h-8 w-16 bg-industrial-muted" />
-                        <Skeleton className="h-8 w-20 bg-industrial-muted" />
-                        <Skeleton className="h-8 w-20 bg-industrial-muted" />
+                        <Skeleton className="h-8 w-16 bg-gray-200" />
+                        <Skeleton className="h-8 w-20 bg-gray-200" />
+                        <Skeleton className="h-8 w-20 bg-gray-200" />
                       </div>
                     </div>
                   ))}
@@ -310,10 +310,10 @@ function StartupGigsPage() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                   >
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-industrial-foreground via-industrial-accent to-industrial-foreground bg-clip-text text-transparent mb-2">
+                    <h1 className="text-4xl font-bold text-gray-800 mb-2">
                       Your Gigs
                     </h1>
-                    <p className="text-industrial-muted-foreground text-lg">
+                    <p className="text-gray-600 text-lg">
                       Manage your industrial job postings and track applications
                     </p>
                   </motion.div>
@@ -375,10 +375,10 @@ function StartupGigsPage() {
                       <Eye className="h-6 w-6 text-industrial-accent" />
                     </motion.div>
                     <div>
-                      <p className="text-sm font-medium text-industrial-muted-foreground">
+                      <p className="text-sm font-medium text-gray-600">
                         Total Gigs
                       </p>
-                      <p className="text-3xl font-bold text-industrial-foreground">
+                      <p className="text-3xl font-bold text-gray-800">
                         {stats.total}
                       </p>
                     </div>
@@ -420,10 +420,10 @@ function StartupGigsPage() {
                       <CheckCircle className="h-6 w-6 text-industrial-safety-400" />
                     </motion.div>
                     <div>
-                      <p className="text-sm font-medium text-industrial-muted-foreground">
+                      <p className="text-sm font-medium text-gray-600">
                         Active Gigs
                       </p>
-                      <p className="text-3xl font-bold text-industrial-foreground">
+                      <p className="text-3xl font-bold text-gray-800">
                         {stats.active}
                       </p>
                     </div>
@@ -464,10 +464,10 @@ function StartupGigsPage() {
                       <Users className="h-6 w-6 text-industrial-navy-400" />
                     </motion.div>
                     <div>
-                      <p className="text-sm font-medium text-industrial-muted-foreground">
+                      <p className="text-sm font-medium text-gray-600">
                         Total Applications
                       </p>
-                      <p className="text-3xl font-bold text-industrial-foreground">
+                      <p className="text-3xl font-bold text-gray-800">
                         {stats.totalApplications}
                       </p>
                     </div>
@@ -512,13 +512,13 @@ function StartupGigsPage() {
                     >
                       <IndustrialIcon
                         icon="factory"
-                        className="h-16 w-16 text-industrial-muted-foreground mb-4"
+                        className="h-16 w-16 text-gray-400 mb-4"
                       />
                     </motion.div>
-                    <h3 className="text-xl font-bold mb-2 text-industrial-foreground">
+                    <h3 className="text-xl font-bold mb-2 text-gray-800">
                       No Industrial Gigs Created
                     </h3>
-                    <p className="text-industrial-muted-foreground text-center mb-6 max-w-md">
+                    <p className="text-gray-600 text-center mb-6 max-w-md">
                       You haven't created any gigs yet. Start by posting your
                       first industrial job opportunity and connect with skilled
                       workers.
@@ -577,11 +577,11 @@ function StartupGigsPage() {
                           className="text-emerald-500"
                         />
                       </motion.div>
-                      <span className="text-industrial-foreground font-bold">
+                      <span className="text-gray-800 font-bold">
                         All Industrial Gigs
                       </span>
                     </IndustrialCardTitle>
-                    <IndustrialCardDescription className="text-industrial-muted-foreground">
+                    <IndustrialCardDescription className="text-gray-600">
                       Manage your industrial job postings and monitor
                       applications
                     </IndustrialCardDescription>
@@ -589,54 +589,51 @@ function StartupGigsPage() {
 
                   <IndustrialCardContent className="relative z-10">
                     <div className="hidden md:block">
-                      <Table className="border-industrial-border">
+                      <Table className="border-gray-200">
                         {' '}
                         <TableHeader>
-                          <TableRow className="border-industrial-border bg-industrial-muted/20">
-                            <TableHead className="text-industrial-foreground font-semibold">
+                          <TableRow className="border-gray-200 bg-gray-50">
+                            <TableHead className="text-gray-800 font-semibold">
                               Title
                             </TableHead>
-                            <TableHead className="text-industrial-foreground">
+                            <TableHead className="text-gray-800">
                               Location
                             </TableHead>
-                            <TableHead className="text-industrial-foreground">
+                            <TableHead className="text-gray-800">
                               Salary
                             </TableHead>
-                            <TableHead className="text-industrial-foreground">
+                            <TableHead className="text-gray-800">
                               Applications
                             </TableHead>
-                            <TableHead className="text-industrial-foreground">
+                            <TableHead className="text-gray-800">
                               Status
                             </TableHead>
-                            <TableHead className="text-industrial-foreground">
+                            <TableHead className="text-gray-800">
                               Created
                             </TableHead>
-                            <TableHead className="text-right text-industrial-foreground">
+                            <TableHead className="text-right text-gray-800">
                               Actions
                             </TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {userGigs.map((gig) => (
-                            <TableRow
-                              key={gig.id}
-                              className="border-industrial-border"
-                            >
-                              <TableCell className="font-medium text-industrial-foreground">
+                            <TableRow key={gig.id} className="border-gray-200">
+                              <TableCell className="font-medium text-gray-800">
                                 {gig.title}
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center space-x-2">
-                                  <MapPin className="h-4 w-4 text-industrial-muted-foreground" />
-                                  <span className="text-industrial-foreground">
+                                  <MapPin className="h-4 w-4 text-gray-500" />
+                                  <span className="text-gray-700">
                                     {gig.location}
                                   </span>
                                 </div>
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center space-x-2">
-                                  <DollarSign className="h-4 w-4 text-industrial-muted-foreground" />
-                                  <span className="text-industrial-foreground">
+                                  <DollarSign className="h-4 w-4 text-gray-500" />
+                                  <span className="text-gray-700">
                                     {gig.salary
                                       ? `$${gig.salary.toLocaleString()}`
                                       : 'Not specified'}
@@ -645,8 +642,8 @@ function StartupGigsPage() {
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center space-x-2">
-                                  <Users className="h-4 w-4 text-industrial-muted-foreground" />
-                                  <span className="text-industrial-foreground">
+                                  <Users className="h-4 w-4 text-gray-500" />
+                                  <span className="text-gray-700">
                                     {gig.applicationCount || 0}
                                   </span>
                                 </div>
@@ -659,8 +656,8 @@ function StartupGigsPage() {
                               </TableCell>
                               <TableCell>
                                 <div className="flex items-center space-x-2">
-                                  <Calendar className="h-4 w-4 text-industrial-muted-foreground" />
-                                  <span className="text-industrial-foreground">
+                                  <Calendar className="h-4 w-4 text-gray-500" />
+                                  <span className="text-gray-700">
                                     {new Date(
                                       gig.createdAt
                                     ).toLocaleDateString()}
@@ -715,16 +712,16 @@ function StartupGigsPage() {
                       {userGigs.map((gig) => (
                         <motion.div
                           key={gig.id}
-                          className="border border-industrial-border rounded-lg p-4 space-y-3 bg-industrial-muted/10"
+                          className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50"
                           whileHover={{ scale: 1.01 }}
                           transition={{ duration: 0.2 }}
                         >
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-industrial-foreground">
+                              <h3 className="font-semibold text-gray-800">
                                 {gig.title}
                               </h3>
-                              <div className="flex items-center gap-4 mt-1 text-sm text-industrial-muted-foreground">
+                              <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
                                 <div className="flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
                                   {gig.location}
@@ -742,11 +739,11 @@ function StartupGigsPage() {
 
                           <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-4">
-                              <div className="flex items-center gap-1 text-industrial-muted-foreground">
+                              <div className="flex items-center gap-1 text-gray-600">
                                 <Users className="h-3 w-3" />
                                 {gig.applicationCount || 0} applications
                               </div>
-                              <div className="flex items-center gap-1 text-industrial-muted-foreground">
+                              <div className="flex items-center gap-1 text-gray-600">
                                 <Calendar className="h-3 w-3" />
                                 {new Date(gig.createdAt).toLocaleDateString()}
                               </div>

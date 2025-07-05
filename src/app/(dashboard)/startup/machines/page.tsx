@@ -50,9 +50,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 const StartupMachinesPage = () => {
   const [filteredMachines, setFilteredMachines] = useState<Machine[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [availabilityFilter, setAvailabilityFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('all-locations');
+  const [typeFilter, setTypeFilter] = useState('all-types');
+  const [availabilityFilter, setAvailabilityFilter] = useState('all-machines');
 
   const { toast } = useToast();
   const { user } = useAuthStore(); // Store data
@@ -74,21 +74,21 @@ const StartupMachinesPage = () => {
     }
 
     // Location filter
-    if (locationFilter) {
+    if (locationFilter && locationFilter !== 'all-locations') {
       filtered = filtered.filter((machine) =>
         machine.location.toLowerCase().includes(locationFilter.toLowerCase())
       );
     }
 
     // Type filter
-    if (typeFilter) {
+    if (typeFilter && typeFilter !== 'all-types') {
       filtered = filtered.filter((machine) =>
         machine.type.toLowerCase().includes(typeFilter.toLowerCase())
       );
     }
 
     // Availability filter
-    if (availabilityFilter) {
+    if (availabilityFilter && availabilityFilter !== 'all-machines') {
       if (availabilityFilter === 'available') {
         filtered = filtered.filter((machine) => machine.isAvailable);
       } else if (availabilityFilter === 'unavailable') {
@@ -198,7 +198,7 @@ const StartupMachinesPage = () => {
               <h1 className="text-3xl font-bold tracking-tight">
                 Available Machines
               </h1>
-              <p className="text-industrial-secondary">
+              <p className="text-gray-600">
                 Browse and apply to use manufacturing machines from verified
                 manufacturers.
               </p>
@@ -249,7 +249,9 @@ const StartupMachinesPage = () => {
                       <SelectValue placeholder="All locations" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All locations</SelectItem>
+                      <SelectItem value="all-locations">
+                        All locations
+                      </SelectItem>
                       {uniqueLocations.map((location) => (
                         <SelectItem key={location} value={location}>
                           {location}
@@ -266,7 +268,7 @@ const StartupMachinesPage = () => {
                       <SelectValue placeholder="All types" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All types</SelectItem>
+                      <SelectItem value="all-types">All types</SelectItem>
                       {uniqueTypes.map((type) => (
                         <SelectItem key={type} value={type}>
                           {type}
@@ -286,7 +288,7 @@ const StartupMachinesPage = () => {
                       <SelectValue placeholder="All" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All</SelectItem>
+                      <SelectItem value="all-machines">All</SelectItem>
                       <SelectItem value="available">Available</SelectItem>
                       <SelectItem value="unavailable">Unavailable</SelectItem>
                     </SelectContent>
@@ -320,12 +322,12 @@ const StartupMachinesPage = () => {
                   <IndustrialIcon
                     icon="wrench"
                     size="xl"
-                    className="text-industrial-secondary mb-4"
+                    className="text-gray-600 mb-4"
                   />
                   <h3 className="text-lg font-semibold mb-2">
                     No machines found
                   </h3>
-                  <p className="text-industrial-secondary text-center max-w-md">
+                  <p className="text-gray-600 text-center max-w-md">
                     No machines match your current filters. Try adjusting your
                     search criteria.
                   </p>
@@ -356,29 +358,29 @@ const StartupMachinesPage = () => {
                         </div>
                       </IndustrialCardHeader>
                       <IndustrialCardContent className="space-y-4">
-                        <p className="text-sm text-industrial-secondary line-clamp-3">
+                        <p className="text-sm text-gray-600 line-clamp-3">
                           {machine.description}
                         </p>
 
                         <div className="space-y-2 text-sm">
-                          <div className="flex items-center gap-2 text-industrial-secondary">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <Building2 className="h-4 w-4" />
                             <span>Manufacturer ID: {machine.manufacturer}</span>
                           </div>
 
-                          <div className="flex items-center gap-2 text-industrial-secondary">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <MapPin className="h-4 w-4" />
                             <span>{machine.location}</span>
                           </div>
 
                           {machine.pricePerHour && (
-                            <div className="flex items-center gap-2 text-industrial-secondary">
+                            <div className="flex items-center gap-2 text-gray-600">
                               <DollarSign className="h-4 w-4" />
                               <span>${machine.pricePerHour}/hour</span>
                             </div>
                           )}
 
-                          <div className="flex items-center gap-2 text-industrial-secondary">
+                          <div className="flex items-center gap-2 text-gray-600">
                             <Calendar className="h-4 w-4" />
                             <span>
                               Listed{' '}

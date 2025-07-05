@@ -138,22 +138,23 @@ function StartupDashboardPage() {
     return (
       <IndustrialLayout>
         <IndustrialContainer>
+          {' '}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <Skeleton className="h-8 w-64 mb-2 bg-industrial-muted" />
-                <Skeleton className="h-4 w-96 bg-industrial-muted" />
+                <Skeleton className="h-8 w-64 mb-2 bg-industrial-gunmetal-200/50" />
+                <Skeleton className="h-4 w-96 bg-industrial-gunmetal-200/50" />
               </div>
-              <Skeleton className="h-10 w-32 bg-industrial-muted" />
+              <Skeleton className="h-10 w-32 bg-industrial-gunmetal-200/50" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
                 <IndustrialCard key={i}>
                   <IndustrialCardContent className="p-6">
-                    <Skeleton className="h-12 w-12 mb-4 bg-industrial-muted" />
-                    <Skeleton className="h-4 w-24 mb-2 bg-industrial-muted" />
-                    <Skeleton className="h-8 w-16 bg-industrial-muted" />
+                    <Skeleton className="h-12 w-12 mb-4 bg-industrial-gunmetal-200/50" />
+                    <Skeleton className="h-4 w-24 mb-2 bg-industrial-gunmetal-200/50" />
+                    <Skeleton className="h-8 w-16 bg-industrial-gunmetal-200/50" />
                   </IndustrialCardContent>
                 </IndustrialCard>
               ))}
@@ -162,26 +163,26 @@ function StartupDashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <IndustrialCard>
                 <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-32 bg-industrial-muted" />
+                  <Skeleton className="h-6 w-32 bg-industrial-gunmetal-200/50" />
                 </IndustrialCardHeader>
                 <IndustrialCardContent className="space-y-4">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="space-y-2">
-                      <Skeleton className="h-4 w-48 bg-industrial-muted" />
-                      <Skeleton className="h-4 w-32 bg-industrial-muted" />
+                      <Skeleton className="h-4 w-48 bg-industrial-gunmetal-200/50" />
+                      <Skeleton className="h-4 w-32 bg-industrial-gunmetal-200/50" />
                     </div>
                   ))}
                 </IndustrialCardContent>
               </IndustrialCard>
               <IndustrialCard>
                 <IndustrialCardHeader>
-                  <Skeleton className="h-6 w-40 bg-industrial-muted" />
+                  <Skeleton className="h-6 w-40 bg-industrial-gunmetal-200/50" />
                 </IndustrialCardHeader>
                 <IndustrialCardContent className="space-y-4">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="space-y-2">
-                      <Skeleton className="h-4 w-48 bg-industrial-muted" />
-                      <Skeleton className="h-4 w-32 bg-industrial-muted" />
+                      <Skeleton className="h-4 w-48 bg-industrial-gunmetal-200/50" />
+                      <Skeleton className="h-4 w-32 bg-industrial-gunmetal-200/50" />
                     </div>
                   ))}
                 </IndustrialCardContent>
@@ -272,7 +273,7 @@ function StartupDashboardPage() {
                     <Button
                       variant="industrial-secondary"
                       size="sm"
-                      className="hover:scale-105 transition-transform"
+                      className="hover:scale-105 transition-transform bg-industrial-gunmetal-200 hover:bg-industrial-gunmetal-300 text-industrial-gunmetal-800 border-industrial-gunmetal-300"
                     >
                       <Settings className="h-5 w-5 mr-2" />
                       Profile
@@ -282,7 +283,7 @@ function StartupDashboardPage() {
                     <Button
                       variant="industrial-accent"
                       size="sm"
-                      className="hover:scale-105 transition-transform shadow-lg hover:shadow-xl"
+                      className="hover:scale-105 transition-transform shadow-lg hover:shadow-xl bg-industrial-safety-400 hover:bg-industrial-safety-500 text-industrial-dark border-industrial-safety-500"
                     >
                       <Plus className="h-5 w-5 mr-2" />
                       Create Gig
@@ -561,7 +562,7 @@ function StartupDashboardPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-700"
+                        className="border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-700 bg-white"
                         asChild
                       >
                         <Link href="/startup/gigs">
@@ -582,7 +583,7 @@ function StartupDashboardPage() {
                           No gigs created yet
                         </p>
                         <Button
-                          className="mt-2 bg-industrial-accent hover:bg-industrial-accent/90 text-industrial-dark"
+                          className="mt-2 bg-industrial-safety-400 hover:bg-industrial-safety-500 text-industrial-dark border-industrial-safety-500"
                           size="sm"
                           asChild
                         >
@@ -666,7 +667,7 @@ function StartupDashboardPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-700"
+                        className="border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-700 bg-white"
                         asChild
                       >
                         <Link href="/startup/applications">
@@ -778,7 +779,7 @@ function StartupDashboardPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <Button
                       variant="outline"
-                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-800"
+                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-800 bg-white"
                       asChild
                     >
                       <Link href="/startup/create-gig">
@@ -791,7 +792,7 @@ function StartupDashboardPage() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-800"
+                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-800 bg-white"
                       asChild
                     >
                       <Link href="/startup/gigs">
@@ -804,7 +805,7 @@ function StartupDashboardPage() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-800"
+                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-800 bg-white"
                       asChild
                     >
                       <Link href="/startup/applications">
@@ -817,7 +818,7 @@ function StartupDashboardPage() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-muted text-industrial-gunmetal-800"
+                      className="h-auto p-3 sm:p-4 flex flex-col items-center gap-2 border-industrial-border hover:bg-industrial-gunmetal-100 hover:border-industrial-gunmetal-300 text-industrial-gunmetal-800 bg-white"
                       asChild
                     >
                       <Link href="/startup/profile">

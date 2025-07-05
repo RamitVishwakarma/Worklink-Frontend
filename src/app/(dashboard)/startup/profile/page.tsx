@@ -330,10 +330,10 @@ function StartupProfilePage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                      <h1 className="text-4xl font-bold bg-gradient-to-r from-industrial-foreground via-industrial-accent to-industrial-foreground bg-clip-text text-transparent mb-2">
+                      <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-industrial-accent to-gray-800 bg-clip-text text-transparent mb-2">
                         Company Profile
                       </h1>
-                      <p className="text-industrial-muted-foreground text-lg">
+                      <p className="text-gray-600 text-lg">
                         Manage your industrial company information and
                         manufacturing capabilities
                       </p>
@@ -453,7 +453,7 @@ function StartupProfilePage() {
                               className="text-industrial-accent"
                             />
                           </motion.div>
-                          <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                          <span className="bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
                             Company Overview
                           </span>
                         </IndustrialCardTitle>
@@ -501,10 +501,10 @@ function StartupProfilePage() {
                                   <Building2 className="h-4 w-4 text-blue-600" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
                                     Company Name
                                   </p>
-                                  <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                                  <p className="text-sm font-medium text-gray-800 group-hover:text-industrial-accent transition-colors">
                                     {profile.companyName || 'Not specified'}
                                   </p>
                                 </div>
@@ -519,10 +519,10 @@ function StartupProfilePage() {
                                   <Factory className="h-4 w-4 text-emerald-600" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
                                     Industry
                                   </p>
-                                  <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                                  <p className="text-sm font-medium text-gray-800 group-hover:text-industrial-accent transition-colors">
                                     {profile.industry || 'Not specified'}
                                   </p>
                                 </div>
@@ -537,10 +537,10 @@ function StartupProfilePage() {
                                   <Calendar className="h-4 w-4 text-amber-600" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
                                     Founded Year
                                   </p>
-                                  <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                                  <p className="text-sm font-medium text-gray-800 group-hover:text-industrial-accent transition-colors">
                                     {profile.foundedYear || 'Not specified'}
                                   </p>
                                 </div>
@@ -555,10 +555,10 @@ function StartupProfilePage() {
                                   <Mail className="h-4 w-4 text-purple-600" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-industrial-muted uppercase tracking-wide">
+                                  <p className="text-xs text-gray-500 uppercase tracking-wide">
                                     Contact Email
                                   </p>
-                                  <p className="text-sm font-medium text-industrial-foreground group-hover:text-industrial-accent transition-colors">
+                                  <p className="text-sm font-medium text-gray-800 group-hover:text-industrial-accent transition-colors">
                                     {profile.email || 'Not specified'}
                                   </p>
                                 </div>
@@ -599,7 +599,7 @@ function StartupProfilePage() {
                             className="text-industrial-accent"
                           />
                         </motion.div>
-                        <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
                           Company Information
                         </span>
                       </IndustrialCardTitle>
@@ -613,7 +613,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="companyName"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <IndustrialIcon
                               icon="factory"
@@ -630,10 +630,10 @@ function StartupProfilePage() {
                                 handleInputChange('companyName', e.target.value)
                               }
                               placeholder="Enter your company name"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.companyName || 'Not specified'}
                             </p>
                           )}
@@ -642,7 +642,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="industry"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <IndustrialIcon
                               icon="gear"
@@ -659,10 +659,10 @@ function StartupProfilePage() {
                                 handleInputChange('industry', e.target.value)
                               }
                               placeholder="e.g., Manufacturing, Technology"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.industry || 'Not specified'}
                             </p>
                           )}
@@ -671,7 +671,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="email"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <Mail className="h-4 w-4 text-industrial-accent" />
                             Email Address *
@@ -685,10 +685,10 @@ function StartupProfilePage() {
                                 handleInputChange('email', e.target.value)
                               }
                               placeholder="company@example.com"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.email || 'Not specified'}
                             </p>
                           )}
@@ -697,7 +697,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="phone"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <Phone className="h-4 w-4 text-industrial-accent" />
                             Phone Number
@@ -710,10 +710,10 @@ function StartupProfilePage() {
                                 handleInputChange('phone', e.target.value)
                               }
                               placeholder="+1 (555) 123-4567"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.phone || 'Not specified'}
                             </p>
                           )}
@@ -722,7 +722,7 @@ function StartupProfilePage() {
                         <div className="space-y-2 md:col-span-2">
                           <Label
                             htmlFor="address"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <MapPin className="h-4 w-4 text-industrial-accent" />
                             Company Address
@@ -735,10 +735,10 @@ function StartupProfilePage() {
                                 handleInputChange('address', e.target.value)
                               }
                               placeholder="123 Industrial Ave, Manufacturing City, State 12345"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.address || 'Not specified'}
                             </p>
                           )}
@@ -747,7 +747,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="website"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <Globe className="h-4 w-4 text-industrial-accent" />
                             Company Website
@@ -761,10 +761,10 @@ function StartupProfilePage() {
                                 handleInputChange('website', e.target.value)
                               }
                               placeholder="https://www.yourcompany.com"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.website ? (
                                 <a
                                   href={profile.website}
@@ -784,7 +784,7 @@ function StartupProfilePage() {
                         <div className="space-y-2">
                           <Label
                             htmlFor="foundedYear"
-                            className="text-industrial-foreground font-semibold flex items-center gap-2"
+                            className="text-gray-700 font-semibold flex items-center gap-2"
                           >
                             <Calendar className="h-4 w-4 text-industrial-accent" />
                             Founded Year
@@ -803,10 +803,10 @@ function StartupProfilePage() {
                                 )
                               }
                               placeholder="2020"
-                              className="bg-white/80 focus:bg-white transition-colors"
+                              className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                             />
                           ) : (
-                            <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 text-industrial-foreground">
+                            <p className="p-3 border border-gray-200 rounded-md bg-gray-50 text-gray-800">
                               {profile?.foundedYear || 'Not specified'}
                             </p>
                           )}
@@ -817,7 +817,7 @@ function StartupProfilePage() {
                       <div className="space-y-2">
                         <Label
                           htmlFor="description"
-                          className="text-industrial-foreground font-semibold flex items-center gap-2"
+                          className="text-gray-700 font-semibold flex items-center gap-2"
                         >
                           <IndustrialIcon
                             icon="factory"
@@ -835,10 +835,10 @@ function StartupProfilePage() {
                             }
                             placeholder="Describe your company's mission, capabilities, and what makes you unique in the industrial sector..."
                             rows={4}
-                            className="bg-white/80 focus:bg-white transition-colors"
+                            className="bg-gray-50 focus:bg-white transition-colors border-gray-200 focus:border-industrial-accent"
                           />
                         ) : (
-                          <p className="p-3 border border-industrial-border rounded-md bg-industrial-muted/50 min-h-[100px] text-industrial-foreground">
+                          <p className="p-3 border border-gray-200 rounded-md bg-gray-50 min-h-[100px] text-gray-800">
                             {profile?.description || 'No description available'}
                           </p>
                         )}
@@ -872,7 +872,7 @@ function StartupProfilePage() {
                             className="text-industrial-accent"
                           />
                         </motion.div>
-                        <span className="bg-gradient-to-r from-industrial-foreground to-industrial-gunmetal-700 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
                           Profile Statistics
                         </span>
                       </IndustrialCardTitle>
@@ -883,26 +883,20 @@ function StartupProfilePage() {
 
                     <IndustrialCardContent className="relative p-6 space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">
-                          Profile Complete
-                        </span>
+                        <span className="text-gray-600">Profile Complete</span>
                         <span className="font-semibold text-industrial-accent">
                           85%
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">
-                          Active Since
-                        </span>
-                        <span className="font-semibold text-industrial-foreground">
+                        <span className="text-gray-600">Active Since</span>
+                        <span className="font-semibold text-gray-800">
                           2024
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-industrial-muted-foreground">
-                          Last Updated
-                        </span>
-                        <span className="font-semibold text-industrial-foreground">
+                        <span className="text-gray-600">Last Updated</span>
+                        <span className="font-semibold text-gray-800">
                           Today
                         </span>
                       </div>
